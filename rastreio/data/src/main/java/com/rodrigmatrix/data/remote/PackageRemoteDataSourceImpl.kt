@@ -6,12 +6,12 @@ import com.rodrigmatrix.domain.entity.StatusRequest
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class PackageStatusRemoteDataSourceImpl(
+class PackageRemoteDataSourceImpl(
     private val correiosService: CorreiosService
-) : PackageStatusRemoteDataSource {
+) : PackageRemoteDataSource {
 
 
-    override suspend fun getStatus(packageId: String): Flow<PackageStatusResponse> =
+    override suspend fun getPackage(packageId: String): Flow<PackageStatusResponse> =
         flow { emit(correiosService.getStatus(StatusRequest(packageId))) }
 
 }

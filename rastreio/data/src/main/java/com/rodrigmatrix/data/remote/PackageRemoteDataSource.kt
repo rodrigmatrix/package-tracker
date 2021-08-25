@@ -3,7 +3,7 @@ package com.rodrigmatrix.data.remote
 import com.rodrigmatrix.data.model.PackageStatusResponse
 import kotlinx.coroutines.flow.Flow
 
-interface PackageStatusRemoteDataSource {
+interface PackageRemoteDataSource {
 
-    suspend fun getStatus(packageId: String): Flow<PackageStatusResponse>
+    suspend fun getPackage(packageId: String): Flow<PackageStatusResponse>
 }

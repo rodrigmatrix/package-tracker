@@ -35,7 +35,7 @@ data class Evento(
     val `data`: String,
     val dataPostagem: String,
     val descricao: String,
-    val destino: List<Destino>,
+    val destino: List<Destino>?,
     val detalhe: String,
     val detalheOEC: DetalheOEC,
     val diasUteis: String,

@@ -11,25 +11,18 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.lifecycleScope
 import com.rodrigmatrix.domain.entity.StatusUpdate
-import com.rodrigmatrix.domain.entity.UserPackage
-import com.rodrigmatrix.domain.repository.PackageStatusRepository
 import com.rodrigmatrix.rastreio.ui.theme.RastreioTheme
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
-import org.koin.android.ext.android.inject
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class MainActivity : ComponentActivity() {
 
-    private val viewModel by inject<MainActivityViewModel>()
+    private val viewModel by viewModel<PackagesDetailsViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,10 +38,11 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun RenderPackage(viewModel: MainActivityViewModel) {
-    val userPackage by viewModel.getPackageStatus("OP212763677BR").collectAsState(null)
+fun RenderPackage(viewModel: PackagesDetailsViewModel) {
+    val viewState by viewModel.viewState.observeAsState(PackageStatusViewState())
+
     LazyColumn {
-        items(userPackage?.statusUpdate.orEmpty()) { statusUpdate ->
+        items(viewState?.userPackage?.statusUpdate.orEmpty()) { statusUpdate ->
             RenderPackageUpdate(statusUpdate)
         }
     }

@@ -1,24 +1,23 @@
 package com.rodrigmatrix.data.mapper
 
-import com.rodrigmatrix.core.extensions.toDate
 import com.rodrigmatrix.core.mapper.Mapper
+import com.rodrigmatrix.domain.entity.StatusAddress
+import com.rodrigmatrix.domain.entity.StatusUpdate
+import com.rodrigmatrix.domain.entity.UserPackageAndUpdates
 import com.rodrigmatrix.data.model.Destino
 import com.rodrigmatrix.data.model.Evento
 import com.rodrigmatrix.data.model.PackageStatusResponse
-import com.rodrigmatrix.domain.entity.StatusAddress
-import com.rodrigmatrix.domain.entity.StatusUpdate
-import com.rodrigmatrix.domain.entity.UserPackage
 
-class PackageMapper: Mapper<PackageStatusResponse, UserPackage?> {
+class PackageMapper: Mapper<PackageStatusResponse, UserPackageAndUpdates> {
 
-    override fun map(source: PackageStatusResponse): UserPackage? {
-        val userPackage = source.objeto?.firstOrNull() ?: return null
+    override fun map(source: PackageStatusResponse): UserPackageAndUpdates {
+        val userPackage = source.objeto?.firstOrNull() ?: throw Exception()
 
-        return UserPackage(
+        return UserPackageAndUpdates(
             id = userPackage.numero,
             name = userPackage.nome,
             deliveryType = userPackage.categoria,
-            postalDate = userPackage.evento.first().dataPostagem.toDate(),
+            postalDate = userPackage.evento.first().dataPostagem,
             statusUpdate = userPackage.evento.map { event -> event.toStatus(userPackage.numero) }
         )
     }
