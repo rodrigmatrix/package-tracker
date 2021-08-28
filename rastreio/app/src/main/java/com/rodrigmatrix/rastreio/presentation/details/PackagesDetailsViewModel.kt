@@ -1,4 +1,4 @@
-package com.rodrigmatrix.rastreio.presentation
+package com.rodrigmatrix.rastreio.presentation.details
 
 import androidx.lifecycle.viewModelScope
 import com.rodrigmatrix.core.viewmodel.ViewEffect

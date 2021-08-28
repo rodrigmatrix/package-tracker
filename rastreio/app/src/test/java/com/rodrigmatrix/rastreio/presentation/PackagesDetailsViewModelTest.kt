@@ -7,11 +7,12 @@ import com.rodrigmatrix.domain.entity.StatusAddress
 import com.rodrigmatrix.domain.entity.StatusUpdate
 import com.rodrigmatrix.domain.entity.UserPackageAndUpdates
 import com.rodrigmatrix.domain.usecase.GetPackageStatusUseCase
+import com.rodrigmatrix.rastreio.presentation.details.PackageStatusViewEffect
+import com.rodrigmatrix.rastreio.presentation.details.PackageStatusViewState
+import com.rodrigmatrix.rastreio.presentation.details.PackagesDetailsViewModel
 import io.mockk.coEvery
-import io.mockk.coVerifyOrder
 import io.mockk.mockk
 import io.mockk.verifyOrder
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow
 import org.junit.Rule

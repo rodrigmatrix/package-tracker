@@ -40,9 +40,9 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.1"
 
     // Koin
-    implementation "org.koin:koin-android:$koin_version"
-    implementation "org.koin:koin-android-scope:$koin_version"
-    implementation "org.koin:koin-android-viewmodel:$koin_version"
+    // Koin
+    implementation "io.insert-koin:koin-android:$koin_version"
+    implementation "io.insert-koin:koin-android-compat:$koin_version"
 
     implementation 'com.google.code.gson:gson:2.8.6'
 
