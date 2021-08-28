@@ -10,11 +10,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.rodrigmatrix.domain.entity.StatusUpdate
 
-
 @Composable
-fun DisplayUpdatesList(statusUpdateList: List<StatusUpdate>) {
+fun PackageUpdatesList(statusUpdateList: List<StatusUpdate>) {
     LazyColumn {
         items(statusUpdateList) { statusUpdate ->
+            when (statusUpdate.userPackageId) {
+
+            }
             RenderPackageUpdate(statusUpdate)
         }
     }

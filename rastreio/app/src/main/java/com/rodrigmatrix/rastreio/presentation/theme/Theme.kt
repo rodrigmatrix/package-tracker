@@ -1,4 +1,4 @@
-package com.rodrigmatrix.rastreio.ui.theme
+package com.rodrigmatrix.rastreio.presentation.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme

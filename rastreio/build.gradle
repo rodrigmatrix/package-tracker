@@ -1,9 +1,5 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
-    ext {
-        compose_version = '1.0.1'
-        koin_version = '3.1.2'
-    }
     repositories {
         google()
         mavenCentral()

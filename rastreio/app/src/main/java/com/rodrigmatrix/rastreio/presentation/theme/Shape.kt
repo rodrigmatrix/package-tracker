@@ -1,4 +1,4 @@
-package com.rodrigmatrix.rastreio.ui.theme
+package com.rodrigmatrix.rastreio.presentation.theme
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Shapes

@@ -1,3 +1,5 @@
+import com.rodrigmatrix.rastreio.buildSrc.Libs
+
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
@@ -47,7 +49,7 @@ android {
         compose true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion compose_version
+        kotlinCompilerExtensionVersion "1.0.1"
         kotlinCompilerVersion '1.4.32'
     }
 }
@@ -57,44 +59,54 @@ dependencies {
     implementation project(':domain')
     implementation project(':data')
 
-    def room_version = "2.3.0"
+    implementation Libs.Kotlin.stdlib
+    implementation Libs.Coroutines.android
+    implementation Libs.Coroutines.core
 
-    implementation "androidx.room:room-runtime:$room_version"
-    kapt "androidx.room:room-compiler:$room_version"
-    implementation "androidx.room:room-ktx:$room_version"
+    implementation Libs.AndroidX.coreKtx
+    implementation Libs.AndroidX.Activity.activityCompose
+    implementation Libs.AndroidX.Lifecycle.viewModelCompose
+    implementation Libs.AndroidX.Navigation.navigationCompose
+    implementation Libs.AndroidX.ConstraintLayout.constraintLayoutCompose
+    implementation Libs.Material.material
 
-    // Kotlin Coroutines
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.1'
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.1"
+
+    // Room
+    implementation Libs.AndroidX.Room.runtime
+    kapt Libs.AndroidX.Room.compiler
+    implementation Libs.AndroidX.Room.ktx
+
+    // Compose
+    implementation Libs.AndroidX.Compose.runtime
+    implementation Libs.AndroidX.Compose.foundation
+    implementation Libs.AndroidX.Compose.layout
+    implementation Libs.AndroidX.Compose.ui
+    implementation Libs.AndroidX.Compose.uiUtil
+    implementation Libs.AndroidX.Compose.material
+    implementation Libs.AndroidX.Compose.animation
+    implementation Libs.AndroidX.Compose.iconsExtended
+    implementation Libs.AndroidX.Compose.tooling
+
+    implementation Libs.Accompanist.insets
+    implementation Libs.Accompanist.systemuicontroller
 
     // Okhttp
-    implementation 'com.squareup.retrofit2:retrofit:2.8.1'
-    implementation "com.squareup.okhttp3:okhttp:4.9.1"
-    implementation "com.squareup.retrofit2:converter-gson:2.8.1"
+    implementation Libs.Network.retrofit
+    implementation Libs.Network.okHttp
+    implementation Libs.Network.gsonConverter
 
     // Koin
-    implementation "io.insert-koin:koin-android:$koin_version"
-    implementation "io.insert-koin:koin-android-compat:$koin_version"
-    implementation "io.insert-koin:koin-androidx-compose:$koin_version"
+    implementation Libs.Koin.android
+    implementation Libs.Koin.androidCompat
+    implementation Libs.Koin.compose
 
-    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation Libs.Serialization.gson
 
-    implementation 'androidx.core:core-ktx:1.6.0'
-    implementation 'androidx.appcompat:appcompat:1.3.1'
-    implementation 'com.google.android.material:material:1.4.0'
-    implementation "androidx.compose.ui:ui:$compose_version"
-    implementation "androidx.compose.material:material:$compose_version"
-    implementation "androidx.compose.ui:ui-tooling:$compose_version"
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
-    implementation 'androidx.compose.runtime:runtime-livedata:1.0.1'
-    implementation 'androidx.activity:activity-compose:1.3.1'
-    implementation "androidx.navigation:navigation-compose:2.4.0-alpha07"
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
-    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
-    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.1'
-    testImplementation "io.mockk:mockk:1.11.0"
-    testImplementation "androidx.arch.core:core-testing:2.1.0"
-    testImplementation "io.insert-koin:koin-test-junit4:$koin_version"
+    testImplementation Libs.Test.junit
+    androidTestImplementation Libs.Test.Ext.junit
+    androidTestImplementation Libs.Test.espressoCore
+    testImplementation Libs.Coroutines.test
+    testImplementation Libs.Test.mockk
+    testImplementation Libs.Test.core
+    testImplementation Libs.Koin.test
 }
