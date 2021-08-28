@@ -16,20 +16,19 @@ class PackagesDetailsViewModel(
     private val coroutineDispatcher: CoroutineDispatcher = Dispatchers.IO
 ): ViewModel<PackageStatusViewState, PackageStatusViewEffect>(PackageStatusViewState()) {
 
-    init {
-        getPackageStatus("OP212763677BR")
-    }
-
     fun getPackageStatus(packageId: String) {
         viewModelScope.launch {
             getPackageStatusUseCase(packageId, false)
                 .flowOn(coroutineDispatcher)
+                .onStart { setState { viewState.value.copy(isLoading = true) } }
                 .catch { error ->
-                    setState { viewState.value?.copy(isLoading = false) }
-                    setEffect { PackageStatusViewEffect.ShowSnackbar(error.message.orEmpty()) }
+                    setState { viewState.value.copy(isLoading = false) }
+                    setEffect {
+                        PackageStatusViewEffect.ShowErrorSnackBarWithRetry(error.message.orEmpty())
+                    }
                 }
                 .collect { userPackage ->
-                    setState { viewState.value?.copy(isLoading = false, userPackage = userPackage) }
+                    setState { viewState.value.copy(isLoading = false, userPackage = userPackage) }
                 }
         }
     }
@@ -43,5 +42,5 @@ data class PackageStatusViewState(
 
 sealed class PackageStatusViewEffect : ViewEffect {
 
-    data class ShowSnackbar(val message: String): PackageStatusViewEffect()
+    data class ShowErrorSnackBarWithRetry(val message: String): PackageStatusViewEffect()
 }

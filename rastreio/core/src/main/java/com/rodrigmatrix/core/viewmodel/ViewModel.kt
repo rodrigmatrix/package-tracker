@@ -1,18 +1,18 @@
 package com.rodrigmatrix.core.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
-abstract class ViewModel<S: ViewState, E: ViewEffect>(initialState: S): ViewModel() {
+abstract class ViewModel<S: ViewState, E: ViewEffect?>(initialState: S): ViewModel() {
 
-    private val _viewState = MutableLiveData(initialState)
-    val viewState: LiveData<S?> = _viewState
+    private val _viewState = MutableStateFlow(initialState)
+    val viewState: StateFlow<S> = _viewState
 
-    private val _viewEffect = MutableLiveData<E>()
-    val viewEffect: LiveData<E> = _viewEffect
+    private val _viewEffect = MutableStateFlow<E?>(null)
+    val viewEffect: StateFlow<E?> = _viewEffect
 
-    protected fun setState(newState: () -> S?) {
+    protected fun setState(newState: () -> S) {
         _viewState.value = newState()
     }
 
