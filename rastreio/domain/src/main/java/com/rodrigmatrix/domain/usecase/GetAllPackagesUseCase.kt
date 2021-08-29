@@ -8,7 +8,9 @@ class GetAllPackagesUseCase(
     private val packageRepository: PackageRepository
 ) {
 
-    suspend operator fun invoke(): Flow<List<UserPackageAndUpdates>> {
+    suspend operator fun invoke(
+        forceUpdate: Boolean
+    ): Flow<List<UserPackageAndUpdates>> {
         return packageRepository.getAllPackages()
     }
 

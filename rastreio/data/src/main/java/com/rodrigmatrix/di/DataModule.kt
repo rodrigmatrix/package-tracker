@@ -11,6 +11,7 @@ import com.rodrigmatrix.data.service.CorreiosService
 import com.rodrigmatrix.data.mapper.PackageMapper
 import com.rodrigmatrix.domain.repository.PackageRepository
 import com.rodrigmatrix.domain.usecase.AddPackageUseCase
+import com.rodrigmatrix.domain.usecase.GetAllPackagesUseCase
 import com.rodrigmatrix.domain.usecase.GetPackageStatusUseCase
 import okhttp3.OkHttpClient
 import org.koin.android.ext.koin.androidContext
@@ -29,6 +30,7 @@ val dataModule = module {
     factory<PackageLocalDataSource> { PackageLocalDataSourceImpl(packagesDAO = get()) }
     factory { AddPackageUseCase(packageRepository = get()) }
     factory { GetPackageStatusUseCase(packageRepository = get()) }
+    factory { GetAllPackagesUseCase(packageRepository = get()) }
     single { PackagesDatabase(androidContext()) }
     single { get<PackagesDatabase>().packagesDAO() }
     factory<CorreiosService> {

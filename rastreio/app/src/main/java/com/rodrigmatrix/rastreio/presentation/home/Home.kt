@@ -11,13 +11,14 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.rodrigmatrix.rastreio.R
 import com.rodrigmatrix.rastreio.presentation.details.DetailsScreen
+import com.rodrigmatrix.rastreio.presentation.packages.PackagesScreen
 
 fun NavGraphBuilder.addHomeGraph(
     onSnackSelected: (Long, NavBackStackEntry) -> Unit,
     modifier: Modifier = Modifier
 ) {
     composable(HomeSections.PACKAGES.route) { from ->
-        DetailsScreen("OP212763677BR")
+        PackagesScreen()
     }
     composable(HomeSections.SETTINGS.route) { from ->
         DetailsScreen("")

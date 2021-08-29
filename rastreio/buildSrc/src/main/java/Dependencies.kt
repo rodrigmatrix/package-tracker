@@ -40,6 +40,7 @@ object Libs {
             const val tooling = "androidx.compose.ui:ui-tooling:${version}"
             const val iconsExtended = "androidx.compose.material:material-icons-extended:$version"
             const val uiTest = "androidx.compose.ui:ui-test-junit4:$version"
+            const val swipeRefresh = "com.google.accompanist:accompanist-swiperefresh:0.17.0"
         }
 
         object Activity {
@@ -73,6 +74,8 @@ object Libs {
     object Material {
         const val material = "com.google.android.material:material:1.4.0"
     }
+
+    const val lottie = "com.airbnb.android:lottie-compose:4.1.0"
 
     object Koin {
         private const val version = "3.1.2"

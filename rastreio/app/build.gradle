@@ -70,7 +70,6 @@ dependencies {
     implementation Libs.AndroidX.ConstraintLayout.constraintLayoutCompose
     implementation Libs.Material.material
 
-
     // Room
     implementation Libs.AndroidX.Room.runtime
     kapt Libs.AndroidX.Room.compiler
@@ -86,6 +85,9 @@ dependencies {
     implementation Libs.AndroidX.Compose.animation
     implementation Libs.AndroidX.Compose.iconsExtended
     implementation Libs.AndroidX.Compose.tooling
+    implementation Libs.AndroidX.Compose.swipeRefresh
+
+    implementation Libs.lottie
 
     implementation Libs.Accompanist.insets
     implementation Libs.Accompanist.systemuicontroller
