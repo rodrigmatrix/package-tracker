@@ -6,14 +6,16 @@ import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navigation
+import com.rodrigmatrix.rastreio.presentation.details.DetailsScreen
 import com.rodrigmatrix.rastreio.presentation.home.HomeSections
-import com.rodrigmatrix.rastreio.presentation.home.addHomeGraph
+import com.rodrigmatrix.rastreio.presentation.packages.PackagesScreen
 
 object MainDestinations {
     const val PACKAGES_ROUTE = "packages"
     const val SETTINGS_ROUTE = "settings"
+    const val PACKAGE_DETAILS = "package/{packageId}"
 }
 
 @Composable
@@ -27,32 +29,16 @@ fun RastreioNavGraph(
         startDestination = startDestination,
         modifier = modifier
     ) {
-        navigation(
-            route = MainDestinations.PACKAGES_ROUTE,
-            startDestination = HomeSections.PACKAGES.route
-        ) {
-            addHomeGraph(
-                onSnackSelected = { snackId: Long, from: NavBackStackEntry ->
-                    // In order to discard duplicated navigation events, we check the Lifecycle
-                    if (from.lifecycleIsResumed()) {
-                        navController.navigate("${MainDestinations.PACKAGES_ROUTE}/$snackId")
-                    }
-                },
-                modifier = modifier
-            )
+        composable(MainDestinations.PACKAGES_ROUTE) {
+            PackagesScreen(navController)
         }
-        navigation(
-            route = MainDestinations.SETTINGS_ROUTE,
-            startDestination = HomeSections.SETTINGS.route
-        ) {
-            addHomeGraph(
-                onSnackSelected = { snackId: Long, from: NavBackStackEntry ->
-                    // In order to discard duplicated navigation events, we check the Lifecycle
-                    if (from.lifecycleIsResumed()) {
-                        navController.navigate("${MainDestinations.SETTINGS_ROUTE}/$snackId")
-                    }
-                },
-                modifier = modifier
+        composable(MainDestinations.SETTINGS_ROUTE) {
+            DetailsScreen(navController, "")
+        }
+        composable(MainDestinations.PACKAGE_DETAILS) { backStackEntry ->
+            DetailsScreen(
+                navController,
+                backStackEntry.arguments?.getString("packageId").orEmpty()
             )
         }
     }

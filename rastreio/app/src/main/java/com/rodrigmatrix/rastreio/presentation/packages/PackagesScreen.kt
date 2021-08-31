@@ -8,20 +8,25 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PlaylistAdd
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import com.rodrigmatrix.domain.entity.UserPackageAndUpdates
-import org.koin.androidx.compose.getViewModel
+import androidx.navigation.NavController
 import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.rodrigmatrix.domain.entity.UserPackageAndUpdates
 import com.rodrigmatrix.rastreio.extensions.getLastStatus
+import org.koin.androidx.compose.getViewModel
 
 @Composable
 fun PackagesScreen(
+    navController: NavController,
     viewModel: PackagesViewModel = getViewModel()
 ) {
     val viewState by viewModel.viewState.collectAsState()
@@ -42,7 +47,7 @@ fun PackagesScreen(
                         }
 
                         viewState.packagesList.isNotEmpty() ->
-                            PackagesList(viewState.packagesList)
+                            PackagesList(navController, viewState.packagesList)
 
                         else -> PackagesEmptyState()
                     }
@@ -53,19 +58,23 @@ fun PackagesScreen(
 }
 
 @Composable
-fun PackagesList(packagesList: List<UserPackageAndUpdates>) {
+fun PackagesList(navController: NavController, packagesList: List<UserPackageAndUpdates>) {
     LazyColumn(modifier = Modifier.fillMaxHeight()) {
         items(packagesList) { packageItem ->
-            PackageItem(packageItem)
+            PackageItem(navController, packageItem)
         }
     }
 }
 
 @Composable
-fun PackageItem(packageItem: UserPackageAndUpdates) {
+fun PackageItem(navController: NavController, packageItem: UserPackageAndUpdates) {
     val lastStatus = packageItem.getLastStatus()
     ConstraintLayout(
-        modifier = Modifier.clickable { /* TODO */ }
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable {
+                navController.navigate("package/${packageItem.id}")
+            }
     ) {
         val (
             divider, episodeTitle, podcastTitle, image
