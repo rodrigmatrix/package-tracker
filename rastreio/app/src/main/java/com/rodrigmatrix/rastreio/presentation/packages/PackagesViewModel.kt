@@ -9,7 +9,6 @@ import com.rodrigmatrix.domain.entity.UserPackageAndUpdates
 import com.rodrigmatrix.domain.usecase.GetAllPackagesUseCase
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flowOn
@@ -34,9 +33,6 @@ class PackagesViewModel(
                         viewState.value.copy(
                             isRefreshing = SwipeRefreshState(isRefreshing = true)
                         )
-                    }
-                    if (forceUpdate){
-                        delay(2000)
                     }
                 }
                 .catch { exception ->

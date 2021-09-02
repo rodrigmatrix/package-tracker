@@ -11,7 +11,7 @@ class GetAllPackagesUseCase(
     suspend operator fun invoke(
         forceUpdate: Boolean
     ): Flow<List<UserPackageAndUpdates>> {
-        return packageRepository.getAllPackages()
+        return packageRepository.getAllPackages(forceUpdate)
     }
 
 }

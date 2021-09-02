@@ -26,7 +26,7 @@ fun UserPackageAndUpdates.getLastStatus(): PackageLastStatus {
     )
 }
 
-private fun StatusUpdate.getStatusIconAndColor(): Pair<Color, ImageVector> {
+fun StatusUpdate.getStatusIconAndColor(): Pair<Color, ImageVector> {
     return when {
         description.contains("entregue") ->
             Pair(Teal200, Icons.Outlined.Done)

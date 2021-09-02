@@ -9,6 +9,6 @@ interface PackageRepository {
 
     suspend fun getStatus(packageId: String, forceUpdate: Boolean): Flow<UserPackageAndUpdates>
 
-    suspend fun getAllPackages(): Flow<List<UserPackageAndUpdates>>
+    suspend fun getAllPackages(forceUpdate: Boolean): Flow<List<UserPackageAndUpdates>>
 
 }

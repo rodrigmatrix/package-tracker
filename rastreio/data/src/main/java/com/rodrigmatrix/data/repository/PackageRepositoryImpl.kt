@@ -37,8 +37,19 @@ class PackageRepositoryImpl(
         }
     }
 
-    override suspend fun getAllPackages(): Flow<List<UserPackageAndUpdates>> {
-        return flow { emit(packagesLocalDataSource.getAllPackages()) }
+    override suspend fun getAllPackages(forceUpdate: Boolean): Flow<List<UserPackageAndUpdates>> {
+        val userPackages = packagesLocalDataSource.getAllPackages()
+
+        return if (forceUpdate) {
+            flow {
+                val result = userPackages.map {
+                    getStatus(it.id, forceUpdate = true).first()
+                }
+                emit(result)
+            }
+        } else {
+            flow { emit(userPackages) }
+        }
     }
 
 }

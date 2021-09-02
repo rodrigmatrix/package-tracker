@@ -1,12 +1,17 @@
 package com.rodrigmatrix.rastreio.presentation.details
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.Surface
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.rodrigmatrix.rastreio.presentation.history.PackageUpdatesList
 import com.rodrigmatrix.rastreio.presentation.theme.RastreioTheme
@@ -23,7 +28,22 @@ fun DetailsScreen(
     viewModel.getPackageStatus(packageId)
 
     Surface(Modifier.fillMaxSize()) {
-        PackageUpdatesList(statusUpdateList = viewState.userPackage?.statusUpdate.orEmpty())
+        Column {
+            TopAppBar(
+                title = {
+                    Text(text = "Detalhes")
+                },
+                navigationIcon = {
+                    IconButton(onClick = {
+                        navController.navigateUp()
+                    }) {
+                        Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "Back")
+                    }
+                }
+            )
+
+            PackageUpdatesList(statusUpdateList = viewState.userPackage?.statusUpdate.orEmpty())
+        }
     }
 }
 
