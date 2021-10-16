@@ -7,12 +7,12 @@ plugins {
 }
 
 android {
-    compileSdk 30
+    compileSdk 31
     buildToolsVersion "30.0.3"
 
     defaultConfig {
         minSdk 21
-        targetSdk 30
+        targetSdk 31
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -39,13 +39,6 @@ dependencies {
     implementation Libs.Kotlin.stdlib
     implementation Libs.Coroutines.android
     implementation Libs.Coroutines.core
-
-    // Room
-    implementation Libs.AndroidX.Room.runtime
-    kapt Libs.AndroidX.Room.compiler
-    implementation Libs.AndroidX.Room.ktx
-
-    implementation Libs.Serialization.gson
 
     testImplementation Libs.Test.junit
     androidTestImplementation Libs.Test.Ext.junit

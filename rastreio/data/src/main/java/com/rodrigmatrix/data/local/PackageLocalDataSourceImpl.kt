@@ -1,8 +1,9 @@
 package com.rodrigmatrix.data.local
 
-import com.rodrigmatrix.domain.entity.UserPackage
-import com.rodrigmatrix.domain.entity.UserPackageAndUpdates
 import com.rodrigmatrix.data.local.database.PackagesDAO
+import com.rodrigmatrix.data.model.UserPackageAndUpdatesEntity
+import com.rodrigmatrix.data.model.UserPackageEntity
+import com.rodrigmatrix.domain.entity.UserPackage
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -13,10 +14,10 @@ class PackageLocalDataSourceImpl(
     private val coroutineDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : PackageLocalDataSource {
 
-    override suspend fun savePackage(userPackage: UserPackageAndUpdates) {
+    override suspend fun savePackage(userPackage: UserPackageAndUpdatesEntity) {
         withContext(coroutineDispatcher) {
             packagesDAO.upsertPackage(
-                UserPackage(
+                UserPackageEntity(
                     userPackage.id,
                     userPackage.name,
                     userPackage.deliveryType,
@@ -28,13 +29,13 @@ class PackageLocalDataSourceImpl(
         }
     }
 
-    override suspend fun getPackage(packageId: String): UserPackageAndUpdates? {
+    override suspend fun getPackage(packageId: String): Flow<UserPackageAndUpdatesEntity> {
         return withContext(coroutineDispatcher) {
             packagesDAO.getPackage(packageId)
         }
     }
 
-    override suspend fun getAllPackages(): List<UserPackageAndUpdates> {
+    override suspend fun getAllPackages(): Flow<List<UserPackageAndUpdatesEntity>> {
         return withContext(coroutineDispatcher) {
             packagesDAO.getAllPackages()
         }

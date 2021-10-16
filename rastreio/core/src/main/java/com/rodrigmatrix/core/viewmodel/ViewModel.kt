@@ -1,7 +1,9 @@
 package com.rodrigmatrix.core.viewmodel
 
+import kotlinx.coroutines.flow.MutableSharedFlow
 import androidx.lifecycle.ViewModel as AndroidxViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 
 abstract class ViewModel<S: ViewState, E: ViewEffect?>(initialState: S): AndroidxViewModel() {
@@ -9,15 +11,15 @@ abstract class ViewModel<S: ViewState, E: ViewEffect?>(initialState: S): Android
     private val _viewState = MutableStateFlow(initialState)
     val viewState: StateFlow<S> = _viewState
 
-    private val _viewEffect = MutableStateFlow<E?>(null)
-    val viewEffect: StateFlow<E?> = _viewEffect
+    private val _viewEffect = MutableSharedFlow<E>()
+    val viewEffect: SharedFlow<E> = _viewEffect
 
-    protected fun setState(newState: () -> S) {
-        _viewState.value = newState()
+    protected fun setState(newState: (S) -> S) {
+        _viewState.value = newState(viewState.value)
     }
 
-    protected fun setEffect(newEffect: () -> E) {
-        _viewEffect.value = newEffect()
+     suspend fun setEffect(newEffect: () -> E) {
+        _viewEffect.emit(newEffect())
     }
 
 

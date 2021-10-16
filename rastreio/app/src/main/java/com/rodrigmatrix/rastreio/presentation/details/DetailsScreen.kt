@@ -19,9 +19,8 @@ import org.koin.androidx.compose.getViewModel
 
 @Composable
 fun DetailsScreen(
-    navController: NavController,
     packageId: String,
-    viewModel: PackagesDetailsViewModel = getViewModel()
+    viewModel: PackagesDetailsViewModel
 ) {
     val viewState by viewModel.viewState.collectAsState()
 
@@ -35,7 +34,7 @@ fun DetailsScreen(
                 },
                 navigationIcon = {
                     IconButton(onClick = {
-                        navController.navigateUp()
+                        //navController.navigateUp()
                     }) {
                         Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "Back")
                     }
@@ -44,14 +43,5 @@ fun DetailsScreen(
 
             PackageUpdatesList(statusUpdateList = viewState.userPackage?.statusUpdate.orEmpty())
         }
-    }
-}
-
-
-@Composable
-@Preview
-fun PreviewDetailsScreen() {
-    RastreioTheme {
-        PackageUpdatesList(statusUpdateList = listOf())
     }
 }

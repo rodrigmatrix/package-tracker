@@ -28,7 +28,7 @@ object Libs {
         const val appCompat = "androidx.appcompat:appcompat:1.3.1"
 
         object Compose {
-            const val version = "1.0.1"
+            const val version = "1.1.0-alpha05"
 
             const val foundation = "androidx.compose.foundation:foundation:${version}"
             const val layout = "androidx.compose.foundation:foundation-layout:${version}"
@@ -41,6 +41,7 @@ object Libs {
             const val iconsExtended = "androidx.compose.material:material-icons-extended:$version"
             const val uiTest = "androidx.compose.ui:ui-test-junit4:$version"
             const val swipeRefresh = "com.google.accompanist:accompanist-swiperefresh:0.17.0"
+            const val themeAdapter = "com.google.android.material:compose-theme-adapter:1.0.3"
         }
 
         object Activity {
@@ -72,7 +73,7 @@ object Libs {
     }
 
     object Material {
-        const val material = "com.google.android.material:material:1.4.0"
+        const val material = "com.google.android.material:material:1.5.0-alpha04"
     }
 
     const val lottie = "com.airbnb.android:lottie-compose:4.1.0"

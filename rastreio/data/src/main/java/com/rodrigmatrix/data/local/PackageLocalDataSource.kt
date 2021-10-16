@@ -1,14 +1,14 @@
 package com.rodrigmatrix.data.local
 
-import com.rodrigmatrix.domain.entity.UserPackageAndUpdates
+import com.rodrigmatrix.data.model.UserPackageAndUpdatesEntity
 import kotlinx.coroutines.flow.Flow
 
 interface PackageLocalDataSource {
 
-    suspend fun savePackage(userPackage: UserPackageAndUpdates)
+    suspend fun savePackage(userPackage: UserPackageAndUpdatesEntity)
 
-    suspend fun getPackage(packageId: String): UserPackageAndUpdates?
+    suspend fun getPackage(packageId: String): Flow<UserPackageAndUpdatesEntity>
 
-    suspend fun getAllPackages(): List<UserPackageAndUpdates>
+    suspend fun getAllPackages(): Flow<List<UserPackageAndUpdatesEntity>>
 
 }

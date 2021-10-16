@@ -8,7 +8,6 @@ import com.rodrigmatrix.data.remote.PackageRemoteDataSource
 import com.rodrigmatrix.data.remote.PackageRemoteDataSourceImpl
 import com.rodrigmatrix.data.repository.PackageRepositoryImpl
 import com.rodrigmatrix.data.service.CorreiosService
-import com.rodrigmatrix.data.mapper.PackageMapper
 import com.rodrigmatrix.domain.repository.PackageRepository
 import com.rodrigmatrix.domain.usecase.AddPackageUseCase
 import com.rodrigmatrix.domain.usecase.GetAllPackagesUseCase

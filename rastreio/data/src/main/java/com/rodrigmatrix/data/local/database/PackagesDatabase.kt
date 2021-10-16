@@ -4,10 +4,10 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.rodrigmatrix.domain.entity.StatusUpdate
-import com.rodrigmatrix.domain.entity.UserPackage
+import com.rodrigmatrix.data.model.StatusUpdateEntity
+import com.rodrigmatrix.data.model.UserPackageEntity
 
-@Database(entities = [UserPackage::class, StatusUpdate::class], version = 1)
+@Database(entities = [UserPackageEntity::class, StatusUpdateEntity::class], version = 1)
 abstract class PackagesDatabase : RoomDatabase() {
 
     abstract fun packagesDAO(): PackagesDAO

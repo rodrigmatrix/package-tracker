@@ -5,8 +5,9 @@ import com.google.accompanist.swiperefresh.SwipeRefreshState
 import com.rodrigmatrix.core.viewmodel.ViewEffect
 import com.rodrigmatrix.core.viewmodel.ViewModel
 import com.rodrigmatrix.core.viewmodel.ViewState
-import com.rodrigmatrix.domain.entity.UserPackageAndUpdates
+import com.rodrigmatrix.domain.entity.UserPackage
 import com.rodrigmatrix.domain.usecase.GetAllPackagesUseCase
+import com.rodrigmatrix.rastreio.presentation.packages.PackagesViewEffect.OpenPackageScreen
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
@@ -28,30 +29,19 @@ class PackagesViewModel(
         viewModelScope.launch {
             getAllPackagesUseCase(forceUpdate)
                 .flowOn(coroutineDispatcher)
-                .onStart {
-                    setState {
-                        viewState.value.copy(
-                            isRefreshing = SwipeRefreshState(isRefreshing = true)
-                        )
-                    }
-                }
+                .onStart { setState { it.loadingState() } }
                 .catch { exception ->
-                    setState {
-                        viewState.value.copy(
-                            isRefreshing = SwipeRefreshState(isRefreshing = false),
-                            exception = exception
-                        )
-                    }
+                    setState { it.errorState(exception) }
                 }
                 .collect { packagesList ->
-                    setState {
-                        viewState.value.copy(
-                            isRefreshing = SwipeRefreshState(isRefreshing = false),
-                            exception = null,
-                            packagesList = packagesList
-                        )
-                    }
+                    setState { it.successState(packagesList) }
                 }
+        }
+    }
+
+    fun openPackage(packageId: String) {
+        viewModelScope.launch {
+            setEffect { OpenPackageScreen(packageId) }
         }
     }
 
@@ -59,10 +49,31 @@ class PackagesViewModel(
 
 data class PackagesViewState(
     val isRefreshing: SwipeRefreshState = SwipeRefreshState(isRefreshing = false),
-    val packagesList: List<UserPackageAndUpdates> = emptyList(),
+    val packagesList: List<UserPackage> = emptyList(),
     val exception: Throwable? = null
-): ViewState
+): ViewState {
+
+    fun loadingState(): PackagesViewState {
+        return this.copy(isRefreshing = SwipeRefreshState(isRefreshing = true))
+    }
+
+    fun successState(packagesList: List<UserPackage>): PackagesViewState {
+        return this.copy(
+            isRefreshing = SwipeRefreshState(isRefreshing = false),
+            packagesList = packagesList,
+            exception = null
+        )
+    }
+
+    fun errorState(throwable: Throwable): PackagesViewState {
+        return this.copy(
+            isRefreshing = SwipeRefreshState(isRefreshing = false),
+            exception = throwable
+        )
+    }
+}
 
 sealed class PackagesViewEffect: ViewEffect {
 
+    data class OpenPackageScreen(val packageId: String): PackagesViewEffect()
 }

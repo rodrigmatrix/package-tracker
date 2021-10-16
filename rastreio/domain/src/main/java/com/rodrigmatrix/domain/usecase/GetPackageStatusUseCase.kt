@@ -1,8 +1,8 @@
 package com.rodrigmatrix.domain.usecase
 
-import com.rodrigmatrix.domain.entity.UserPackageAndUpdates
+import com.rodrigmatrix.domain.entity.UserPackage
 import com.rodrigmatrix.domain.repository.PackageRepository
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
 
 class GetPackageStatusUseCase(
     private val packageRepository: PackageRepository
@@ -11,7 +11,7 @@ class GetPackageStatusUseCase(
     suspend operator fun invoke(
         packageId: String,
         forceUpdate: Boolean
-    ): Flow<UserPackageAndUpdates> {
+    ): Flow<UserPackage> {
         return packageRepository.getStatus(packageId, forceUpdate)
     }
 

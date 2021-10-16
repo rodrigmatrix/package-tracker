@@ -2,4 +2,5 @@
     <string name="app_name">Rastreio</string>
     <string name="packages">Packages</string>
     <string name="settings">Settings</string>
+    <string name="home">Home</string>
 </resources>

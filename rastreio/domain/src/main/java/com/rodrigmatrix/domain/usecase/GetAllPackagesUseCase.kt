@@ -1,6 +1,6 @@
 package com.rodrigmatrix.domain.usecase
 
-import com.rodrigmatrix.domain.entity.UserPackageAndUpdates
+import com.rodrigmatrix.domain.entity.UserPackage
 import com.rodrigmatrix.domain.repository.PackageRepository
 import kotlinx.coroutines.flow.Flow
 
@@ -10,7 +10,7 @@ class GetAllPackagesUseCase(
 
     suspend operator fun invoke(
         forceUpdate: Boolean
-    ): Flow<List<UserPackageAndUpdates>> {
+    ): Flow<List<UserPackage>> {
         return packageRepository.getAllPackages(forceUpdate)
     }
 

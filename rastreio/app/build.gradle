@@ -47,6 +47,7 @@ android {
     }
     buildFeatures {
         compose true
+        viewBinding true
     }
     composeOptions {
         kotlinCompilerExtensionVersion "1.0.1"
@@ -86,6 +87,7 @@ dependencies {
     implementation Libs.AndroidX.Compose.iconsExtended
     implementation Libs.AndroidX.Compose.tooling
     implementation Libs.AndroidX.Compose.swipeRefresh
+    implementation Libs.AndroidX.Compose.themeAdapter
 
     implementation Libs.lottie
 

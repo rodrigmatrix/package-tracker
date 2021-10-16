@@ -1,33 +1,30 @@
 package com.rodrigmatrix.rastreio.presentation.packages
 
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.PlaylistAdd
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import androidx.navigation.NavController
 import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.rodrigmatrix.domain.entity.UserPackageAndUpdates
+import com.rodrigmatrix.domain.entity.UserPackage
 import com.rodrigmatrix.rastreio.extensions.getLastStatus
-import org.koin.androidx.compose.getViewModel
+import com.rodrigmatrix.rastreio.extensions.getStatusIconAndColor
 
 @Composable
 fun PackagesScreen(
-    navController: NavController,
-    viewModel: PackagesViewModel = getViewModel()
+    viewModel: PackagesViewModel
 ) {
     val viewState by viewModel.viewState.collectAsState()
 
@@ -47,7 +44,7 @@ fun PackagesScreen(
                         }
 
                         viewState.packagesList.isNotEmpty() ->
-                            PackagesList(navController, viewState.packagesList)
+                            PackagesList(viewModel, viewState.packagesList)
 
                         else -> PackagesEmptyState()
                     }
@@ -58,22 +55,28 @@ fun PackagesScreen(
 }
 
 @Composable
-fun PackagesList(navController: NavController, packagesList: List<UserPackageAndUpdates>) {
+fun PackagesList(
+    viewModel: PackagesViewModel,
+    packagesList: List<UserPackage>
+) {
     LazyColumn(modifier = Modifier.fillMaxHeight()) {
         items(packagesList) { packageItem ->
-            PackageItem(navController, packageItem)
+            PackageItem(viewModel, packageItem)
         }
     }
 }
 
 @Composable
-fun PackageItem(navController: NavController, packageItem: UserPackageAndUpdates) {
+fun PackageItem(
+    viewModel: PackagesViewModel,
+    packageItem: UserPackage
+) {
     val lastStatus = packageItem.getLastStatus()
     ConstraintLayout(
         modifier = Modifier
             .fillMaxWidth()
             .clickable {
-                navController.navigate("package/${packageItem.id}")
+                viewModel.openPackage(packageItem.packageId)
             }
     ) {
         val (
@@ -89,14 +92,19 @@ fun PackageItem(navController: NavController, packageItem: UserPackageAndUpdates
             }
         )
 
-        // If we have an image Url, we can show it using Coil
-        Image(
-            imageVector = Icons.Filled.PlaylistAdd,
+        val statusUpdate = packageItem.statusUpdate.orEmpty().first()
+
+        val (statusColor, iconVector) = statusUpdate.getStatusIconAndColor()
+
+        Icon(
+            imageVector = iconVector,
             contentDescription = null,
-            contentScale = ContentScale.Crop,
+            tint = Color.White,
             modifier = Modifier
-                .size(56.dp)
-                .clip(MaterialTheme.shapes.medium)
+                .size(42.dp)
+                .clip(CircleShape)
+                .background(statusColor)
+                .padding(8.dp)
                 .constrainAs(image) {
                     end.linkTo(parent.end, 16.dp)
                     top.linkTo(parent.top, 16.dp)
@@ -125,7 +133,7 @@ fun PackageItem(navController: NavController, packageItem: UserPackageAndUpdates
 
         CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
             Text(
-                text = packageItem.id,
+                text = packageItem.packageId,
                 maxLines = 2,
                 style = MaterialTheme.typography.subtitle2,
                 modifier = Modifier.constrainAs(podcastTitle) {

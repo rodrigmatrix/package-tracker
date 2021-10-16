@@ -4,7 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.rodrigmatrix.core.viewmodel.ViewEffect
 import com.rodrigmatrix.core.viewmodel.ViewModel
 import com.rodrigmatrix.core.viewmodel.ViewState
-import com.rodrigmatrix.domain.entity.UserPackageAndUpdates
+import com.rodrigmatrix.domain.entity.UserPackage
 import com.rodrigmatrix.domain.usecase.GetPackageStatusUseCase
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -37,7 +37,7 @@ class PackagesDetailsViewModel(
 
 data class PackageStatusViewState(
     val isLoading: Boolean = true,
-    val userPackage: UserPackageAndUpdates? = null
+    val userPackage: UserPackage? = null
 ): ViewState
 
 sealed class PackageStatusViewEffect : ViewEffect {
