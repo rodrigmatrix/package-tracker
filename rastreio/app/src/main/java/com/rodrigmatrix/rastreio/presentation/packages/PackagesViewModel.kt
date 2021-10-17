@@ -1,15 +1,14 @@
 package com.rodrigmatrix.rastreio.presentation.packages
 
 import androidx.lifecycle.viewModelScope
-import com.google.accompanist.swiperefresh.SwipeRefreshState
-import com.rodrigmatrix.core.viewmodel.ViewEffect
 import com.rodrigmatrix.core.viewmodel.ViewModel
-import com.rodrigmatrix.core.viewmodel.ViewState
-import com.rodrigmatrix.domain.entity.UserPackage
+import com.rodrigmatrix.data.local.database.PackagesDAO
+import com.rodrigmatrix.domain.usecase.FetchAllPackagesUseCase
 import com.rodrigmatrix.domain.usecase.GetAllPackagesUseCase
 import com.rodrigmatrix.rastreio.presentation.packages.PackagesViewEffect.OpenPackageScreen
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flowOn
@@ -18,6 +17,7 @@ import kotlinx.coroutines.launch
 
 class PackagesViewModel(
     private val getAllPackagesUseCase: GetAllPackagesUseCase,
+    private val fetchAllPackagesUseCase: FetchAllPackagesUseCase,
     private val coroutineDispatcher: CoroutineDispatcher = Dispatchers.IO
 ): ViewModel<PackagesViewState, PackagesViewEffect>(PackagesViewState()) {
 
@@ -25,9 +25,9 @@ class PackagesViewModel(
         loadPackages()
     }
 
-    fun loadPackages(forceUpdate: Boolean = false) {
+    private fun loadPackages() {
         viewModelScope.launch {
-            getAllPackagesUseCase(forceUpdate)
+            getAllPackagesUseCase()
                 .flowOn(coroutineDispatcher)
                 .onStart { setState { it.loadingState() } }
                 .catch { exception ->
@@ -39,41 +39,19 @@ class PackagesViewModel(
         }
     }
 
+    fun fetchPackages() {
+        viewModelScope.launch {
+            fetchAllPackagesUseCase()
+                .flowOn(coroutineDispatcher)
+                .onStart { setState { it.loadingState() } }
+                .catch { exception -> setState { it.errorState(exception) } }
+                .collect()
+        }
+    }
+
     fun openPackage(packageId: String) {
         viewModelScope.launch {
             setEffect { OpenPackageScreen(packageId) }
         }
     }
-
-}
-
-data class PackagesViewState(
-    val isRefreshing: SwipeRefreshState = SwipeRefreshState(isRefreshing = false),
-    val packagesList: List<UserPackage> = emptyList(),
-    val exception: Throwable? = null
-): ViewState {
-
-    fun loadingState(): PackagesViewState {
-        return this.copy(isRefreshing = SwipeRefreshState(isRefreshing = true))
-    }
-
-    fun successState(packagesList: List<UserPackage>): PackagesViewState {
-        return this.copy(
-            isRefreshing = SwipeRefreshState(isRefreshing = false),
-            packagesList = packagesList,
-            exception = null
-        )
-    }
-
-    fun errorState(throwable: Throwable): PackagesViewState {
-        return this.copy(
-            isRefreshing = SwipeRefreshState(isRefreshing = false),
-            exception = throwable
-        )
-    }
-}
-
-sealed class PackagesViewEffect: ViewEffect {
-
-    data class OpenPackageScreen(val packageId: String): PackagesViewEffect()
 }

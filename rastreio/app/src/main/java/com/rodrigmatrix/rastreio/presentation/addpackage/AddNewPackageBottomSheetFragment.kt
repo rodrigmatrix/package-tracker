@@ -32,7 +32,7 @@ class AddNewPackageBottomSheetFragment: BottomSheetDialogFragment() {
         binding.textButton.setOnClickListener {
             addPackage()
         }
-        binding.textInputPackageId.setText("ON931559908BR")
+        binding.textInputPackageId.setText("SF6041112550171")
     }
 
     private fun setObservers() {

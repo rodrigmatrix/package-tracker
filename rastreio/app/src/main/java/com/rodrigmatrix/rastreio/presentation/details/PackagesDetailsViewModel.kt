@@ -18,7 +18,7 @@ class PackagesDetailsViewModel(
 
     fun getPackageStatus(packageId: String) {
         viewModelScope.launch {
-            getPackageStatusUseCase(packageId, false)
+            getPackageStatusUseCase(packageId)
                 .flowOn(coroutineDispatcher)
                 .onStart { setState { viewState.value.copy(isLoading = true) } }
                 .catch { error ->

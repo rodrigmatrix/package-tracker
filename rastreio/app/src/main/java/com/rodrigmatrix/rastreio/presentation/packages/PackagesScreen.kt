@@ -28,26 +28,21 @@ fun PackagesScreen(
 ) {
     val viewState by viewModel.viewState.collectAsState()
 
-    Surface {
+    Surface(
+        modifier = Modifier
+            .fillMaxSize()
+            .fillMaxWidth()
+    ) {
         Column {
             SwipeRefresh(
                 state = viewState.isRefreshing,
-                onRefresh = { viewModel.loadPackages(forceUpdate = true) }
+                onRefresh = { viewModel.fetchPackages() }
             ) {
                 Column(modifier = Modifier
                     .fillMaxSize()
                     .fillMaxWidth()
                 ) {
-                    when  {
-                        viewState.exception != null -> {
-
-                        }
-
-                        viewState.packagesList.isNotEmpty() ->
-                            PackagesList(viewModel, viewState.packagesList)
-
-                        else -> PackagesEmptyState()
-                    }
+                    PackagesList(viewModel, viewState.packagesList)
                 }
             }
         }

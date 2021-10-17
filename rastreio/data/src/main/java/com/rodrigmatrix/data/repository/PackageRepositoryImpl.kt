@@ -27,46 +27,34 @@ class PackageRepositoryImpl(
             }
     }
 
-    override suspend fun getStatus(packageId: String, forceUpdate: Boolean): Flow<UserPackage> {
-        return if (forceUpdate) {
-            fetchPackage(packageId)
-                .map { userPackageEntity ->
-                    packagesLocalDataSource.savePackage(userPackageEntity)
-                    packageMapper.map(userPackageEntity)
-                }
-        } else {
-            packagesLocalDataSource
-                .getPackage(packageId)
-                .map { packageMapper.map(it) }
-        }
+    override suspend fun getStatus(packageId: String): Flow<UserPackage> {
+        return packagesLocalDataSource.getPackage(packageId)
+            .map { packageMapper.map(it) }
     }
 
-    override suspend fun getAllPackages(forceUpdate: Boolean): Flow<List<UserPackage>> {
-        return if (forceUpdate) {
-            packagesLocalDataSource
-                .getAllPackages()
-                .map { packagesList ->
-                    packagesList.map { userPackage ->
-                        fetchPackage(userPackage.id)
-                            .map { userPackageEntity ->
-                                packagesLocalDataSource.savePackage(userPackageEntity)
-                                packageMapper.map(userPackage)
-                            }.first()
-                    }
+    override suspend fun getPackages(): Flow<List<UserPackage>> {
+        return packagesLocalDataSource.getAllPackages()
+            .map { packagesList ->
+                packagesList.map { userPackage ->
+                    packageMapper.map(userPackage)
                 }
-        } else {
-            packagesLocalDataSource
-                .getAllPackages()
-                .map { packagesList ->
-                    packagesList.map { userPackage ->
-                        packageMapper.map(userPackage)
-                    }
+            }
+    }
+
+    override suspend fun fetchPackages(): Flow<Unit> {
+        return flow {
+            packagesLocalDataSource.getAllPackages()
+                .first()
+                .forEach { userPackage ->
+                    val packageEntity = fetchPackage(userPackage.id).first()
+                    packagesLocalDataSource.savePackage(packageEntity)
                 }
         }
     }
 
     private suspend fun fetchPackage(packageId: String): Flow<UserPackageAndUpdatesEntity> {
         return packagesRemoteDataSource.getPackage(packageId)
+            .catch { throw it }
             .map { packageEntityMapper.map(it) }
     }
 }

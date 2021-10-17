@@ -1,14 +1,13 @@
 package com.rodrigmatrix.domain.usecase
 
-import com.rodrigmatrix.domain.entity.UserPackage
 import com.rodrigmatrix.domain.repository.PackageRepository
 import kotlinx.coroutines.flow.Flow
 
-class GetAllPackagesUseCase(
+class FetchAllPackagesUseCase(
     private val packageRepository: PackageRepository
 ) {
 
-    suspend operator fun invoke(): Flow<List<UserPackage>> {
-        return packageRepository.getPackages()
+    suspend operator fun invoke(): Flow<Unit> {
+        return packageRepository.fetchPackages()
     }
 }

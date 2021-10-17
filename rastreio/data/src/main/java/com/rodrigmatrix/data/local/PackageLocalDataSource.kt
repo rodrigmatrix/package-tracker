@@ -10,5 +10,4 @@ interface PackageLocalDataSource {
     suspend fun getPackage(packageId: String): Flow<UserPackageAndUpdatesEntity>
 
     suspend fun getAllPackages(): Flow<List<UserPackageAndUpdatesEntity>>
-
 }
