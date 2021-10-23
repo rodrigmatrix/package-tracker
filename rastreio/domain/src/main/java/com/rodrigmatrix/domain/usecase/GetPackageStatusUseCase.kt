@@ -8,7 +8,7 @@ class GetPackageStatusUseCase(
     private val packageRepository: PackageRepository
 ) {
 
-    suspend operator fun invoke(packageId: String): Flow<UserPackage> {
+    operator fun invoke(packageId: String): Flow<UserPackage> {
         return packageRepository.getStatus(packageId)
     }
 }

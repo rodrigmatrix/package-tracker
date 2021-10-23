@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.rodrigmatrix.rastreio.databinding.FragmentAddNewPackageBinding
+import com.rodrigmatrix.rastreio.presentation.addpackage.AddPackageViewEffect.PackageAdded
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -32,13 +33,20 @@ class AddNewPackageBottomSheetFragment: BottomSheetDialogFragment() {
         binding.textButton.setOnClickListener {
             addPackage()
         }
-        binding.textInputPackageId.setText("SF6041112550171")
+        binding.textInputPackageId.setText("NX133836615BR")
     }
 
     private fun setObservers() {
         lifecycleScope.launch {
             viewModel.viewState.collect {
                 Toast.makeText(context, "${it.error}", Toast.LENGTH_SHORT).show()
+            }
+            viewModel.viewEffect.collect {
+                when (it) {
+                    is PackageAdded -> {
+                        dismiss()
+                    }
+                }
             }
         }
     }

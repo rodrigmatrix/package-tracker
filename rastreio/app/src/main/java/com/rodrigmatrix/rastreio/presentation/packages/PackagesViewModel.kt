@@ -3,6 +3,7 @@ package com.rodrigmatrix.rastreio.presentation.packages
 import androidx.lifecycle.viewModelScope
 import com.rodrigmatrix.core.viewmodel.ViewModel
 import com.rodrigmatrix.data.local.database.PackagesDAO
+import com.rodrigmatrix.domain.usecase.DeletePackageUseCase
 import com.rodrigmatrix.domain.usecase.FetchAllPackagesUseCase
 import com.rodrigmatrix.domain.usecase.GetAllPackagesUseCase
 import com.rodrigmatrix.rastreio.presentation.packages.PackagesViewEffect.OpenPackageScreen
@@ -18,6 +19,7 @@ import kotlinx.coroutines.launch
 class PackagesViewModel(
     private val getAllPackagesUseCase: GetAllPackagesUseCase,
     private val fetchAllPackagesUseCase: FetchAllPackagesUseCase,
+    private val deletePackageUseCase: DeletePackageUseCase,
     private val coroutineDispatcher: CoroutineDispatcher = Dispatchers.IO
 ): ViewModel<PackagesViewState, PackagesViewEffect>(PackagesViewState()) {
 
@@ -42,6 +44,16 @@ class PackagesViewModel(
     fun fetchPackages() {
         viewModelScope.launch {
             fetchAllPackagesUseCase()
+                .flowOn(coroutineDispatcher)
+                .onStart { setState { it.loadingState() } }
+                .catch { exception -> setState { it.errorState(exception) } }
+                .collect()
+        }
+    }
+
+    fun deletePackage(packageId: String) {
+        viewModelScope.launch {
+            deletePackageUseCase(packageId)
                 .flowOn(coroutineDispatcher)
                 .onStart { setState { it.loadingState() } }
                 .catch { exception -> setState { it.errorState(exception) } }

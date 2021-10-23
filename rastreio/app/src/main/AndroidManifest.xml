@@ -13,7 +13,7 @@
         android:name=".RastreioApp">
 
         <activity
-            android:name=".presentation.home.HomeActivity"
+            android:name=".presentation.packages.PackagesActivity"
             android:exported="true"
             android:theme="@style/Theme.Rastreio.NoActionBar">
             <intent-filter>

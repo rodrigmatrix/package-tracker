@@ -3,6 +3,7 @@ package com.rodrigmatrix.rastreio.presentation.addpackage
 import androidx.lifecycle.viewModelScope
 import com.rodrigmatrix.core.viewmodel.ViewModel
 import com.rodrigmatrix.domain.usecase.AddPackageUseCase
+import com.rodrigmatrix.rastreio.presentation.addpackage.AddPackageViewEffect.PackageAdded
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
@@ -21,8 +22,10 @@ class AddNewPackageViewModel(
             addPackageUseCase(name, packageId)
                 .flowOn(dispatcher)
                 .onStart { setState { it.loadingState() } }
-                .catch { error -> setState { it.errorState(error.message.orEmpty()) } }
-                .collect {  }
+                .catch { error ->
+                    setState { it.errorState(error.message.orEmpty()) }
+                }
+                .collect { setEffect { PackageAdded } }
         }
     }
 }

@@ -8,6 +8,12 @@ import org.koin.dsl.module
 
 val presentationModule = module {
     viewModel { PackagesDetailsViewModel(getPackageStatusUseCase = get()) }
-    viewModel { PackagesViewModel(getAllPackagesUseCase = get(), fetchAllPackagesUseCase = get()) }
+    viewModel {
+        PackagesViewModel(
+            getAllPackagesUseCase = get(),
+            fetchAllPackagesUseCase = get(),
+            deletePackageUseCase = get()
+        )
+    }
     viewModel { AddNewPackageViewModel(addPackageUseCase = get()) }
 }

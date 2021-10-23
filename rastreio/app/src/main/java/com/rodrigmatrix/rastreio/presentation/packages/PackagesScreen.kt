@@ -1,7 +1,9 @@
 package com.rodrigmatrix.rastreio.presentation.packages
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -61,6 +63,7 @@ fun PackagesList(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PackageItem(
     viewModel: PackagesViewModel,
@@ -70,9 +73,10 @@ fun PackageItem(
     ConstraintLayout(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable {
-                viewModel.openPackage(packageItem.packageId)
-            }
+            .combinedClickable(
+                onClick = { viewModel.openPackage(packageItem.packageId) },
+                onLongClick = { viewModel.deletePackage(packageItem.packageId) }
+            )
     ) {
         val (
             divider, episodeTitle, podcastTitle, image

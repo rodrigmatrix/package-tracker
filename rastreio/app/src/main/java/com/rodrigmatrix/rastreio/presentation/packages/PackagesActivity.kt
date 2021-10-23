@@ -1,4 +1,4 @@
-package com.rodrigmatrix.rastreio.presentation.home
+package com.rodrigmatrix.rastreio.presentation.packages
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,19 +6,19 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.rodrigmatrix.rastreio.databinding.ActivityHomeBinding
 import com.rodrigmatrix.rastreio.presentation.history.PackageActivity
-import com.rodrigmatrix.rastreio.presentation.packages.PackagesScreen
-import com.rodrigmatrix.rastreio.presentation.packages.PackagesViewEffect
-import com.rodrigmatrix.rastreio.presentation.packages.PackagesViewModel
 import com.google.android.material.composethemeadapter.MdcTheme
 import com.rodrigmatrix.rastreio.presentation.addpackage.AddNewPackageBottomSheetFragment
-import com.rodrigmatrix.rastreio.presentation.theme.RastreioTheme
 import kotlinx.coroutines.flow.collect
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class HomeActivity : AppCompatActivity() {
+class PackagesActivity : AppCompatActivity() {
 
     private val binding by lazy {
         ActivityHomeBinding.inflate(layoutInflater)
+    }
+
+    private val packagesAdapter by lazy {
+        PackagesAdapter()
     }
 
     private val viewModel by viewModel<PackagesViewModel>()
@@ -43,6 +43,9 @@ class HomeActivity : AppCompatActivity() {
 
     private fun setObservers() {
         lifecycleScope.launchWhenStarted {
+            viewModel.viewState.collect { viewState ->
+                packagesAdapter.submitList(viewState.packagesList)
+            }
             viewModel.viewEffect.collect { effect ->
                 when (effect) {
                     is PackagesViewEffect.OpenPackageScreen -> {
@@ -55,7 +58,7 @@ class HomeActivity : AppCompatActivity() {
 
     private fun openAddPackageFragment() {
         AddNewPackageBottomSheetFragment()
-            .show(supportFragmentManager, HomeActivity::class.simpleName)
+            .show(supportFragmentManager, PackagesActivity::class.simpleName)
     }
 
     private fun openPackageScreen(packageId: String) {

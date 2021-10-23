@@ -3,11 +3,11 @@ package com.rodrigmatrix.domain.usecase
 import com.rodrigmatrix.domain.repository.PackageRepository
 import kotlinx.coroutines.flow.Flow
 
-class FetchAllPackagesUseCase(
+class DeletePackageUseCase(
     private val packageRepository: PackageRepository
 ) {
 
-    operator fun invoke(): Flow<Unit> {
-        return packageRepository.fetchPackages()
+    operator fun invoke(packageId: String): Flow<Unit> {
+        return packageRepository.deletePackage(packageId)
     }
 }

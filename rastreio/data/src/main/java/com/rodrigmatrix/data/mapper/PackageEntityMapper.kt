@@ -9,11 +9,13 @@ class PackageEntityMapper: Mapper<PackageStatusResponse, UserPackageAndUpdatesEn
         val userPackage = source.objeto?.firstOrNull() ?: throw Exception()
 
         return UserPackageAndUpdatesEntity(
-            id = userPackage.numero,
-            name = userPackage.nome,
-            deliveryType = userPackage.categoria,
-            postalDate = userPackage.evento.first().dataPostagem,
-            statusUpdate = userPackage.evento.map { event -> event.toStatus(userPackage.numero) }
+            id = userPackage.numero.orEmpty(),
+            name = userPackage.nome.orEmpty(),
+            deliveryType = userPackage.categoria.orEmpty(),
+            postalDate = userPackage.evento?.firstOrNull()?.dataPostagem.orEmpty(),
+            statusUpdate = userPackage.evento?.map { event ->
+                event.toStatus(userPackage.numero.orEmpty())
+            }
         )
     }
 
@@ -21,9 +23,9 @@ class PackageEntityMapper: Mapper<PackageStatusResponse, UserPackageAndUpdatesEn
         return StatusUpdateEntity(
             userPackageId = packageId,
             //FIXME
-            statusUpdateType = tipo,
-            description = descricao,
-            date = data,
+            statusUpdateType = tipo.orEmpty(),
+            description = descricao.orEmpty(),
+            date = data.orEmpty(),
             from = getAddress(),
             to = destino?.firstOrNull()?.getDestinationAddress()
         )
@@ -31,23 +33,23 @@ class PackageEntityMapper: Mapper<PackageStatusResponse, UserPackageAndUpdatesEn
 
     private fun Evento.getAddress(): StatusAddressEntity {
         return StatusAddressEntity(
-            localName = unidade.local,
-            city = unidade.cidade,
-            state = unidade.uf,
-            unitType = unidade.tipounidade,
-            latitude = unidade.endereco.latitude.toLongOrNull() ?: 0L,
-            longitude = unidade.endereco.longitude.toLongOrNull() ?: 0L
+            localName = unidade?.local.orEmpty(),
+            city = unidade?.cidade.orEmpty(),
+            state = unidade?.uf.orEmpty(),
+            unitType = unidade?.tipounidade.orEmpty(),
+            latitude = unidade?.endereco?.latitude?.toLongOrNull() ?: 0L,
+            longitude = unidade?.endereco?.longitude?.toLongOrNull() ?: 0L
         )
     }
 
     private fun Destino.getDestinationAddress(): StatusAddressEntity {
         return StatusAddressEntity(
-            localName = local,
-            city = cidade,
-            state = uf,
+            localName = local.orEmpty(),
+            city = cidade.orEmpty(),
+            state = uf.orEmpty(),
             unitType = null,
-            latitude = endereco.latitude.toLongOrNull() ?: 0L,
-            longitude = endereco.longitude.toLongOrNull() ?: 0L
+            latitude = endereco?.latitude?.toLongOrNull() ?: 0L,
+            longitude = endereco?.longitude?.toLongOrNull() ?: 0L
         )
     }
 

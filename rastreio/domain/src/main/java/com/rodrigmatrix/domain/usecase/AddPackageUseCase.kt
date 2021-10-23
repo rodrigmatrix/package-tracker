@@ -8,7 +8,7 @@ class AddPackageUseCase(
     private val packageRepository: PackageRepository
 ) {
 
-    suspend operator fun invoke(name: String, packageId: String): Flow<UserPackage> {
+    operator fun invoke(name: String, packageId: String): Flow<UserPackage> {
         return packageRepository.addPackage(name, packageId)
     }
 }

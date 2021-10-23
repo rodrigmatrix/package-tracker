@@ -40,6 +40,9 @@ dependencies {
     implementation Libs.AndroidX.coreKtx
     implementation Libs.AndroidX.appCompat
 
+    implementation Libs.AndroidX.ConstraintLayout.constraintLayoutCompose
+    implementation Libs.Material.material
+
     implementation Libs.Serialization.gson
 
     testImplementation Libs.Test.junit

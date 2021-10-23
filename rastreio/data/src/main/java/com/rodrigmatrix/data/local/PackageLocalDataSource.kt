@@ -5,9 +5,13 @@ import kotlinx.coroutines.flow.Flow
 
 interface PackageLocalDataSource {
 
-    suspend fun savePackage(userPackage: UserPackageAndUpdatesEntity)
+    fun savePackages(userPackageList: List<UserPackageAndUpdatesEntity>)
 
-    suspend fun getPackage(packageId: String): Flow<UserPackageAndUpdatesEntity>
+    fun savePackage(userPackage: UserPackageAndUpdatesEntity)
 
-    suspend fun getAllPackages(): Flow<List<UserPackageAndUpdatesEntity>>
+    fun getPackage(packageId: String): Flow<UserPackageAndUpdatesEntity>
+
+    fun getAllPackages(): Flow<List<UserPackageAndUpdatesEntity>>
+
+    fun deletePackage(packageId: String): Flow<Unit>
 }

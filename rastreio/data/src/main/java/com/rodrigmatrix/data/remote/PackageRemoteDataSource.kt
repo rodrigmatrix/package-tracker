@@ -5,5 +5,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface PackageRemoteDataSource {
 
-    suspend fun getPackage(packageId: String): Flow<PackageStatusResponse>
+    fun getPackage(packageId: String): Flow<PackageStatusResponse>
 }

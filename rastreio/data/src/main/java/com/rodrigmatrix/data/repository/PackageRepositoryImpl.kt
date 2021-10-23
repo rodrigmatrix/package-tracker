@@ -17,7 +17,13 @@ class PackageRepositoryImpl(
     private val packageEntityMapper: PackageEntityMapper = PackageEntityMapper()
 ) : PackageRepository {
 
-    override suspend fun addPackage(name: String, packageId: String): Flow<UserPackage> {
+    private fun fetchPackage(packageId: String): Flow<UserPackageAndUpdatesEntity> {
+        return packagesRemoteDataSource.getPackage(packageId)
+            .catch { throw it }
+            .map { packageEntityMapper.map(it) }
+    }
+
+    override fun addPackage(name: String, packageId: String): Flow<UserPackage> {
         return fetchPackage(packageId)
             .catch { throw it }
             .map { userPackageEntity ->
@@ -27,12 +33,12 @@ class PackageRepositoryImpl(
             }
     }
 
-    override suspend fun getStatus(packageId: String): Flow<UserPackage> {
+    override fun getStatus(packageId: String): Flow<UserPackage> {
         return packagesLocalDataSource.getPackage(packageId)
             .map { packageMapper.map(it) }
     }
 
-    override suspend fun getPackages(): Flow<List<UserPackage>> {
+    override fun getPackages(): Flow<List<UserPackage>> {
         return packagesLocalDataSource.getAllPackages()
             .map { packagesList ->
                 packagesList.map { userPackage ->
@@ -41,20 +47,19 @@ class PackageRepositoryImpl(
             }
     }
 
-    override suspend fun fetchPackages(): Flow<Unit> {
+    override fun fetchPackages(): Flow<Unit> {
         return flow {
             packagesLocalDataSource.getAllPackages()
                 .first()
-                .forEach { userPackage ->
-                    val packageEntity = fetchPackage(userPackage.id).first()
-                    packagesLocalDataSource.savePackage(packageEntity)
+                .map { userPackage ->
+                    fetchPackage(userPackage.id).first()
+                }.also { packagesList ->
+                    packagesLocalDataSource.savePackages(packagesList)
                 }
         }
     }
 
-    private suspend fun fetchPackage(packageId: String): Flow<UserPackageAndUpdatesEntity> {
-        return packagesRemoteDataSource.getPackage(packageId)
-            .catch { throw it }
-            .map { packageEntityMapper.map(it) }
+    override fun deletePackage(packageId: String): Flow<Unit> {
+        return packagesLocalDataSource.deletePackage(packageId)
     }
 }

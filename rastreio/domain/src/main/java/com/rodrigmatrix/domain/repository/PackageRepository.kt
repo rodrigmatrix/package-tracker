@@ -5,11 +5,13 @@ import kotlinx.coroutines.flow.Flow
 
 interface PackageRepository {
 
-    suspend fun addPackage(name: String,packageId: String): Flow<UserPackage>
+    fun addPackage(name: String,packageId: String): Flow<UserPackage>
 
-    suspend fun getStatus(packageId: String): Flow<UserPackage>
+    fun getStatus(packageId: String): Flow<UserPackage>
 
-    suspend fun getPackages(): Flow<List<UserPackage>>
+    fun getPackages(): Flow<List<UserPackage>>
 
-    suspend fun fetchPackages(): Flow<Unit>
+    fun fetchPackages(): Flow<Unit>
+
+    fun deletePackage(packageId: String): Flow<Unit>
 }

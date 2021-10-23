@@ -27,4 +27,27 @@ abstract class PackagesDAO {
     @Query("DELETE FROM status_update WHERE userPackageId LIKE :packageId")
     abstract fun deletePackageUpdates(packageId: String)
 
+    @Query("DELETE FROM packages WHERE id LIKE :packageId")
+    abstract fun deletePackage(packageId: String)
+
+    @Transaction
+    open fun savePackage(userPackage: UserPackageAndUpdatesEntity) {
+        upsertPackage(
+            UserPackageEntity(
+                userPackage.id,
+                userPackage.name,
+                userPackage.deliveryType,
+                userPackage.postalDate
+            )
+        )
+        deletePackageUpdates(userPackage.id)
+        upsertPackageUpdates(userPackage.statusUpdate.orEmpty())
+    }
+
+    @Transaction
+    open fun savePackages(userPackageList: List<UserPackageAndUpdatesEntity>) {
+        userPackageList.forEach {
+            savePackage(it)
+        }
+    }
 }

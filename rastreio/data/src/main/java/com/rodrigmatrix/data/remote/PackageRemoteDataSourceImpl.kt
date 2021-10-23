@@ -10,8 +10,6 @@ class PackageRemoteDataSourceImpl(
     private val correiosService: CorreiosService
 ) : PackageRemoteDataSource {
 
-
-    override suspend fun getPackage(packageId: String): Flow<PackageStatusResponse> =
+    override fun getPackage(packageId: String): Flow<PackageStatusResponse> =
         flow { emit(correiosService.getStatus(StatusRequest(packageId))) }
-
 }
