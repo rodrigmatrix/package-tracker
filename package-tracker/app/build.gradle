@@ -1,0 +1,116 @@
+import com.rodrigmatrix.packagetracker.buildSrc.Libs
+
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+}
+
+android {
+    compileSdk 31
+
+    defaultConfig {
+        applicationId "com.rodrigmatrix.packagetracker"
+        minSdk 21
+        targetSdk 31
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables {
+            useSupportLibrary true
+        }
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += [
+                        "room.schemaLocation":"$projectDir/schemas".toString(),
+                        "room.incremental":"true",
+                        "room.expandProjection":"true"]
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+        useIR = true
+    }
+    buildFeatures {
+        compose true
+        viewBinding true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion "1.0.1"
+        kotlinCompilerVersion '1.4.32'
+    }
+}
+
+dependencies {
+    implementation project(':core')
+    implementation project(':domain')
+    implementation project(':data')
+
+    implementation Libs.Kotlin.stdlib
+    implementation Libs.Coroutines.android
+    implementation Libs.Coroutines.core
+
+    implementation Libs.AndroidX.coreKtx
+    implementation Libs.AndroidX.Activity.activityCompose
+    implementation Libs.AndroidX.Lifecycle.viewModelCompose
+    implementation Libs.AndroidX.Navigation.navigationCompose
+    implementation Libs.AndroidX.ConstraintLayout.constraintLayoutCompose
+    implementation Libs.Material.material
+
+    // Room
+    implementation Libs.AndroidX.Room.runtime
+    kapt Libs.AndroidX.Room.compiler
+    implementation Libs.AndroidX.Room.ktx
+
+    // Compose
+    implementation Libs.AndroidX.Compose.runtime
+    implementation Libs.AndroidX.Compose.foundation
+    implementation Libs.AndroidX.Compose.layout
+    implementation Libs.AndroidX.Compose.ui
+    implementation Libs.AndroidX.Compose.uiUtil
+    implementation Libs.AndroidX.Compose.material3
+    implementation Libs.AndroidX.Compose.animation
+    implementation Libs.AndroidX.Compose.iconsExtended
+    implementation Libs.AndroidX.Compose.tooling
+    implementation Libs.AndroidX.Compose.swipeRefresh
+    implementation Libs.AndroidX.Compose.themeAdapter
+
+    implementation Libs.lottie
+
+    implementation Libs.Accompanist.insets
+    implementation Libs.Accompanist.systemuicontroller
+
+    // Okhttp
+    implementation Libs.Network.retrofit
+    implementation Libs.Network.okHttp
+    implementation Libs.Network.gsonConverter
+
+    // Koin
+    implementation Libs.Koin.android
+    implementation Libs.Koin.androidCompat
+    implementation Libs.Koin.compose
+
+    implementation Libs.Serialization.gson
+
+    testImplementation Libs.Test.junit
+    androidTestImplementation Libs.Test.Ext.junit
+    androidTestImplementation Libs.Test.espressoCore
+    testImplementation Libs.Coroutines.test
+    testImplementation Libs.Test.mockk
+    testImplementation Libs.Test.core
+    testImplementation Libs.Koin.test
+}

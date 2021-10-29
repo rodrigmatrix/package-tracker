@@ -1,0 +1,35 @@
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/composeView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/addPackageFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="?attr/floatingActionButtonLargeStyle"
+        android:layout_margin="92dp"
+        app:layout_anchorGravity="bottom|center"
+        android:layout_gravity="center|bottom"
+        app:backgroundTint="@color/colorPrimaryVariant"
+        app:shapeAppearanceOverlay="@style/ShapeAppearance.Rastreio.LargeComponent"
+        android:src="@drawable/ic_add"
+       app:layout_anchor="@id/bottomNavigation"/>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        style="@style/Rastreio.BottomNavigationView"
+        app:menu="@menu/bottom_navigation_menu" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,0 +1,53 @@
+import com.rodrigmatrix.packagetracker.buildSrc.Libs
+
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+}
+
+android {
+    compileSdk 31
+    buildToolsVersion "30.0.3"
+
+    defaultConfig {
+        minSdk 21
+        targetSdk 31
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+dependencies {
+    implementation Libs.Kotlin.stdlib
+    implementation Libs.Coroutines.android
+    implementation Libs.Coroutines.core
+    implementation Libs.AndroidX.coreKtx
+    implementation Libs.AndroidX.appCompat
+
+    implementation Libs.AndroidX.ConstraintLayout.constraintLayoutCompose
+    implementation Libs.Material.material
+
+    implementation Libs.Serialization.gson
+
+    testImplementation Libs.Test.junit
+    androidTestImplementation Libs.Test.Ext.junit
+    androidTestImplementation Libs.Test.espressoCore
+    testImplementation Libs.Coroutines.test
+    testImplementation Libs.Test.core
+}
