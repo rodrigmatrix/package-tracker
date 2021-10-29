@@ -1,10 +1,8 @@
 package com.rodrigmatrix.rastreio.presentation.history
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -19,11 +17,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
+import com.rodrigmatrix.domain.entity.PackageProgressStatus
 import com.rodrigmatrix.domain.entity.StatusAddress
 import com.rodrigmatrix.domain.entity.StatusUpdate
+import com.rodrigmatrix.domain.entity.UserPackage
 import com.rodrigmatrix.rastreio.extensions.getStatusIconAndColor
+import com.rodrigmatrix.rastreio.presentation.details.Details
+import com.rodrigmatrix.rastreio.presentation.theme.RastreioTheme
 
 @Composable
 fun PackageUpdatesList(statusUpdateList: List<StatusUpdate>) {
@@ -39,7 +43,7 @@ fun PackageUpdate(statusUpdate: StatusUpdate) {
 
     val (statusColor, iconVector) = statusUpdate.getStatusIconAndColor()
 
-    ConstraintLayout {
+    ConstraintLayout(Modifier.fillMaxWidth()) {
         val (icon, textItems) = createRefs()
 
         Icon(
@@ -65,6 +69,7 @@ fun PackageUpdate(statusUpdate: StatusUpdate) {
                     top.linkTo(parent.top)
                     bottom.linkTo(parent.bottom)
                     end.linkTo(parent.end)
+                    width = Dimension.fillToConstraints
                 }
         ) {
             Text(
@@ -106,5 +111,22 @@ fun Address(address: StatusAddress?, isDestination: Boolean) {
             text = "${address.localName}-${address.state}",
             style = MaterialTheme.typography.body2
         )
+    }
+}
+
+
+@Preview(name = "Light Theme")
+@Preview(name = "Dark Theme", uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(name = "Large Font", fontScale = 2f)
+@Composable
+fun PackageUpdatePreview() {
+    val packageItem = StatusUpdate(
+        date = "20/07/2022",
+        description = "Saiu para entrega",
+        from = StatusAddress()
+    )
+
+    RastreioTheme {
+        PackageUpdate(packageItem)
     }
 }

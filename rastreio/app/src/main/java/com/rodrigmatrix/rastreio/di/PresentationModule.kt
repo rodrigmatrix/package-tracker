@@ -7,7 +7,12 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val presentationModule = module {
-    viewModel { PackagesDetailsViewModel(getPackageStatusUseCase = get()) }
+    viewModel {
+        PackagesDetailsViewModel(
+            getPackageStatusUseCase = get(),
+            getPackageProgressStatus = get()
+        )
+    }
     viewModel {
         PackagesViewModel(
             getAllPackagesUseCase = get(),

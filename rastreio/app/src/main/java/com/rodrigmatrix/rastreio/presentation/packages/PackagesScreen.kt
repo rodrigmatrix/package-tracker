@@ -1,32 +1,30 @@
 package com.rodrigmatrix.rastreio.presentation.packages
 
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.combinedClickable
+import android.content.res.Configuration
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.*
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.constraintlayout.compose.Dimension
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
 import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.rodrigmatrix.domain.entity.StatusAddress
+import com.rodrigmatrix.domain.entity.StatusUpdate
 import com.rodrigmatrix.domain.entity.UserPackage
-import com.rodrigmatrix.rastreio.extensions.getLastStatus
-import com.rodrigmatrix.rastreio.extensions.getStatusIconAndColor
+import com.rodrigmatrix.rastreio.presentation.theme.RastreioTheme
+import org.koin.androidx.compose.getViewModel
 
 @Composable
 fun PackagesScreen(
-    viewModel: PackagesViewModel
+    navController: NavController,
+    viewModel: PackagesViewModel = getViewModel()
 ) {
     val viewState by viewModel.viewState.collectAsState()
 
@@ -44,7 +42,12 @@ fun PackagesScreen(
                     .fillMaxSize()
                     .fillMaxWidth()
                 ) {
-                    PackagesList(viewModel, viewState.packagesList)
+                    PackagesList(
+                        { id ->
+                            navController.navigate("package/$id")
+                        },
+                        viewState.packagesList
+                    )
                 }
             }
         }
@@ -53,112 +56,62 @@ fun PackagesScreen(
 
 @Composable
 fun PackagesList(
-    viewModel: PackagesViewModel,
+    onItemClick: (id: String) -> Unit,
     packagesList: List<UserPackage>
 ) {
-    LazyColumn(modifier = Modifier.fillMaxHeight()) {
-        items(packagesList) { packageItem ->
-            PackageItem(viewModel, packageItem)
+    Box(Modifier.fillMaxSize()) {
+        AnimatedVisibility(
+            visible = packagesList.isNotEmpty(),
+            enter = fadeIn(),
+            exit = fadeOut()
+        ) {
+            LazyColumn(modifier = Modifier.fillMaxHeight()) {
+                items(packagesList) { packageItem ->
+                    Package(onItemClick, packageItem)
+                }
+            }
         }
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
+@Preview(name = "Light Theme")
+@Preview(name = "Dark Theme", uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(name = "Large Font", fontScale = 2f)
 @Composable
-fun PackageItem(
-    viewModel: PackagesViewModel,
-    packageItem: UserPackage
-) {
-    val lastStatus = packageItem.getLastStatus()
-    ConstraintLayout(
-        modifier = Modifier
-            .fillMaxWidth()
-            .combinedClickable(
-                onClick = { viewModel.openPackage(packageItem.packageId) },
-                onLongClick = { viewModel.deletePackage(packageItem.packageId) }
-            )
-    ) {
-        val (
-            divider, episodeTitle, podcastTitle, image
-        ) = createRefs()
-
-        Divider(
-            Modifier.constrainAs(divider) {
-                top.linkTo(parent.top)
-                centerHorizontallyTo(parent)
-
-                width = Dimension.fillToConstraints
-            }
-        )
-
-        val statusUpdate = packageItem.statusUpdate.orEmpty().first()
-
-        val (statusColor, iconVector) = statusUpdate.getStatusIconAndColor()
-
-        Icon(
-            imageVector = iconVector,
-            contentDescription = null,
-            tint = Color.White,
-            modifier = Modifier
-                .size(42.dp)
-                .clip(CircleShape)
-                .background(statusColor)
-                .padding(8.dp)
-                .constrainAs(image) {
-                    end.linkTo(parent.end, 16.dp)
-                    top.linkTo(parent.top, 16.dp)
-                },
-        )
-
-        Text(
-            text = packageItem.name,
-            maxLines = 2,
-            style = MaterialTheme.typography.subtitle1,
-            modifier = Modifier.constrainAs(episodeTitle) {
-                linkTo(
-                    start = parent.start,
-                    end = image.start,
-                    startMargin = 24.dp,
-                    endMargin = 16.dp,
-                    bias = 0f
+fun PackagesPreview() {
+    val items = listOf(
+        UserPackage(
+            "H6XAJ123BN12",
+            "Google Pixel 4",
+            "",
+            "20/07/2022",
+            listOf(
+                StatusUpdate(
+                    date = "20/07/2022",
+                    description = "Saiu para entrega",
+                    from = StatusAddress()
                 )
-                top.linkTo(parent.top, 16.dp)
-
-                width = Dimension.preferredWrapContent
-            }
-        )
-
-        val titleImageBarrier = createBottomBarrier(podcastTitle, image)
-
-        CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
-            Text(
-                text = packageItem.packageId,
-                maxLines = 2,
-                style = MaterialTheme.typography.subtitle2,
-                modifier = Modifier.constrainAs(podcastTitle) {
-                    linkTo(
-                        start = parent.start,
-                        end = image.start,
-                        startMargin = 24.dp,
-                        endMargin = 16.dp,
-                        bias = 0f
-                    )
-                    top.linkTo(episodeTitle.bottom, 6.dp)
-
-                    width = Dimension.preferredWrapContent
-                },
-                color = lastStatus.color
             )
-        }
+        ),
+        UserPackage(
+            "H6XAJ123BN12",
+            "Google Pixel 6 Pro",
+            "",
+            "20/07/2022",
+            listOf(
+                StatusUpdate(
+                    date = "21/07/2022",
+                    description = "Entregue",
+                    from = StatusAddress()
+                )
+            )
+        )
+    )
 
-    }
-}
-
-@Composable
-fun PackagesEmptyState() {
-    Column {
-
-
-
+    RastreioTheme {
+        PackagesList(
+            onItemClick = {},
+            packagesList = items
+        )
     }
 }

@@ -31,7 +31,7 @@ class PackageActivity : AppCompatActivity() {
     private fun setScreen() {
         binding.composeView.setContent {
             MdcTheme {
-                DetailsScreen(packageId, viewModel)
+                //DetailsScreen(packageId, viewModel)
             }
         }
     }

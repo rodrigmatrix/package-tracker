@@ -33,13 +33,16 @@ class AddNewPackageBottomSheetFragment: BottomSheetDialogFragment() {
         binding.textButton.setOnClickListener {
             addPackage()
         }
+        binding.textInputName.setText("Google Pixel")
         binding.textInputPackageId.setText("NX133836615BR")
     }
 
     private fun setObservers() {
         lifecycleScope.launch {
             viewModel.viewState.collect {
-                Toast.makeText(context, "${it.error}", Toast.LENGTH_SHORT).show()
+                it.error?.let {
+                    Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+                }
             }
             viewModel.viewEffect.collect {
                 when (it) {

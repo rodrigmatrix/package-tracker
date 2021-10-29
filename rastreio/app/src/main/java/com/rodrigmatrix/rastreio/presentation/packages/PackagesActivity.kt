@@ -1,70 +1,76 @@
 package com.rodrigmatrix.rastreio.presentation.packages
 
-import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
-import com.rodrigmatrix.rastreio.databinding.ActivityHomeBinding
-import com.rodrigmatrix.rastreio.presentation.history.PackageActivity
-import com.google.android.material.composethemeadapter.MdcTheme
-import com.rodrigmatrix.rastreio.presentation.addpackage.AddNewPackageBottomSheetFragment
-import kotlinx.coroutines.flow.collect
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material3.*
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import com.rodrigmatrix.rastreio.presentation.details.DetailsScreen
+import com.rodrigmatrix.rastreio.presentation.navigation.Screen
+import com.rodrigmatrix.rastreio.presentation.theme.RastreioTheme
 
-class PackagesActivity : AppCompatActivity() {
-
-    private val binding by lazy {
-        ActivityHomeBinding.inflate(layoutInflater)
-    }
-
-    private val packagesAdapter by lazy {
-        PackagesAdapter()
-    }
-
-    private val viewModel by viewModel<PackagesViewModel>()
+@OptIn(ExperimentalMaterial3Api::class)
+class PackagesActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(binding.root)
-        setObservers()
-        setScreen()
-    }
-
-    private fun setScreen() {
-        binding.composeView.setContent {
-            MdcTheme {
-                PackagesScreen(viewModel)
-            }
-        }
-        binding.addPackageFab.setOnClickListener {
-            openAddPackageFragment()
-        }
-    }
-
-    private fun setObservers() {
-        lifecycleScope.launchWhenStarted {
-            viewModel.viewState.collect { viewState ->
-                packagesAdapter.submitList(viewState.packagesList)
-            }
-            viewModel.viewEffect.collect { effect ->
-                when (effect) {
-                    is PackagesViewEffect.OpenPackageScreen -> {
-                        openPackageScreen(effect.packageId)
+        setContent {
+            val navController = rememberNavController()
+            RastreioTheme {
+                Scaffold(
+                    modifier = Modifier.fillMaxSize(),
+                    bottomBar = {
+                        val navBackStackEntry by navController.currentBackStackEntryAsState()
+                        val currentDestination = navBackStackEntry?.destination
+                        if (currentDestination?.route == "home") {
+                            NavigationBar {
+                                listOf(
+                                    Screen.Home,
+                                    Screen.Settings
+                                ).forEach { screen ->
+                                    NavigationBarItem(
+                                        icon = { Icon(Icons.Filled.Favorite, contentDescription = null) },
+                                        label = { Text(stringResource(screen.resourceId)) },
+                                        onClick = {
+                                            navController.navigate(screen.route) {
+                                                restoreState = true
+                                                launchSingleTop = true
+                                            }
+                                        },
+                                        selected = currentDestination.hierarchy.any {
+                                            it.route == screen.route
+                                        }
+                                    )
+                                }
+                            }
+                        }
+                    }
+                ) {
+                    NavHost(
+                        navController,
+                        startDestination = Screen.Home.route
+                    ) {
+                        composable(Screen.Home.route) { PackagesScreen(navController) }
+                        composable(Screen.Settings.route) { PackagesScreen(navController) }
+                        composable(Screen.Packages.route) { backStackEntry ->
+                            DetailsScreen(
+                                backStackEntry.arguments?.getString("packageId").orEmpty(),
+                                navController
+                            )
+                        }
                     }
                 }
             }
         }
-    }
-
-    private fun openAddPackageFragment() {
-        AddNewPackageBottomSheetFragment()
-            .show(supportFragmentManager, PackagesActivity::class.simpleName)
-    }
-
-    private fun openPackageScreen(packageId: String) {
-        startActivity(
-            Intent(this, PackageActivity::class.java)
-                .putExtra("package_id", packageId)
-        )
     }
 }

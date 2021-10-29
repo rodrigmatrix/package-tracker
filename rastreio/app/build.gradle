@@ -83,6 +83,7 @@ dependencies {
     implementation Libs.AndroidX.Compose.ui
     implementation Libs.AndroidX.Compose.uiUtil
     implementation Libs.AndroidX.Compose.material
+    implementation Libs.AndroidX.Compose.material3
     implementation Libs.AndroidX.Compose.animation
     implementation Libs.AndroidX.Compose.iconsExtended
     implementation Libs.AndroidX.Compose.tooling

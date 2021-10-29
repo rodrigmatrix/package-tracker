@@ -7,6 +7,19 @@
         <entry key="../../../../../../layout/compose-model-1628682219550.xml" value="0.18074324324324326" />
         <entry key="../../../../../../layout/compose-model-1633349124390.xml" value="0.1" />
         <entry key="../../../../../../layout/compose-model-1633572980804.xml" value="0.1" />
+        <entry key="../../../../../../layout/compose-model-1635380917042.xml" value="0.335" />
+        <entry key="../../../../../../layout/compose-model-1635381115571.xml" value="0.335" />
+        <entry key="../../../../../../layout/compose-model-1635448214224.xml" value="0.25" />
+        <entry key="../../../../../../layout/compose-model-1635448318099.xml" value="0.335" />
+        <entry key="../../../../../../layout/compose-model-1635449348404.xml" value="0.10125" />
+        <entry key="../../../../../../layout/compose-model-1635450724535.xml" value="0.625" />
+        <entry key="../../../../../../layout/compose-model-1635454007697.xml" value="0.45" />
+        <entry key="../../../../../../layout/compose-model-1635463771325.xml" value="0.10125" />
+        <entry key="../../../../../../layout/compose-model-1635464759723.xml" value="0.335" />
+        <entry key="../../../../../../layout/compose-model-1635465665695.xml" value="0.28050800662617337" />
+        <entry key="../../../../../../layout/compose-model-1635465685637.xml" value="0.1" />
+        <entry key="../../../../../../layout/compose-model-1635465697291.xml" value="0.28050800662617337" />
+        <entry key="../../../../../../layout/compose-model-1635466341021.xml" value="0.375" />
         <entry key="app/src/main/res/drawable/ic_add.xml" value="0.21354166666666666" />
         <entry key="app/src/main/res/layout/activity_home.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_package.xml" value="0.19739583333333333" />
@@ -16,7 +29,7 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

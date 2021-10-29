@@ -14,7 +14,7 @@ class PackageMapper : Mapper<UserPackageAndUpdatesEntity, UserPackage> {
             name = source.name,
             deliveryType = source.deliveryType,
             postalDate = source.postalDate,
-            statusUpdate = source.statusUpdate?.map { it.toStatus() }
+            statusUpdateList = source.statusUpdate.orEmpty().map { it.toStatus() }
         )
     }
 

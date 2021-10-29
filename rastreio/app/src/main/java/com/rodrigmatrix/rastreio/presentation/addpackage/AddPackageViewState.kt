@@ -4,7 +4,7 @@ import com.rodrigmatrix.core.viewmodel.ViewState
 
 data class AddPackageViewState(
     val isLoading: Boolean = false,
-    val error: String = ""
+    val error: String? = null
 ): ViewState {
 
     fun loadingState(): AddPackageViewState {

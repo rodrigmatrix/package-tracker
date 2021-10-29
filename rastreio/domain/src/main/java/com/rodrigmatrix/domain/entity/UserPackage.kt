@@ -5,5 +5,5 @@ data class UserPackage(
     val name: String,
     val deliveryType: String,
     val postalDate: String,
-    val statusUpdate: List<StatusUpdate>? = null
+    val statusUpdateList: List<StatusUpdate>
 )
