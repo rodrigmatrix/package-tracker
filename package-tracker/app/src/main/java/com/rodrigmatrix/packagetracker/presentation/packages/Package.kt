@@ -26,7 +26,7 @@ import com.rodrigmatrix.domain.entity.StatusUpdate
 import com.rodrigmatrix.domain.entity.UserPackage
 import com.rodrigmatrix.packagetracker.extensions.getLastStatus
 import com.rodrigmatrix.packagetracker.extensions.getStatusIconAndColor
-import com.rodrigmatrix.packagetracker.presentation.theme.RastreioTheme
+import com.rodrigmatrix.packagetracker.presentation.theme.PackageTrackerTheme
 
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -145,7 +145,7 @@ fun PackagePreview() {
         )
     )
 
-    RastreioTheme {
+    PackageTrackerTheme {
         Package(
             onItemClick = {},
             packageItem = packageItem

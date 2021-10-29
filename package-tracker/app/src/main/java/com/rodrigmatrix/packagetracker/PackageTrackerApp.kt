@@ -7,13 +7,13 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.loadKoinModules
 import org.koin.core.context.startKoin
 
-class RastreioApp: Application() {
+class PackageTrackerApp: Application() {
 
 
     override fun onCreate() {
         super.onCreate()
         startKoin {
-            androidContext(this@RastreioApp)
+            androidContext(this@PackageTrackerApp)
             loadKoinModules(listOf(dataModule, presentationModule))
         }
     }

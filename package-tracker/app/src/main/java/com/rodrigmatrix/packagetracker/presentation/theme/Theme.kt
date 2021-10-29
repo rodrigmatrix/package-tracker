@@ -65,7 +65,7 @@ private val DarkThemeColors = darkColorScheme(
 )
 
 @Composable
-fun RastreioTheme(
+fun PackageTrackerTheme(
 	useDarkTheme: Boolean = isSystemInDarkTheme(),
 	isDynamic: Boolean = BuildCompat.isAtLeastS(),
 	content: @Composable () -> Unit

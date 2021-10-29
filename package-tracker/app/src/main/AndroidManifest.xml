@@ -10,7 +10,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Rastreio.NoActionBar"
-        android:name="com.rodrigmatrix.packagetracker.RastreioApp">
+        android:name="com.rodrigmatrix.packagetracker.PackageTrackerApp">
 
         <activity
             android:name="com.rodrigmatrix.packagetracker.presentation.packages.NavigationActivity"

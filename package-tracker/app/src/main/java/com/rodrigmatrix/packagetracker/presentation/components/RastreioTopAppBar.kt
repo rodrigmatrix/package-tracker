@@ -10,10 +10,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import com.rodrigmatrix.packagetracker.presentation.theme.RastreioTheme
+import com.rodrigmatrix.packagetracker.presentation.theme.PackageTrackerTheme
 
 @Composable
-fun RastreioTopAppBar(
+fun PackageTrackerTopAppBar(
     modifier: Modifier = Modifier,
     scrollBehavior: TopAppBarScrollBehavior? = null,
     title: @Composable () -> Unit,
@@ -40,9 +40,9 @@ fun RastreioTopAppBar(
 
 @Preview
 @Composable
-fun RastreioAppBarPreview() {
-    RastreioTheme {
-        RastreioTopAppBar(title = { Text("Preview!") }, navigationIcon =  {
+fun PackageTrackerAppBarPreview() {
+    PackageTrackerTheme {
+        PackageTrackerTopAppBar(title = { Text("Preview!") }, navigationIcon =  {
             IconButton(onClick = {
             }) {
                 Icon(
@@ -56,9 +56,9 @@ fun RastreioAppBarPreview() {
 
 @Preview(name = "")
 @Composable
-fun RastreioAppBarPreviewDark() {
-    RastreioTheme {
-        RastreioTopAppBar(title = { Text("Preview!") }, navigationIcon =  {
+fun PackageTrackerAppBarPreviewDark() {
+    PackageTrackerTheme {
+        PackageTrackerTopAppBar(title = { Text("Preview!") }, navigationIcon =  {
             IconButton(onClick = {
             }) {
                 Icon(

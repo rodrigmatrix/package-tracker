@@ -17,7 +17,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.rodrigmatrix.packagetracker.presentation.details.DetailsScreen
 import com.rodrigmatrix.packagetracker.presentation.navigation.Screen
-import com.rodrigmatrix.packagetracker.presentation.theme.RastreioTheme
+import com.rodrigmatrix.packagetracker.presentation.theme.PackageTrackerTheme
 
 @ExperimentalMaterial3Api
 class NavigationActivity : ComponentActivity() {
@@ -26,7 +26,7 @@ class NavigationActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val navController = rememberNavController()
-            RastreioTheme {
+            PackageTrackerTheme {
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
                     bottomBar = {

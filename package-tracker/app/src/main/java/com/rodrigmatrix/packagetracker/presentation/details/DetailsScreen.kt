@@ -20,10 +20,10 @@ import com.rodrigmatrix.domain.entity.PackageProgressStatus
 import com.rodrigmatrix.domain.entity.StatusAddress
 import com.rodrigmatrix.domain.entity.StatusUpdate
 import com.rodrigmatrix.domain.entity.UserPackage
-import com.rodrigmatrix.packagetracker.presentation.components.RastreioTopAppBar
+import com.rodrigmatrix.packagetracker.presentation.components.PackageTrackerTopAppBar
 import com.rodrigmatrix.packagetracker.presentation.history.PackageStatus
 import com.rodrigmatrix.packagetracker.presentation.history.PackageUpdatesList
-import com.rodrigmatrix.packagetracker.presentation.theme.RastreioTheme
+import com.rodrigmatrix.packagetracker.presentation.theme.PackageTrackerTheme
 import org.koin.androidx.compose.getViewModel
 
 @Composable
@@ -45,7 +45,7 @@ fun DetailsScreen(
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                RastreioTopAppBar(
+                PackageTrackerTopAppBar(
                     title = {
                         Text(
                             text = "Detalhes",
@@ -86,7 +86,7 @@ fun Details(
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                RastreioTopAppBar(
+                PackageTrackerTopAppBar(
                     title = {
                         Text(text = "Detalhes")
                     },
@@ -144,7 +144,7 @@ fun DetailsScreenPreview() {
         delivered = false
     )
 
-    RastreioTheme {
+    PackageTrackerTheme {
         Details(
             onNavigationItemClick = {},
             packageItem,

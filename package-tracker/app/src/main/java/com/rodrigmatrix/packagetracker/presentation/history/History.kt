@@ -24,7 +24,7 @@ import androidx.constraintlayout.compose.Dimension
 import com.rodrigmatrix.domain.entity.StatusAddress
 import com.rodrigmatrix.domain.entity.StatusUpdate
 import com.rodrigmatrix.packagetracker.extensions.getStatusIconAndColor
-import com.rodrigmatrix.packagetracker.presentation.theme.RastreioTheme
+import com.rodrigmatrix.packagetracker.presentation.theme.PackageTrackerTheme
 
 @Composable
 fun PackageUpdatesList(statusUpdateList: List<StatusUpdate>) {
@@ -123,7 +123,7 @@ fun PackageUpdatePreview() {
         from = StatusAddress()
     )
 
-    RastreioTheme {
+    PackageTrackerTheme {
         PackageUpdate(packageItem)
     }
 }

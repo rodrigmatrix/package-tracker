@@ -23,7 +23,7 @@ import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.rodrigmatrix.domain.entity.StatusAddress
 import com.rodrigmatrix.domain.entity.StatusUpdate
 import com.rodrigmatrix.domain.entity.UserPackage
-import com.rodrigmatrix.packagetracker.presentation.theme.RastreioTheme
+import com.rodrigmatrix.packagetracker.presentation.theme.PackageTrackerTheme
 import org.koin.androidx.compose.getViewModel
 
 @Composable
@@ -127,7 +127,7 @@ fun PackagesPreview() {
         )
     )
 
-    RastreioTheme {
+    PackageTrackerTheme {
         PackagesList(
             onItemClick = {},
             packagesList = items

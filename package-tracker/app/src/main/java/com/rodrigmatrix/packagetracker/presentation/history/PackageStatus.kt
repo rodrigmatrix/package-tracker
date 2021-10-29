@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.rodrigmatrix.domain.entity.PackageProgressStatus
-import com.rodrigmatrix.packagetracker.presentation.theme.RastreioTheme
+import com.rodrigmatrix.packagetracker.presentation.theme.PackageTrackerTheme
 import com.rodrigmatrix.packagetracker.presentation.theme.md_theme_light_primary
 
 @Composable
@@ -147,7 +147,7 @@ fun PackagePreview() {
         delivered = false
     )
 
-    RastreioTheme {
+    PackageTrackerTheme {
         PackageStatus(
             packageProgressStatus
         )
