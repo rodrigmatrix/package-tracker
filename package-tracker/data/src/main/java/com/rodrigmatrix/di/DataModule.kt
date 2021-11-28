@@ -33,7 +33,7 @@ val dataModule = module {
     factory { GetPackageProgressStatus() }
     single { PackagesDatabase(androidContext()) }
     factory { get<PackagesDatabase>().packagesDAO() }
-    factory<CorreiosService> {
+    factory {
         Retrofit.Builder()
         .baseUrl("https://correios.contrateumdev.com.br/api/")
         .client( OkHttpClient.Builder().build())

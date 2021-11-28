@@ -47,14 +47,17 @@ class PackageRepositoryImpl(
             }
     }
 
-    override fun fetchPackages(): Flow<Unit> {
+    override fun fetchPackages(): Flow<List<UserPackage>> {
         return flow {
             packagesLocalDataSource.getAllPackages()
                 .first()
                 .map { userPackage ->
-                    fetchPackage(userPackage.id).first()
+                    fetchPackage(userPackage.id).first().apply {
+                        name = userPackage.name
+                    }
                 }.also { packagesList ->
                     packagesLocalDataSource.savePackages(packagesList)
+                    emit(packagesList.map { packageMapper.map(it) })
                 }
         }
     }

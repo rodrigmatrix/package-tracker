@@ -2,6 +2,8 @@ package com.rodrigmatrix.packagetracker.extensions
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.rodrigmatrix.data.model.PackageLastStatus
@@ -28,21 +30,21 @@ fun UserPackage.getLastStatus(): PackageLastStatus {
 fun StatusUpdate.getStatusIconAndColor(): Pair<Color, ImageVector> {
     return when {
         description.contains("entregue") ->
-            Pair(md_theme_light_primary, Icons.Outlined.Done)
+            Pair(theme_light_done, Icons.Outlined.Done)
 
         description.contains("saiu para entrega") ->
-            Pair(md_theme_light_tertiary, Icons.Outlined.LocalShipping)
+            Pair(theme_light_done, Icons.Outlined.LocalShipping)
 
         description.contains("em trânsito") ->
-            Pair(md_theme_light_primary, Icons.Outlined.Cached)
+            Pair(theme_light_done, Icons.Outlined.Cached)
 
         description.contains("Encaminhado") ->
-            Pair(md_theme_light_primary, Icons.Outlined.Cached)
+            Pair(theme_light_done, Icons.Outlined.Cached)
 
         description.contains("postado") ->
-            Pair(md_theme_light_primary, Icons.Outlined.FlightTakeoff)
+            Pair(theme_light_done, Icons.Outlined.FlightTakeoff)
 
-        else -> Pair(md_theme_light_primary, Icons.Outlined.Info)
+        else -> Pair(theme_light_done, Icons.Outlined.Info)
     }
 }
 

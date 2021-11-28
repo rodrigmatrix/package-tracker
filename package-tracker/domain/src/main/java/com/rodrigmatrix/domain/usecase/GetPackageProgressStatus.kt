@@ -3,7 +3,7 @@ package com.rodrigmatrix.domain.usecase
 import com.rodrigmatrix.domain.entity.PackageProgressStatus
 import com.rodrigmatrix.domain.entity.UserPackage
 
-private const val DELIVERED_MATCHER = "Entregue"
+private const val DELIVERED_MATCHER = "entregue"
 
 class GetPackageProgressStatus {
 
@@ -25,7 +25,7 @@ class GetPackageProgressStatus {
 
     private fun hasPackageBeenDelivered(userPackage: UserPackage): Boolean {
         return userPackage.statusUpdateList.any {
-            it.description.contains("Entregue")
+            it.description.lowercase().contains(DELIVERED_MATCHER)
         }
     }
 

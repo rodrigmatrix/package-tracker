@@ -26,9 +26,10 @@ object Libs {
     object AndroidX {
         const val coreKtx = "androidx.core:core-ktx:1.6.0"
         const val appCompat = "androidx.appcompat:appcompat:1.3.1"
+        const val workManager = "androidx.work:work-runtime-ktx:2.7.0"
 
         object Compose {
-            const val version = "1.1.0-alpha05"
+            private const val version = "1.1.0-beta01"
 
             const val foundation = "androidx.compose.foundation:foundation:${version}"
             const val layout = "androidx.compose.foundation:foundation-layout:${version}"
@@ -57,6 +58,7 @@ object Libs {
 
         object Navigation {
             const val navigationCompose = "androidx.navigation:navigation-compose:2.4.0-alpha06"
+            const val composeNavAccompanist = "com.google.accompanist:accompanist-navigation-animation:0.16.1"
         }
 
         object ConstraintLayout {
@@ -83,6 +85,7 @@ object Libs {
         private const val version = "3.1.2"
 
         const val android = "io.insert-koin:koin-android:$version"
+        const val koinWorkManager = "io.insert-koin:koin-android:$version"
         const val androidCompat = "io.insert-koin:koin-android-compat:$version"
         const val compose = "io.insert-koin:koin-androidx-compose:$version"
         const val test = "io.insert-koin:koin-test-junit4:$version"

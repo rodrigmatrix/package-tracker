@@ -11,7 +11,7 @@ interface PackageRepository {
 
     fun getPackages(): Flow<List<UserPackage>>
 
-    fun fetchPackages(): Flow<Unit>
+    fun fetchPackages(): Flow<List<UserPackage>>
 
     fun deletePackage(packageId: String): Flow<Unit>
 }

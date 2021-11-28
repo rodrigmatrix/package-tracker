@@ -60,10 +60,14 @@ dependencies {
     implementation Libs.Network.okHttp
     implementation Libs.Network.gsonConverter
 
+    // Work Manager
+    implementation Libs.AndroidX.workManager
+
     // Koin
     implementation Libs.Koin.android
     implementation Libs.Koin.androidCompat
     implementation Libs.Koin.compose
+    implementation Libs.Koin.koinWorkManager
 
     implementation Libs.Serialization.gson
 

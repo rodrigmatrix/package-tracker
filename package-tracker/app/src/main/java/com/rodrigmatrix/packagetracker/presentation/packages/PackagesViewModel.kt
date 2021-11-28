@@ -34,7 +34,7 @@ class PackagesViewModel(
                     setState { it.errorState(exception) }
                 }
                 .collect { packagesList ->
-                    setState { it.successState(packagesList) }
+                    setState { it.successState(packagesList.asReversed()) }
                 }
         }
     }

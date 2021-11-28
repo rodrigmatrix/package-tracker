@@ -10,7 +10,8 @@ val presentationModule = module {
     viewModel {
         PackagesDetailsViewModel(
             getPackageStatusUseCase = get(),
-            getPackageProgressStatus = get()
+            getPackageProgressStatus = get(),
+            deletePackageUseCase = get()
         )
     }
     viewModel {

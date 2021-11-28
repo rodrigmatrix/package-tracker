@@ -12,10 +12,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Composition
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalAccessibilityManager
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -23,12 +27,15 @@ import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.rodrigmatrix.domain.entity.StatusAddress
 import com.rodrigmatrix.domain.entity.StatusUpdate
 import com.rodrigmatrix.domain.entity.UserPackage
+import com.rodrigmatrix.packagetracker.presentation.addpackage.AddNewPackageBottomSheetFragment
 import com.rodrigmatrix.packagetracker.presentation.theme.PackageTrackerTheme
+import com.rodrigmatrix.packagetracker.presentation.utils.packageItemsList
 import org.koin.androidx.compose.getViewModel
 
 @Composable
 fun PackagesScreen(
     navController: NavController,
+    onAddPackageClick: () -> Unit,
     viewModel: PackagesViewModel = getViewModel()
 ) {
     val viewState by viewModel.viewState.collectAsState()
@@ -52,10 +59,7 @@ fun PackagesScreen(
                     )
 
                     LargeFloatingActionButton(
-                        onClick = {
-//                        AddNewPackageBottomSheetFragment()
-//                            .show(LocalLifecycleOwner.current)
-                        },
+                        onClick = onAddPackageClick,
                         modifier = Modifier
                             .align(Alignment.BottomCenter)
                             .padding(bottom = 100.dp),
@@ -98,39 +102,10 @@ fun PackagesList(
 @Preview(name = "Large Font", fontScale = 2f)
 @Composable
 fun PackagesPreview() {
-    val items = listOf(
-        UserPackage(
-            "H6XAJ123BN12",
-            "Google Pixel 4",
-            "",
-            "20/07/2022",
-            listOf(
-                StatusUpdate(
-                    date = "20/07/2022",
-                    description = "Saiu para entrega",
-                    from = StatusAddress()
-                )
-            )
-        ),
-        UserPackage(
-            "H6XAJ123BN12",
-            "Google Pixel 6 Pro",
-            "",
-            "20/07/2022",
-            listOf(
-                StatusUpdate(
-                    date = "21/07/2022",
-                    description = "Entregue",
-                    from = StatusAddress()
-                )
-            )
-        )
-    )
-
     PackageTrackerTheme {
         PackagesList(
             onItemClick = {},
-            packagesList = items
+            packagesList = packageItemsList
         )
     }
 }

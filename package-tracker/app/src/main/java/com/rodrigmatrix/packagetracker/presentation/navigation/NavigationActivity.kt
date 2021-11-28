@@ -1,8 +1,9 @@
-package com.rodrigmatrix.packagetracker.presentation.packages
+package com.rodrigmatrix.packagetracker.presentation.navigation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
@@ -15,12 +16,18 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.rodrigmatrix.packagetracker.presentation.addpackage.AddNewPackageBottomSheetFragment
+import com.rodrigmatrix.packagetracker.presentation.addpackage.AddNewPackageViewModel
 import com.rodrigmatrix.packagetracker.presentation.details.DetailsScreen
-import com.rodrigmatrix.packagetracker.presentation.navigation.Screen
+import com.rodrigmatrix.packagetracker.presentation.packages.PackagesScreen
+import com.rodrigmatrix.packagetracker.presentation.settings.SettingsScreen
 import com.rodrigmatrix.packagetracker.presentation.theme.PackageTrackerTheme
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 @ExperimentalMaterial3Api
-class NavigationActivity : ComponentActivity() {
+class NavigationActivity : AppCompatActivity() {
+
+    private val addPackageViewModel by viewModel<AddNewPackageViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,14 +39,14 @@ class NavigationActivity : ComponentActivity() {
                     bottomBar = {
                         val navBackStackEntry by navController.currentBackStackEntryAsState()
                         val currentDestination = navBackStackEntry?.destination
-                        if (currentDestination?.route == "home") {
+                        if (currentDestination?.route?.contains("package")?.not() == true) {
                             NavigationBar {
                                 listOf(
                                     Screen.Home,
                                     Screen.Settings
                                 ).forEach { screen ->
                                     NavigationBarItem(
-                                        icon = { Icon(Icons.Filled.Favorite, contentDescription = null) },
+                                        icon = { Icon(screen.image, contentDescription = null) },
                                         label = { Text(stringResource(screen.resourceId)) },
                                         onClick = {
                                             navController.navigate(screen.route) {
@@ -60,8 +67,16 @@ class NavigationActivity : ComponentActivity() {
                         navController,
                         startDestination = Screen.Home.route
                     ) {
-                        composable(Screen.Home.route) { PackagesScreen(navController) }
-                        composable(Screen.Settings.route) { PackagesScreen(navController) }
+                        composable(Screen.Home.route) {
+                            PackagesScreen(
+                                navController,
+                                onAddPackageClick = {
+                                    AddNewPackageBottomSheetFragment()
+                                        .show(supportFragmentManager, "")
+                                }
+                            )
+                        }
+                        composable(Screen.Settings.route) { SettingsScreen(navController) }
                         composable(Screen.Packages.route) { backStackEntry ->
                             DetailsScreen(
                                 backStackEntry.arguments?.getString("packageId").orEmpty(),

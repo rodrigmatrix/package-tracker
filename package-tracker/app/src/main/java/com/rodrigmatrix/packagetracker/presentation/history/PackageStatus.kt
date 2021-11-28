@@ -19,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
@@ -26,12 +27,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.rodrigmatrix.domain.entity.PackageProgressStatus
-import com.rodrigmatrix.packagetracker.presentation.theme.PackageTrackerTheme
+import com.rodrigmatrix.packagetracker.presentation.theme.*
 import com.rodrigmatrix.packagetracker.presentation.theme.md_theme_light_primary
 
 @Composable
 fun PackageStatus(
-    packageProgressStatus: PackageProgressStatus
+    progressStatus: PackageProgressStatus
 ) {
     Surface(
         color = MaterialTheme.colorScheme.secondaryContainer,
@@ -49,6 +50,7 @@ fun PackageStatus(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
+                    .alpha(getEnabledAlpha(progressStatus.mailed))
                     .constrainAs(dispatched) {
                         start.linkTo(parent.start, 16.dp)
 
@@ -63,7 +65,7 @@ fun PackageStatus(
                     modifier = Modifier
                         .size(34.dp)
                         .clip(CircleShape)
-                        .background(md_theme_light_primary)
+                        .background(getEnabledColor(progressStatus.mailed))
                         .padding(8.dp)
                 )
                 
@@ -78,6 +80,7 @@ fun PackageStatus(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
+                    .alpha(getEnabledAlpha(progressStatus.inProgress))
                     .constrainAs(inProgress) {
                         start.linkTo(dispatched.end, 16.dp)
 
@@ -92,7 +95,7 @@ fun PackageStatus(
                     modifier = Modifier
                         .size(34.dp)
                         .clip(CircleShape)
-                        .background(md_theme_light_primary)
+                        .background(getEnabledColor(progressStatus.inProgress))
                         .padding(8.dp)
                 )
 
@@ -107,6 +110,7 @@ fun PackageStatus(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
+                    .alpha(getEnabledAlpha(progressStatus.delivered))
                     .constrainAs(done) {
                         start.linkTo(inProgress.end, 16.dp)
                         end.linkTo(parent.end, 16.dp)
@@ -122,7 +126,7 @@ fun PackageStatus(
                     modifier = Modifier
                         .size(34.dp)
                         .clip(CircleShape)
-                        .background(md_theme_light_primary)
+                        .background(getEnabledColor(progressStatus.delivered))
                         .padding(8.dp)
                 )
 
@@ -134,6 +138,14 @@ fun PackageStatus(
             }
         }
     }
+}
+
+private fun getEnabledAlpha(enabled: Boolean): Float {
+    return if (enabled) 1f else 0.4f
+}
+
+private fun getEnabledColor(isEnabled: Boolean): Color {
+    return if (isEnabled) theme_light_done else theme_light_disabled
 }
 
 @Preview(name = "Light Theme")

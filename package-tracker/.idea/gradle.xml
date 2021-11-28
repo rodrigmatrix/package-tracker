@@ -18,6 +18,7 @@
             <option value="$PROJECT_DIR$/domain" />
           </set>
         </option>
+        <option name="resolveModulePerSourceSet" value="false" />
       </GradleProjectSettings>
     </option>
   </component>
