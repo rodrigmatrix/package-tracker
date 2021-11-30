@@ -3,6 +3,8 @@ package com.rodrigmatrix.packagetracker.presentation.theme
 import androidx.compose.ui.graphics.Color
 
 val theme_light_mailed = Color(0xFF048334)
+val theme_light_alert = Color(0xFFFFD500)
+val theme_light_shipped = Color(0xFF275EFF)
 val theme_light_inRoute = Color(0xFFFF9800)
 val theme_light_inProgress = Color(0xFF006877)
 val theme_light_done = Color(0xFF048334)

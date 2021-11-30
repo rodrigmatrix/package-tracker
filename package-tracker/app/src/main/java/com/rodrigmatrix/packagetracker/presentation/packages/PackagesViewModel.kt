@@ -26,6 +26,7 @@ class PackagesViewModel(
 
     init {
         loadPackages()
+        fetchPackages()
     }
 
     private fun loadPackages() {

@@ -42,9 +42,9 @@ fun StatusUpdate.getStatusIconAndColor(): Pair<Color, ImageVector> {
             Pair(theme_light_inProgress, Icons.Outlined.Cached)
 
         description.contains("postado") ->
-            Pair(theme_light_done, Icons.Outlined.FlightTakeoff)
+            Pair(theme_light_shipped, Icons.Outlined.FlightTakeoff)
 
-        else -> Pair(theme_light_done, Icons.Outlined.Info)
+        else -> Pair(theme_light_alert, Icons.Outlined.Info)
     }
 }
 

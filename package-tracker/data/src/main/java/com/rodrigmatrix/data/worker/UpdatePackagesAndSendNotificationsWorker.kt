@@ -11,6 +11,7 @@ import com.rodrigmatrix.domain.entity.UserPackage
 import com.rodrigmatrix.domain.usecase.FetchAllPackagesUseCase
 import com.rodrigmatrix.domain.usecase.GetAllPackagesUseCase
 import com.rodrigmatrix.domain.usecase.GetPackageNotificationsUseCase
+import com.rodrigmatrix.domain.usecase.GetPackageProgressStatus
 import kotlinx.coroutines.flow.first
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -25,6 +26,7 @@ class UpdatePackagesAndSendNotificationsWorker(
 
     private val getAllPackagesUseCase by inject<GetAllPackagesUseCase>()
     private val fetchAllPackagesUseCase by inject<FetchAllPackagesUseCase>()
+    private val getPackageProgressStatus by inject<GetPackageProgressStatus>()
     private val getPackageNotificationsUseCase = GetPackageNotificationsUseCase()
 
     override suspend fun doWork(): Result {
@@ -32,7 +34,9 @@ class UpdatePackagesAndSendNotificationsWorker(
             val cachedPackages = getAllPackagesUseCase().first()
             val updatedPackages = fetchAllPackagesUseCase().first()
 
-            cachedPackages.forEachIndexed { index, userPackage ->
+            cachedPackages
+                .filter { getPackageProgressStatus(it).inProgress }
+                .forEachIndexed { index, userPackage ->
                 getPackageNotificationsUseCase(userPackage, updatedPackages[index]).forEach {
                     sendNotification(userPackage, it)
                 }

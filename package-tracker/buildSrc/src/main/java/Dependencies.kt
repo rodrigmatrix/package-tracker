@@ -76,7 +76,7 @@ object Libs {
     }
 
     object Material {
-        const val material = "com.google.android.material:material:1.5.0-alpha04"
+        const val material = "com.google.android.material:material:1.6.0-alpha01"
     }
 
     const val lottie = "com.airbnb.android:lottie-compose:4.1.0"

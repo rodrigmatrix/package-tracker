@@ -32,13 +32,14 @@ import com.rodrigmatrix.packagetracker.presentation.theme.md_theme_light_primary
 
 @Composable
 fun PackageStatus(
-    progressStatus: PackageProgressStatus
+    progressStatus: PackageProgressStatus,
+    modifier: Modifier = Modifier
 ) {
     Surface(
         color = MaterialTheme.colorScheme.secondaryContainer,
         tonalElevation = 8.dp,
         shape = RoundedCornerShape(16.dp),
-        modifier = Modifier
+        modifier = modifier
             .padding(16.dp)
     ) {
         ConstraintLayout {

@@ -17,6 +17,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.google.android.material.color.DynamicColors
 import com.rodrigmatrix.packagetracker.presentation.addpackage.AddNewPackageBottomSheetFragment
 import com.rodrigmatrix.packagetracker.presentation.addpackage.AddNewPackageViewModel
 import com.rodrigmatrix.packagetracker.presentation.details.DetailsScreen
@@ -30,6 +31,7 @@ class NavigationActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        DynamicColors.applyIfAvailable(this)
         setContent {
             val navController = rememberNavController()
             PackageTrackerTheme {
@@ -75,7 +77,7 @@ class NavigationActivity : AppCompatActivity() {
                                 }
                             )
                         }
-                        composable(Screen.Settings.route) { SettingsScreen(navController) }
+                        composable(Screen.Settings.route) { SettingsScreen() }
                         composable(Screen.Packages.route) { backStackEntry ->
                             DetailsScreen(
                                 backStackEntry.arguments?.getString("packageId").orEmpty(),

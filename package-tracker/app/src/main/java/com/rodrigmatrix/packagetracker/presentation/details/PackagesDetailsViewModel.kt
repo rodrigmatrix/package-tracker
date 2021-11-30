@@ -52,10 +52,6 @@ class PackagesDetailsViewModel(
         setState { it.copy(deletePackageDialogVisible = false) }
     }
 
-    fun showEditDialog() {
-        setState { it.copy(editPackageDialogVisible = true) }
-    }
-
     fun deletePackage(packageId: String) {
         viewModelScope.launch {
             deletePackageUseCase(packageId)

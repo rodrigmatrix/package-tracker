@@ -16,15 +16,12 @@ import androidx.compose.material3.*
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import com.rodrigmatrix.packagetracker.R
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -32,16 +29,16 @@ import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavController
 import com.rodrigmatrix.domain.entity.PackageProgressStatus
 import com.rodrigmatrix.domain.entity.UserPackage
+import com.rodrigmatrix.packagetracker.R
 import com.rodrigmatrix.packagetracker.presentation.addpackage.AddNewPackageBottomSheetFragment
 import com.rodrigmatrix.packagetracker.presentation.components.PackageTrackerTopAppBar
-import com.rodrigmatrix.packagetracker.presentation.components.Toast
 import com.rodrigmatrix.packagetracker.presentation.history.PackageStatus
 import com.rodrigmatrix.packagetracker.presentation.history.PackageUpdatesList
 import com.rodrigmatrix.packagetracker.presentation.theme.PackageTrackerTheme
-import com.rodrigmatrix.packagetracker.presentation.utils.packageItem
-import com.rodrigmatrix.packagetracker.presentation.utils.packageProgressStatus
+import com.rodrigmatrix.packagetracker.presentation.utils.PreviewPackageItem
+import com.rodrigmatrix.packagetracker.presentation.utils.PreviewPackageProgressStatus
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
+import androidx.compose.material3.MaterialTheme
 import org.koin.androidx.compose.getViewModel
 
 @Composable
@@ -72,76 +69,77 @@ fun DetailsScreen(
     if (viewState.deletePackageDialogVisible) {
         DeletePackageDialog(
             onConfirmButtonClick = { viewModel.deletePackage(packageId) },
-            onDismissButtonClick = { viewModel.hideDeleteDialog() }
+            onDismissButtonClick = viewModel::hideDeleteDialog
         )
     }
 
-    if (viewState.editPackageDialogVisible) {
-
+    AnimatedVisibility(visible = true) {
+        DetailsScreen(
+            viewState = viewState,
+            onBackButtonClick = navController::navigateUp,
+            onEditButtonClick = {
+                AddNewPackageBottomSheetFragment
+                    .newInstance(packageId)
+                    .show(fragmentManager, null)
+            },
+            onDeleteButtonClick = viewModel::showDeleteDialog
+        )
     }
+}
 
-    AnimatedVisibility(
-        visible = true
+@Composable
+private fun DetailsScreen(
+    viewState: PackageStatusViewState,
+    onBackButtonClick: () -> Unit,
+    onEditButtonClick: () -> Unit,
+    onDeleteButtonClick: () -> Unit
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Surface(Modifier.fillMaxSize()) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                PackageTrackerTopAppBar(
-                    title = {
-                        Text(
-                            text = stringResource(R.string.details),
-                            style = MaterialTheme.typography.bodyLarge
-                        )
-                    },
-                    navigationIcon = {
-                        IconButton(onClick = { navController.navigateUp() }) {
-                            Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "Back")
-                        }
-                    },
-                    actions = {
-                        IconButton(
-                            onClick = {
-                                AddNewPackageBottomSheetFragment
-                                    .newInstance(packageId)
-                                    .show(fragmentManager, null)
-                            }
-                        ) {
-                            Icon(
-                                imageVector = Icons.Outlined.Edit,
-                                modifier = Modifier
-                                    .padding(horizontal = 12.dp, vertical = 16.dp)
-                                    .height(24.dp),
-                                contentDescription = null
-                            )
-                        }
-
-                        IconButton(
-                            onClick = {
-                                viewModel.showDeleteDialog()
-                            }
-                        ) {
-                            Icon(
-                                imageVector = Icons.Outlined.Delete,
-                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                                modifier = Modifier
-                                    .padding(horizontal = 12.dp, vertical = 16.dp)
-                                    .height(24.dp),
-                                contentDescription = null
-                            )
-                        }
-                    }
+        PackageTrackerTopAppBar(
+            title = {
+                Text(
+                    text = stringResource(R.string.details),
+                    style = MaterialTheme.typography.bodyLarge
                 )
-
-                viewState.packageProgressStatus?.let {
-                    PackageStatus(it)
+            },
+            navigationIcon = {
+                IconButton(onClick = onBackButtonClick) {
+                    Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "Back")
+                }
+            },
+            actions = {
+                IconButton(onClick = onEditButtonClick) {
+                    Icon(
+                        imageVector = Icons.Outlined.Edit,
+                        modifier = Modifier
+                            .padding(horizontal = 12.dp, vertical = 16.dp)
+                            .height(24.dp),
+                        contentDescription = null
+                    )
                 }
 
-                PackageUpdatesList(
-                    statusUpdateList = viewState.userPackage?.statusUpdateList.orEmpty()
-                )
+                IconButton(onClick = onDeleteButtonClick) {
+                    Icon(
+                        imageVector = Icons.Outlined.Delete,
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier
+                            .padding(horizontal = 12.dp, vertical = 16.dp)
+                            .height(24.dp),
+                        contentDescription = null
+                    )
+                }
             }
+        )
+
+        viewState.packageProgressStatus?.let {
+            PackageStatus(it)
         }
+
+        PackageUpdatesList(
+            statusUpdateList = viewState.userPackage?.statusUpdateList.orEmpty()
+        )
     }
 }
 
@@ -172,56 +170,20 @@ fun DeletePackageDialog(
     )
 }
 
-@Composable
-fun Details(
-    onNavigationItemClick: () -> Unit,
-    userPackage: UserPackage?,
-    packageProgressStatus: PackageProgressStatus?
-) {
-    AnimatedVisibility(
-        visible = true,
-        enter = expandIn(),
-        exit = shrinkOut()
-    ) {
-        Surface(Modifier.fillMaxSize()) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                PackageTrackerTopAppBar(
-                    title = {
-                        Text(text = stringResource(R.string.details))
-                    },
-                    navigationIcon = {
-                        IconButton(onClick = onNavigationItemClick) {
-                            Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "Back")
-                        }
-                    }
-                )
-
-                packageProgressStatus?.let {
-                    PackageStatus(it)
-                }
-
-                userPackage?.statusUpdateList?.let {
-                    PackageUpdatesList(
-                        statusUpdateList = it
-                    )
-                }
-            }
-        }
-    }
-}
-
 @Preview(name = "Light Theme")
 @Preview(name = "Dark Theme", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Preview(name = "Large Font", fontScale = 2f)
 @Composable
 fun DetailsScreenPreview() {
     PackageTrackerTheme {
-        Details(
-            onNavigationItemClick = {},
-            packageItem,
-            packageProgressStatus
+        DetailsScreen(
+            viewState = PackageStatusViewState(
+                userPackage = PreviewPackageItem,
+                packageProgressStatus = PreviewPackageProgressStatus
+            ),
+            onBackButtonClick = { },
+            onEditButtonClick = { },
+            onDeleteButtonClick = { }
         )
     }
 }
