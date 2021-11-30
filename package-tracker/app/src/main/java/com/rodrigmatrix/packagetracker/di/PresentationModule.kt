@@ -1,5 +1,6 @@
 package com.rodrigmatrix.packagetracker.di
 
+import com.rodrigmatrix.domain.usecase.GetPackageProgressStatus
 import com.rodrigmatrix.packagetracker.presentation.addpackage.AddNewPackageViewModel
 import com.rodrigmatrix.packagetracker.presentation.details.PackagesDetailsViewModel
 import com.rodrigmatrix.packagetracker.presentation.packages.PackagesViewModel
@@ -18,8 +19,16 @@ val presentationModule = module {
         PackagesViewModel(
             getAllPackagesUseCase = get(),
             fetchAllPackagesUseCase = get(),
-            deletePackageUseCase = get()
+            deletePackageUseCase = get(),
+            getPackageProgressStatus = GetPackageProgressStatus()
         )
     }
-    viewModel { AddNewPackageViewModel(addPackageUseCase = get()) }
+    viewModel { (packageId: String) ->
+        AddNewPackageViewModel(
+            packageId = packageId,
+            addPackageUseCase = get(),
+            getPackageStatusUseCase = get(),
+            editPackageUseCase = get()
+        )
+    }
 }

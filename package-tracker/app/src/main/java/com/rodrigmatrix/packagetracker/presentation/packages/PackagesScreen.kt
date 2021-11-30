@@ -51,12 +51,16 @@ fun PackagesScreen(
                 onRefresh = { viewModel.fetchPackages() }
             ) {
                 BoxWithConstraints(modifier = Modifier.weight(1f)) {
-                    PackagesList(
-                        { id ->
-                            navController.navigate("package/$id")
-                        },
-                        viewState.packagesList
-                    )
+                    if (viewState.packagesList.isNotEmpty()) {
+                        PackagesList(
+                            { id ->
+                                navController.navigate("package/$id")
+                            },
+                            viewState.packagesList
+                        )
+                    } else {
+                        PackagesListEmptyState()
+                    }
 
                     LargeFloatingActionButton(
                         onClick = onAddPackageClick,
@@ -88,12 +92,21 @@ fun PackagesList(
             enter = fadeIn(),
             exit = fadeOut()
         ) {
-            LazyColumn(modifier = Modifier.fillMaxHeight()) {
+            LazyColumn(
+                contentPadding = PaddingValues(bottom = 200.dp)
+            ) {
                 items(packagesList) { packageItem ->
                     Package(onItemClick, packageItem)
                 }
             }
         }
+    }
+}
+
+@Composable
+fun PackagesListEmptyState() {
+    Box(Modifier.fillMaxSize()) {
+        Text(text = "Nenhuma encomenda cadastrada. Adicione uma encomenda no botão abaixo")
     }
 }
 

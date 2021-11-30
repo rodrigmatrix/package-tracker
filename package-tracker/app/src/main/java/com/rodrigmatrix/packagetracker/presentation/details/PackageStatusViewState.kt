@@ -8,5 +8,6 @@ data class PackageStatusViewState(
     val isLoading: Boolean = true,
     val userPackage: UserPackage? = null,
     val packageProgressStatus: PackageProgressStatus? = null,
-    val deletePackageDialogVisible: Boolean = false
+    val deletePackageDialogVisible: Boolean = false,
+    val editPackageDialogVisible: Boolean = false
 ): ViewState

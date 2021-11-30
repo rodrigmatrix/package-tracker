@@ -7,4 +7,10 @@
     <string name="delete">Deletar</string>
     <string name="cancel">Cancelar</string>
     <string name="details">Detalhes</string>
+    <string name="edit">Editar</string>
+    <string name="add_package">Adicionar pacote</string>
+    <string name="add">Adicionar</string>
+    <string name="package_id">Código</string>
+    <string name="name">Nome</string>
+    <string name="edit_package">Editar encomenda</string>
 </resources>

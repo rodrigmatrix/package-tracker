@@ -65,4 +65,16 @@ class PackageRepositoryImpl(
     override fun deletePackage(packageId: String): Flow<Unit> {
         return packagesLocalDataSource.deletePackage(packageId)
     }
+
+    override fun editPackage(name: String, packageId: String): Flow<Unit> {
+        return flow {
+            packagesLocalDataSource.getPackage(packageId)
+                .first()
+                .also {
+                    it.name = name
+                    packagesLocalDataSource.savePackage(it)
+                    emit(Unit)
+                }
+        }
+    }
 }

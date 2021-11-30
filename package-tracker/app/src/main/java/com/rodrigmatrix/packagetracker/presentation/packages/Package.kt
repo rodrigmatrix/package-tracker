@@ -50,10 +50,10 @@ fun Package(
     ) {
         ConstraintLayout {
             val (
-                name, lastUpdate, image, packageId
+                name, lastUpdate, image, packageId, date
             ) = createRefs()
 
-            val statusUpdate = packageItem.statusUpdateList.orEmpty().first()
+            val statusUpdate = packageItem.statusUpdateList.first()
 
             val (statusColor, iconVector) = statusUpdate.getStatusIconAndColor()
 
@@ -90,8 +90,8 @@ fun Package(
             )
 
             Text(
-                text = "${lastStatus.title} - ${statusUpdate.date}",
-                maxLines = 2,
+                text = lastStatus.title,
+                maxLines = 1,
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.constrainAs(lastUpdate) {
                     linkTo(
@@ -101,9 +101,26 @@ fun Package(
                         endMargin = 16.dp,
                         bias = 0f
                     )
-                    top.linkTo(name.bottom)
+                    top.linkTo(name.bottom, 8.dp)
                 }
             )
+
+            Text(
+                text = statusUpdate.date,
+                maxLines = 1,
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.constrainAs(date) {
+                    linkTo(
+                        start = image.end,
+                        end = parent.end,
+                        startMargin = 8.dp,
+                        endMargin = 16.dp,
+                        bias = 0f
+                    )
+                    top.linkTo(lastUpdate.bottom)
+                }
+            )
+
             Text(
                 text = packageItem.packageId,
                 maxLines = 1,
@@ -116,7 +133,7 @@ fun Package(
                         endMargin = 16.dp,
                         bias = 0f
                     )
-                    top.linkTo(lastUpdate.bottom, 6.dp)
+                    top.linkTo(date.bottom, 0.dp)
                     bottom.linkTo(parent.bottom, 16.dp)
 
                     width = Dimension.preferredWrapContent

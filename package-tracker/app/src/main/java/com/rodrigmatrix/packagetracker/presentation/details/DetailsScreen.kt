@@ -6,21 +6,33 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material3.*
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import com.rodrigmatrix.packagetracker.R
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavController
 import com.rodrigmatrix.domain.entity.PackageProgressStatus
 import com.rodrigmatrix.domain.entity.UserPackage
+import com.rodrigmatrix.packagetracker.presentation.addpackage.AddNewPackageBottomSheetFragment
 import com.rodrigmatrix.packagetracker.presentation.components.PackageTrackerTopAppBar
 import com.rodrigmatrix.packagetracker.presentation.components.Toast
 import com.rodrigmatrix.packagetracker.presentation.history.PackageStatus
@@ -28,27 +40,33 @@ import com.rodrigmatrix.packagetracker.presentation.history.PackageUpdatesList
 import com.rodrigmatrix.packagetracker.presentation.theme.PackageTrackerTheme
 import com.rodrigmatrix.packagetracker.presentation.utils.packageItem
 import com.rodrigmatrix.packagetracker.presentation.utils.packageProgressStatus
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.getViewModel
 
 @Composable
 fun DetailsScreen(
     packageId: String,
     navController: NavController,
+    fragmentManager: FragmentManager,
     viewModel: PackagesDetailsViewModel = getViewModel()
 ) {
     val viewState by viewModel.viewState.collectAsState()
-    val viewEffect by viewModel.viewEffect.collectAsState(null)
 
     viewModel.getPackageStatus(packageId)
 
-    when (viewEffect) {
-        is PackageStatusViewEffect.Close -> {
-            navController.navigateUp()
+    LaunchedEffect("") {
+        viewModel.viewEffect.onEach { viewEffect ->
+            when (viewEffect) {
+                is PackageStatusViewEffect.Close -> {
+                    navController.navigateUp()
+                }
+                is PackageStatusViewEffect.Toast -> {
+                    //Toast((viewEffect as PackageStatusViewEffect.Toast).message)
+                }
+                null -> Unit
+            }
         }
-        is PackageStatusViewEffect.Toast -> {
-            Toast((viewEffect as PackageStatusViewEffect.Toast).message)
-        }
-        null -> Unit
     }
 
     if (viewState.deletePackageDialogVisible) {
@@ -56,6 +74,10 @@ fun DetailsScreen(
             onConfirmButtonClick = { viewModel.deletePackage(packageId) },
             onDismissButtonClick = { viewModel.hideDeleteDialog() }
         )
+    }
+
+    if (viewState.editPackageDialogVisible) {
+
     }
 
     AnimatedVisibility(
@@ -80,7 +102,9 @@ fun DetailsScreen(
                     actions = {
                         IconButton(
                             onClick = {
-
+                                AddNewPackageBottomSheetFragment
+                                    .newInstance(packageId)
+                                    .show(fragmentManager, null)
                             }
                         ) {
                             Icon(

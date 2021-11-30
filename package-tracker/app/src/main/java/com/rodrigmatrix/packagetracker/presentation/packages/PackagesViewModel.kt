@@ -5,6 +5,8 @@ import com.rodrigmatrix.core.viewmodel.ViewModel
 import com.rodrigmatrix.domain.usecase.DeletePackageUseCase
 import com.rodrigmatrix.domain.usecase.FetchAllPackagesUseCase
 import com.rodrigmatrix.domain.usecase.GetAllPackagesUseCase
+import com.rodrigmatrix.domain.usecase.GetPackageProgressStatus
+import com.rodrigmatrix.packagetracker.extensions.getLastStatus
 import com.rodrigmatrix.packagetracker.presentation.packages.PackagesViewEffect.OpenPackageScreen
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -18,6 +20,7 @@ class PackagesViewModel(
     private val getAllPackagesUseCase: GetAllPackagesUseCase,
     private val fetchAllPackagesUseCase: FetchAllPackagesUseCase,
     private val deletePackageUseCase: DeletePackageUseCase,
+    private val getPackageProgressStatus: GetPackageProgressStatus,
     private val coroutineDispatcher: CoroutineDispatcher = Dispatchers.IO
 ): ViewModel<PackagesViewState, PackagesViewEffect>(PackagesViewState()) {
 
@@ -34,7 +37,13 @@ class PackagesViewModel(
                     setState { it.errorState(exception) }
                 }
                 .collect { packagesList ->
-                    setState { it.successState(packagesList.asReversed()) }
+                    setState {
+                        it.successState(
+                            packagesList.sortedBy { userPackage ->
+                                getPackageProgressStatus(userPackage).inProgress
+                            }
+                        )
+                    }
                 }
         }
     }

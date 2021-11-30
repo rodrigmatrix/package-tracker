@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.*
@@ -26,8 +27,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 @ExperimentalMaterial3Api
 class NavigationActivity : AppCompatActivity() {
-
-    private val addPackageViewModel by viewModel<AddNewPackageViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,7 +79,8 @@ class NavigationActivity : AppCompatActivity() {
                         composable(Screen.Packages.route) { backStackEntry ->
                             DetailsScreen(
                                 backStackEntry.arguments?.getString("packageId").orEmpty(),
-                                navController
+                                navController,
+                                supportFragmentManager
                             )
                         }
                     }

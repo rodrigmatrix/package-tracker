@@ -33,13 +33,13 @@ fun StatusUpdate.getStatusIconAndColor(): Pair<Color, ImageVector> {
             Pair(theme_light_done, Icons.Outlined.Done)
 
         description.contains("saiu para entrega") ->
-            Pair(theme_light_done, Icons.Outlined.LocalShipping)
+            Pair(theme_light_inRoute, Icons.Outlined.LocalShipping)
 
         description.contains("em trânsito") ->
-            Pair(theme_light_done, Icons.Outlined.Cached)
+            Pair(theme_light_inProgress, Icons.Outlined.Cached)
 
         description.contains("Encaminhado") ->
-            Pair(theme_light_done, Icons.Outlined.Cached)
+            Pair(theme_light_inProgress, Icons.Outlined.Cached)
 
         description.contains("postado") ->
             Pair(theme_light_done, Icons.Outlined.FlightTakeoff)

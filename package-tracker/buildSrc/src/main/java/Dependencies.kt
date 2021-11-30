@@ -51,7 +51,7 @@ object Libs {
         }
 
         object Lifecycle {
-
+            const val lifecycle = "androidx.lifecycle:lifecycle-runtime-ktx:2.4.0"
             const val viewModelCompose =
                 "androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha07"
         }

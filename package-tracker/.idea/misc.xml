@@ -61,14 +61,18 @@
         <entry key="../../../../../../layout/compose-model-1638139308895.xml" value="0.3111111111111111" />
         <entry key="../../../../../../layout/compose-model-1638139325750.xml" value="0.3111111111111111" />
         <entry key="../../../../../../layout/compose-model-1638139339355.xml" value="0.335" />
-        <entry key="../../../../../../layout/compose-model-1638140074540.xml" value="0.1" />
+        <entry key="../../../../../../layout/compose-model-1638140074540.xml" value="0.25" />
         <entry key="../../../../../../layout/compose-model-1638140924196.xml" value="0.1" />
+        <entry key="../../../../../../layout/compose-model-1638143353335.xml" value="0.30833333333333335" />
+        <entry key="../../../../../../layout/compose-model-1638193042781.xml" value="0.11" />
+        <entry key="../../../../../../layout/compose-model-1638193042786.xml" value="0.1" />
+        <entry key="../../../../../../layout/compose-model-1638203821000.xml" value="0.30833333333333335" />
         <entry key="app/src/main/res/drawable/ic_add.xml" value="0.21354166666666666" />
         <entry key="app/src/main/res/drawable/ic_home.xml" value="0.1535" />
         <entry key="app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.2025" />
         <entry key="app/src/main/res/layout/activity_home.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_package.xml" value="0.19739583333333333" />
-        <entry key="app/src/main/res/layout/fragment_add_new_package.xml" value="0.3546875" />
+        <entry key="app/src/main/res/layout/fragment_add_new_package.xml" value="0.45" />
         <entry key="app/src/main/res/layout/recycler_item_package.xml" value="0.3546875" />
         <entry key="app/src/main/res/menu/bottom_navigation_menu.xml" value="0.3546875" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.189" />

@@ -30,6 +30,7 @@ val dataModule = module {
     factory { GetAllPackagesUseCase(packageRepository = get()) }
     factory { FetchAllPackagesUseCase(packageRepository = get()) }
     factory { DeletePackageUseCase(packageRepository = get()) }
+    factory { EditPackageUseCase(packageRepository = get()) }
     factory { GetPackageProgressStatus() }
     single { PackagesDatabase(androidContext()) }
     factory { get<PackagesDatabase>().packagesDAO() }

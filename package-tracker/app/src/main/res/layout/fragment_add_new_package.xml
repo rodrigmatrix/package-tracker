@@ -10,11 +10,12 @@
         android:orientation="vertical">
 
         <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:textAppearance="?textAppearanceHeadline5"
-            android:text="Adicionar pacote"/>
+            android:text="@string/add_package"/>
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
@@ -22,7 +23,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="10dp"
-            android:hint="Nome">
+            android:hint="@string/name">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/textInputName"
@@ -40,7 +41,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="10dp"
-            android:hint="Código">
+            android:hint="@string/package_id">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/textInputPackageId"
@@ -55,7 +56,7 @@
             android:id="@+id/textButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Adicionar"
+            android:text="@string/add"
             android:layout_gravity="end"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="10dp"

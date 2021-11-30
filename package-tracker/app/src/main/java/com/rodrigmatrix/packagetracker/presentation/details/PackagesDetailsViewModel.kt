@@ -25,9 +25,9 @@ class PackagesDetailsViewModel(
         viewModelScope.launch {
             getPackageStatusUseCase(packageId)
                 .flowOn(coroutineDispatcher)
-                .onStart { setState { viewState.value.copy(isLoading = true) } }
+                .onStart { setState { it.copy(isLoading = true) } }
                 .catch { error ->
-                    setState { viewState.value.copy(isLoading = false) }
+                    setState { it.copy(isLoading = false) }
                     setEffect {
                         Toast(error.message.orEmpty())
                     }
@@ -45,11 +45,15 @@ class PackagesDetailsViewModel(
     }
 
     fun showDeleteDialog() {
-        setState { viewState.value.copy(deletePackageDialogVisible = true) }
+        setState { it.copy(deletePackageDialogVisible = true) }
     }
 
     fun hideDeleteDialog() {
-        setState { viewState.value.copy(deletePackageDialogVisible = false) }
+        setState { it.copy(deletePackageDialogVisible = false) }
+    }
+
+    fun showEditDialog() {
+        setState { it.copy(editPackageDialogVisible = true) }
     }
 
     fun deletePackage(packageId: String) {
@@ -57,13 +61,13 @@ class PackagesDetailsViewModel(
             deletePackageUseCase(packageId)
                 .flowOn(coroutineDispatcher)
                 .catch { error ->
-                    setState { viewState.value.copy(isLoading = false) }
+                    setState { it.copy(isLoading = false) }
                     setEffect {
                         Toast(error.message.orEmpty())
                     }
                 }
                 .collect {
-                    setState { viewState.value.copy(deletePackageDialogVisible = false) }
+                    setState { it.copy(deletePackageDialogVisible = false) }
                     setEffect {
                         PackageStatusViewEffect.Close
                     }
