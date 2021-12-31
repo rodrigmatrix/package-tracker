@@ -25,7 +25,12 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 val dataModule = module {
-    factory<PackageRemoteDataSource> { PackageRemoteDataSourceImpl(correiosService = get()) }
+    factory<PackageRemoteDataSource> {
+        PackageRemoteDataSourceImpl(
+            correiosService = get(),
+            resourceProvider = get()
+        )
+    }
     single<PackageRepository> {
         PackageRepositoryImpl(
             packagesLocalDataSource = get(),
@@ -54,7 +59,7 @@ val dataModule = module {
     factory { get<PackagesDatabase>().packagesDAO() }
     factory {
         Retrofit.Builder()
-        .baseUrl("http://webservice.correios.com.br/service/")
+        .baseUrl("https://webservice.correios.com.br/service/")
         .client( OkHttpClient.Builder().build())
         .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
         .build()

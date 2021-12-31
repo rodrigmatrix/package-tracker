@@ -11,22 +11,27 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.Icon
-import androidx.compose.material3.LargeFloatingActionButton
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieCompositionSpec.RawRes
+import com.airbnb.lottie.compose.animateLottieCompositionAsState
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshState
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.rodrigmatrix.domain.entity.UserPackage
+import com.rodrigmatrix.packagetracker.R
 import com.rodrigmatrix.packagetracker.presentation.theme.PackageTrackerTheme
 import com.rodrigmatrix.packagetracker.presentation.utils.PreviewPackageItemsList
 import org.koin.androidx.compose.getViewModel
@@ -117,8 +122,24 @@ private fun PackagesList(
 
 @Composable
 private fun PackagesListEmptyState() {
-    Box(Modifier.fillMaxSize()) {
-        Text(text = "Nenhuma encomenda cadastrada. Adicione uma encomenda no botão abaixo")
+    Column(Modifier.fillMaxSize()) {
+        val composition by rememberLottieComposition(RawRes(R.raw.empty_box))
+        val progress by animateLottieCompositionAsState(composition)
+        LottieAnimation(
+            composition,
+            progress,
+            modifier = Modifier
+                .size(width = 200.dp, height = 200.dp)
+                .align(Alignment.CenterHorizontally)
+        )
+        Text(
+            text = stringResource(R.string.empty_packages),
+            textAlign = TextAlign.Center,
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier
+                .padding(16.dp)
+                .align(Alignment.CenterHorizontally)
+        )
     }
 }
 

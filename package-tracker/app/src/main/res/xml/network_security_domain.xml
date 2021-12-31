@@ -1,16 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <network-security-config>
-    <domain-config cleartextTrafficPermitted="true">
-        <domain includeSubdomains="true">http://webservice.correios.com.br</domain>
-    </domain-config>
-    <debug-overrides>
-        <trust-anchors>
-            <!-- Trust user added CAs while debuggable only -->
-            <certificates src="user" />
-            <certificates src="system" />
-        </trust-anchors>
-    </debug-overrides>
-
     <base-config cleartextTrafficPermitted="true">
         <trust-anchors>
             <certificates src="system" />

@@ -13,4 +13,5 @@
     <string name="package_id">Código</string>
     <string name="name">Nome</string>
     <string name="edit_package">Editar encomenda</string>
+    <string name="empty_packages">Nenhuma encomenda cadastrada. Adicione uma encomenda no botão abaixo</string>
 </resources>

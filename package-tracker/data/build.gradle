@@ -6,6 +6,10 @@ plugins {
     id 'kotlin-kapt'
 }
 
+def localPropertiesFile = rootProject.file("local.properties")
+def localProperties = new Properties()
+localProperties.load(new FileInputStream(localPropertiesFile))
+
 android {
     compileSdk 31
     buildToolsVersion "30.0.3"
@@ -16,6 +20,10 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
+
+        buildConfigField "String", "CORREIOS_USER", localProperties['correios.user']
+        buildConfigField "String", "CORREIOS_PASSWORD", localProperties['correios.password']
+        buildConfigField "String", "CORREIOS_TOKEN", localProperties['correios.token']
 
         javaCompileOptions {
             annotationProcessorOptions {
