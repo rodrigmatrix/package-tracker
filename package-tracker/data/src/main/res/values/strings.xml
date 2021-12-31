@@ -2,4 +2,8 @@
 <resources>
     <string name="updates_channel_name">Updates</string>
     <string name="updates_channel_description">Updates</string>
+    <string name="package_updates_channel_name">Atualizações de encomendas</string>
+    <string name="general_channel_name">Geral</string>
+    <string name="general_channel_description">Notificações gerais do app</string>
+    <string name="package_updates_channel_description">Atualizações de suas encomendas em progresso</string>
 </resources>

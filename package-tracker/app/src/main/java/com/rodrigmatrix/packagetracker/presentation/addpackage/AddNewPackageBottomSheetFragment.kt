@@ -48,7 +48,7 @@ class AddNewPackageBottomSheetFragment: BottomSheetDialogFragment() {
             addPackage()
         }
         binding.textInputName.setText("Google Pixel")
-        binding.textInputPackageId.setText("NX133836615BR")
+        binding.textInputPackageId.setText("qb405350993br")
     }
 
     private fun setObservers() {

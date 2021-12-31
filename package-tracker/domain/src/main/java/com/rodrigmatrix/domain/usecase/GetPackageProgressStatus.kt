@@ -28,5 +28,4 @@ class GetPackageProgressStatus {
             it.description.lowercase().contains(DELIVERED_MATCHER)
         }
     }
-
 }

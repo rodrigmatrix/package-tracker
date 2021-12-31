@@ -64,28 +64,7 @@ class NavigationActivity : AppCompatActivity() {
                         }
                     }
                 ) {
-                    NavHost(
-                        navController,
-                        startDestination = Screen.Home.route
-                    ) {
-                        composable(Screen.Home.route) {
-                            PackagesScreen(
-                                navController,
-                                onAddPackageClick = {
-                                    AddNewPackageBottomSheetFragment()
-                                        .show(supportFragmentManager, "")
-                                }
-                            )
-                        }
-                        composable(Screen.Settings.route) { SettingsScreen() }
-                        composable(Screen.Packages.route) { backStackEntry ->
-                            DetailsScreen(
-                                backStackEntry.arguments?.getString("packageId").orEmpty(),
-                                navController,
-                                supportFragmentManager
-                            )
-                        }
-                    }
+                    HomeNavHost(navController, supportFragmentManager)
                 }
             }
         }

@@ -8,10 +8,7 @@ import com.rodrigmatrix.domain.usecase.GetPackageStatusUseCase
 import com.rodrigmatrix.packagetracker.presentation.details.PackageStatusViewEffect.Toast
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class PackagesDetailsViewModel(
@@ -62,12 +59,13 @@ class PackagesDetailsViewModel(
                         Toast(error.message.orEmpty())
                     }
                 }
-                .collect {
+                .onCompletion {
                     setState { it.copy(deletePackageDialogVisible = false) }
                     setEffect {
                         PackageStatusViewEffect.Close
                     }
                 }
+                .collect()
         }
     }
 }
