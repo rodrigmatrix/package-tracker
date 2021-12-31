@@ -39,6 +39,7 @@ import com.rodrigmatrix.packagetracker.presentation.utils.PreviewPackageItem
 import com.rodrigmatrix.packagetracker.presentation.utils.PreviewPackageProgressStatus
 import kotlinx.coroutines.flow.onEach
 import androidx.compose.material3.MaterialTheme
+import com.rodrigmatrix.packagetracker.presentation.components.DeletePackageDialog
 import com.rodrigmatrix.packagetracker.presentation.components.Toast
 import org.koin.androidx.compose.getViewModel
 
@@ -98,7 +99,7 @@ private fun DetailsScreen(
         PackageTrackerTopAppBar(
             title = {
                 Text(
-                    text = stringResource(R.string.details),
+                    text = viewState.userPackage?.name ?: stringResource(R.string.details),
                     style = MaterialTheme.typography.bodyLarge
                 )
             },
@@ -139,33 +140,6 @@ private fun DetailsScreen(
             statusUpdateList = viewState.userPackage?.statusUpdateList.orEmpty()
         )
     }
-}
-
-@Composable
-fun DeletePackageDialog(
-    onConfirmButtonClick: () -> Unit,
-    onDismissButtonClick: () -> Unit
-) {
-    AlertDialog(
-        onDismissRequest = onDismissButtonClick,
-        title = {
-            Text(text = stringResource(R.string.delete_package_title))
-        },
-        confirmButton = {
-            TextButton(
-                onClick = onConfirmButtonClick
-            ) {
-                Text(text = stringResource(R.string.delete))
-            }
-        },
-        dismissButton = {
-            TextButton(
-                onClick = onDismissButtonClick
-            ) {
-                Text(text = stringResource(R.string.cancel))
-            }
-        }
-    )
 }
 
 @Preview(name = "Light Theme")

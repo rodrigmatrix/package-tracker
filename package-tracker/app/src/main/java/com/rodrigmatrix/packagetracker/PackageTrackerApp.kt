@@ -29,7 +29,7 @@ class PackageTrackerApp: Application() {
 
         val periodicWorkRequest = PeriodicWorkRequest.Builder(
             UpdatePackagesAndSendNotificationsWorker::class.java,
-            30,
+            2,
             TimeUnit.MINUTES
         ).build()
 

@@ -32,6 +32,7 @@ import com.google.accompanist.swiperefresh.SwipeRefreshState
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.rodrigmatrix.domain.entity.UserPackage
 import com.rodrigmatrix.packagetracker.R
+import com.rodrigmatrix.packagetracker.presentation.components.DeletePackageDialog
 import com.rodrigmatrix.packagetracker.presentation.theme.PackageTrackerTheme
 import com.rodrigmatrix.packagetracker.presentation.utils.PreviewPackageItemsList
 import org.koin.androidx.compose.getViewModel
@@ -44,12 +45,25 @@ fun PackagesScreen(
 ) {
     val viewState by viewModel.viewState.collectAsState()
 
+    if (viewState.deletePackageDialogVisible) {
+//        DeletePackageDialog(
+//            onConfirmButtonClick = { viewModel.deletePackage(it) },
+//            onDismissButtonClick = {  }
+//        )
+    }
+
     PackagesScreen(
         viewState = viewState,
         onSwipeRefresh = viewModel::fetchPackages,
         onAddPackageClick = onAddPackageClick,
         onPackageClick = { id ->
             navController.navigate("package/$id")
+        },
+        onLongClick = {
+//            DeletePackageDialog(
+//                onConfirmButtonClick = { viewModel.deletePackage(it) },
+//                onDismissButtonClick = {  }
+//            )
         }
     )
 }
@@ -59,7 +73,8 @@ private fun PackagesScreen(
     viewState: PackagesViewState,
     onSwipeRefresh: () -> Unit,
     onAddPackageClick: () -> Unit,
-    onPackageClick: (id: String) -> Unit
+    onPackageClick: (id: String) -> Unit,
+    onLongClick: (id: String) -> Unit
 ) {
     Column {
         SwipeRefresh(
@@ -72,6 +87,9 @@ private fun PackagesScreen(
                         PackagesList(
                             onItemClick = {
                                 onPackageClick(it)
+                            },
+                            onLongClick = {
+                                onLongClick(it)
                             },
                             viewState.packagesList
                         )
@@ -101,6 +119,7 @@ private fun PackagesScreen(
 @Composable
 private fun PackagesList(
     onItemClick: (id: String) -> Unit,
+    onLongClick: (id: String) -> Unit,
     packagesList: List<UserPackage>
 ) {
     Box(Modifier.fillMaxSize()) {
@@ -113,7 +132,11 @@ private fun PackagesList(
                 contentPadding = PaddingValues(bottom = 200.dp)
             ) {
                 items(packagesList) { packageItem ->
-                    Package(onItemClick, packageItem)
+                    Package(
+                        onItemClick,
+                        onLongClick,
+                        packageItem
+                    )
                 }
             }
         }
@@ -156,7 +179,8 @@ fun PackagesPreview() {
             ),
             onSwipeRefresh = { },
             onAddPackageClick = { },
-            onPackageClick = { }
+            onPackageClick = { },
+            onLongClick =  { }
         )
     }
 }
@@ -170,7 +194,8 @@ fun PackagesEmptyStatePreview() {
             viewState = PackagesViewState(),
             onSwipeRefresh = { },
             onAddPackageClick = { },
-            onPackageClick = { }
+            onPackageClick = { },
+            onLongClick =  { }
         )
     }
 }

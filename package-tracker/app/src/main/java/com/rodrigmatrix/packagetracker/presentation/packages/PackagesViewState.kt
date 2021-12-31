@@ -7,6 +7,7 @@ import com.rodrigmatrix.domain.entity.UserPackage
 data class PackagesViewState(
     val isRefreshing: SwipeRefreshState = SwipeRefreshState(isRefreshing = false),
     val packagesList: List<UserPackage> = emptyList(),
+    val deletePackageDialogVisible: Boolean = false,
     val exception: Throwable? = null
 ): ViewState {
 
@@ -18,6 +19,7 @@ data class PackagesViewState(
         return this.copy(
             isRefreshing = SwipeRefreshState(isRefreshing = false),
             packagesList = packagesList,
+            deletePackageDialogVisible = false,
             exception = null
         )
     }

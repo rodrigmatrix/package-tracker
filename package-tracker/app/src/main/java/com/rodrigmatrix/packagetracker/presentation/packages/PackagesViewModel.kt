@@ -69,6 +69,10 @@ class PackagesViewModel(
         }
     }
 
+    fun showDeletePackageDialog() {
+        setState { it.copy(deletePackageDialogVisible = true) }
+    }
+
     fun openPackage(packageId: String) {
         viewModelScope.launch {
             setEffect { OpenPackageScreen(packageId) }

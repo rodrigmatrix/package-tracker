@@ -27,7 +27,7 @@
         <item name="colorOnSurfaceInverse">@color/md_theme_dark_inverseOnSurface</item>
         <item name="colorSurfaceInverse">@color/md_theme_dark_inverseSurface</item>
         <item name="colorPrimaryInverse">@color/md_theme_dark_primaryInverse</item>
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <item name="android:statusBarColor">@color/md_theme_dark_primaryInverse</item>
         <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.PackageTracker.SmallComponent</item>
         <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.PackageTracker.MediumComponent</item>
         <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.PackageTracker.LargeComponent</item>

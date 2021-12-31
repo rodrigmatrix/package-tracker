@@ -22,10 +22,10 @@ class PackageEntityMapper: Mapper<PackageStatusResponse, UserPackageAndUpdatesEn
     private fun Evento.toStatus(packageId: String): StatusUpdateEntity {
         return StatusUpdateEntity(
             userPackageId = packageId,
-            //FIXME
             statusUpdateType = tipo.orEmpty(),
             description = descricao.orEmpty(),
             date = data.orEmpty(),
+            hour = hora.orEmpty(),
             from = getAddress(),
             to = destino?.firstOrNull()?.getDestinationAddress()
         )

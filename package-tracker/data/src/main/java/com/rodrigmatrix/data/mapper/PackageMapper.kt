@@ -20,10 +20,10 @@ class PackageMapper : Mapper<UserPackageAndUpdatesEntity, UserPackage> {
 
     private fun StatusUpdateEntity.toStatus(): StatusUpdate {
         return StatusUpdate(
-            //FIXME
             statusUpdateType = statusUpdateType,
             description = description,
             date = date,
+            hour = hour,
             from = from.getAddress(),
             to = to?.getAddress()
         )

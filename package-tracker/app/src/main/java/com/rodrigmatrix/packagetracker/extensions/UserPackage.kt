@@ -13,7 +13,7 @@ import com.rodrigmatrix.packagetracker.presentation.theme.*
 
 fun UserPackage.getLastStatus(): PackageLastStatus {
     val lastStatus = statusUpdateList.firstOrNull() ?: return PackageLastStatus(
-        "Erro ao carregar dados",
+        "Encomenda não encontrada na base de dados",
         md_theme_light_primary,
         Icons.Outlined.Done
     )
@@ -27,8 +27,11 @@ fun UserPackage.getLastStatus(): PackageLastStatus {
     )
 }
 
-fun StatusUpdate.getStatusIconAndColor(): Pair<Color, ImageVector> {
+fun StatusUpdate?.getStatusIconAndColor(): Pair<Color, ImageVector> {
     return when {
+        this == null ->
+            Pair(md_theme_light_error, Icons.Outlined.Info)
+
         description.contains("entregue") ->
             Pair(theme_light_done, Icons.Outlined.Done)
 

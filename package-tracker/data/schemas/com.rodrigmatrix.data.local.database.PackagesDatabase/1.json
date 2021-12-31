@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "a3889697e69801658d701dcfc85a2ad8",
+    "identityHash": "0bc4922f634847c52608b65f58fa2a33",
     "entities": [
       {
         "tableName": "packages",
@@ -44,7 +44,7 @@
       },
       {
         "tableName": "status_update",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`userPackageId` TEXT NOT NULL, `statusUpdateType` TEXT NOT NULL, `description` TEXT NOT NULL, `date` TEXT NOT NULL, `statusId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `fromlocalName` TEXT NOT NULL, `fromcity` TEXT NOT NULL, `fromstate` TEXT NOT NULL, `fromunitType` TEXT, `fromlatitude` INTEGER NOT NULL, `fromlongitude` INTEGER NOT NULL, `tolocalName` TEXT, `tocity` TEXT, `tostate` TEXT, `tounitType` TEXT, `tolatitude` INTEGER, `tolongitude` INTEGER)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`userPackageId` TEXT NOT NULL, `statusUpdateType` TEXT NOT NULL, `description` TEXT NOT NULL, `date` TEXT NOT NULL, `hour` TEXT NOT NULL, `statusId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `fromlocalName` TEXT NOT NULL, `fromcity` TEXT NOT NULL, `fromstate` TEXT NOT NULL, `fromunitType` TEXT, `fromlatitude` INTEGER NOT NULL, `fromlongitude` INTEGER NOT NULL, `tolocalName` TEXT, `tocity` TEXT, `tostate` TEXT, `tounitType` TEXT, `tolatitude` INTEGER, `tolongitude` INTEGER)",
         "fields": [
           {
             "fieldPath": "userPackageId",
@@ -67,6 +67,12 @@
           {
             "fieldPath": "date",
             "columnName": "date",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hour",
+            "columnName": "hour",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -162,7 +168,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a3889697e69801658d701dcfc85a2ad8')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0bc4922f634847c52608b65f58fa2a33')"
     ]
   }
 }

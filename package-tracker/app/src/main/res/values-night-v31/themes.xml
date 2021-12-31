@@ -27,40 +27,13 @@
         <item name="colorOnSurfaceInverse">@color/md_theme_light_inverseOnSurface</item>
         <item name="colorSurfaceInverse">@color/md_theme_light_inverseSurface</item>
         <item name="colorPrimaryInverse">@color/md_theme_light_primaryInverse</item>
-        <item name="android:statusBarColor">@color/md_theme_light_primaryInverse</item>
+        <item name="android:statusBarColor">?android:textColorPrimaryInverse</item>
         <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.PackageTracker.SmallComponent</item>
         <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.PackageTracker.MediumComponent</item>
         <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.PackageTracker.LargeComponent</item>
         <item name="bottomSheetDialogTheme">@style/Theme.PackageTracker.BottomSheet</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-    </style>
-
-    <style name="ShapeAppearance.PackageTracker.SmallComponent" parent="ShapeAppearance.Material3.SmallComponent">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">50%</item>
-    </style>
-
-    <style name="ShapeAppearance.PackageTracker.MediumComponent" parent="ShapeAppearance.Material3.MediumComponent">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">50%</item>
-    </style>
-
-    <style name="ShapeAppearance.PackageTracker.LargeComponent" parent="ShapeAppearance.Material3.LargeComponent">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">50%</item>
-    </style>
-
-    <style name="ShapeAppearance.PackageTracker.BottomSheet" parent="ShapeAppearance.Material3.LargeComponent">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSizeTopLeft">26dp</item>
-        <item name="cornerSizeTopRight">26dp</item>
-    </style>
-
-    <style name="Theme.PackageTracker.BottomSheet" parent="ThemeOverlay.Material3.BottomSheetDialog">
-        <item name="android:windowIsFloating">false</item>
-        <item name="android:windowSoftInputMode">adjustResize</item>
-        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.PackageTracker.BottomSheet</item>
     </style>
 
 </resources>

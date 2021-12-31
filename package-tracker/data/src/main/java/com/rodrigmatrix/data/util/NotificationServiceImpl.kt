@@ -2,10 +2,13 @@ package com.rodrigmatrix.data.util
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import androidx.annotation.DrawableRes
 import androidx.core.app.NotificationCompat
+import androidx.core.app.TaskStackBuilder
 import com.rodrigmatrix.core.resource.ResourceProvider
 import com.rodrigmatrix.data.model.notification.PackageTrackerNotificationChannel
 import kotlin.random.Random
@@ -45,8 +48,17 @@ class NotificationServiceImpl(
                 NotificationCompat.BigTextStyle()
                 .bigText(description))
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setContentIntent(createIntent())
             .build()
 
         notificationManager.notify(Random.nextInt(), builder)
+    }
+
+    private fun createIntent(): PendingIntent? {
+        val resultIntent = Intent("action.packagetracker.open")
+        return TaskStackBuilder.create(applicationContext).run {
+            addNextIntentWithParentStack(resultIntent)
+            getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
+        }
     }
 }

@@ -10,6 +10,7 @@ data class StatusUpdateEntity(
     val statusUpdateType: String = "",
     val description: String = "",
     val date: String = "",
+    val hour: String = "",
     @Embedded(prefix = "from") val from: StatusAddressEntity,
     @Embedded(prefix = "to") val to: StatusAddressEntity? = null
 ) {

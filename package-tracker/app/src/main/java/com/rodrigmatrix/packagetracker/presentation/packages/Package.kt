@@ -3,7 +3,7 @@ package com.rodrigmatrix.packagetracker.presentation.packages
 import android.content.res.Configuration
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -33,9 +34,14 @@ import com.rodrigmatrix.packagetracker.presentation.theme.PackageTrackerTheme
 @Composable
 fun Package(
     onItemClick: (id: String) -> Unit,
+    onLongClick: (id: String) -> Unit,
     packageItem: UserPackage
 ) {
     val lastStatus = packageItem.getLastStatus()
+
+    val statusUpdate = packageItem.statusUpdateList.firstOrNull()
+
+    val (statusColor, iconVector) = statusUpdate.getStatusIconAndColor()
 
     Surface(
         color = MaterialTheme.colorScheme.secondaryContainer,
@@ -44,18 +50,23 @@ fun Package(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)
-            .clickable {
-                onItemClick(packageItem.packageId)
-            }
+            .combinedClickable(
+                onLongClick = {
+                    onLongClick(packageItem.packageId)
+                },
+                onClick = {
+                    if (statusUpdate == null) {
+                        onLongClick(packageItem.packageId)
+                    } else {
+                        onItemClick(packageItem.packageId)
+                    }
+                }
+            )
     ) {
         ConstraintLayout {
             val (
                 name, lastUpdate, image, packageId, date
             ) = createRefs()
-
-            val statusUpdate = packageItem.statusUpdateList.first()
-
-            val (statusColor, iconVector) = statusUpdate.getStatusIconAndColor()
 
             Icon(
                 imageVector = iconVector,
@@ -74,7 +85,8 @@ fun Package(
 
             Text(
                 text = packageItem.name,
-                maxLines = 2,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
                 style = MaterialTheme.typography.headlineSmall,
                 modifier = Modifier.constrainAs(name) {
                     linkTo(
@@ -85,13 +97,13 @@ fun Package(
                         bias = 0f
                     )
                     top.linkTo(parent.top, 16.dp)
-                    width = Dimension.preferredWrapContent
                 }
             )
 
             Text(
                 text = lastStatus.title,
                 maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.constrainAs(lastUpdate) {
                     linkTo(
@@ -106,7 +118,7 @@ fun Package(
             )
 
             Text(
-                text = statusUpdate.date,
+                text = statusUpdate?.getDateWithHour() ?: "-",
                 maxLines = 1,
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.constrainAs(date) {
@@ -164,7 +176,8 @@ fun PackagePreview() {
 
     PackageTrackerTheme {
         Package(
-            onItemClick = {},
+            onItemClick = { },
+            onLongClick =  { },
             packageItem = packageItem
         )
     }

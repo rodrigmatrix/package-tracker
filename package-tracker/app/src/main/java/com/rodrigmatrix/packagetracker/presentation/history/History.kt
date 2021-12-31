@@ -76,7 +76,7 @@ fun PackageUpdate(statusUpdate: StatusUpdate) {
                 fontSize = 24.sp
             )
             Text(
-                text = statusUpdate.date,
+                text = statusUpdate.getDateWithHour(),
                 style = MaterialTheme.typography.bodySmall
             )
             Address(statusUpdate.from, isDestination = false)
