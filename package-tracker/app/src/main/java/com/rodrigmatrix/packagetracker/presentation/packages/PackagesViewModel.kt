@@ -6,8 +6,6 @@ import com.rodrigmatrix.domain.usecase.DeletePackageUseCase
 import com.rodrigmatrix.domain.usecase.FetchAllPackagesUseCase
 import com.rodrigmatrix.domain.usecase.GetAllPackagesUseCase
 import com.rodrigmatrix.domain.usecase.GetPackageProgressStatus
-import com.rodrigmatrix.packagetracker.extensions.getLastStatus
-import com.rodrigmatrix.packagetracker.presentation.packages.PackagesViewEffect.OpenPackageScreen
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
@@ -69,13 +67,11 @@ class PackagesViewModel(
         }
     }
 
-    fun showDeletePackageDialog() {
-        setState { it.copy(deletePackageDialogVisible = true) }
+    fun showDeletePackageDialog(packageId: String) {
+        setState { it.showDialogDeleteState(packageId) }
     }
 
-    fun openPackage(packageId: String) {
-        viewModelScope.launch {
-            setEffect { OpenPackageScreen(packageId) }
-        }
+    fun hideDeleteDialog() {
+        setState { it.hideDialogDelete() }
     }
 }

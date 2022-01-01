@@ -17,7 +17,7 @@ abstract class ViewModel<S: ViewState, E: ViewEffect?>(initialState: S): Android
         _viewState.value = newState(viewState.value)
     }
 
-     protected suspend fun setEffect(newEffect: () -> E) {
-        _viewEffect.send(newEffect())
+     protected fun setEffect(newEffect: () -> E) {
+        _viewEffect.trySend(newEffect())
     }
 }

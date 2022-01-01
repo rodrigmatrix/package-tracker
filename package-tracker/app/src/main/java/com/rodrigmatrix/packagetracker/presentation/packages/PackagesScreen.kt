@@ -46,10 +46,12 @@ fun PackagesScreen(
     val viewState by viewModel.viewState.collectAsState()
 
     if (viewState.deletePackageDialogVisible) {
-//        DeletePackageDialog(
-//            onConfirmButtonClick = { viewModel.deletePackage(it) },
-//            onDismissButtonClick = {  }
-//        )
+        DeletePackageDialog(
+            onConfirmButtonClick = {
+                viewModel.deletePackage(viewState.selectedPackageId)
+            },
+            onDismissButtonClick = viewModel::hideDeleteDialog
+        )
     }
 
     PackagesScreen(
@@ -59,11 +61,8 @@ fun PackagesScreen(
         onPackageClick = { id ->
             navController.navigate("package/$id")
         },
-        onLongClick = {
-//            DeletePackageDialog(
-//                onConfirmButtonClick = { viewModel.deletePackage(it) },
-//                onDismissButtonClick = {  }
-//            )
+        onLongClick = { id ->
+            viewModel.showDeletePackageDialog(id)
         }
     )
 }

@@ -43,6 +43,7 @@ class AddNewPackageBottomSheetFragment: BottomSheetDialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        DynamicColors.applyIfAvailable(requireActivity())
         setObservers()
         binding.textButton.setOnClickListener {
             addPackage()
