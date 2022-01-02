@@ -5,7 +5,9 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
+    id 'com.google.gms.google-services'
 }
+apply plugin: 'com.google.firebase.crashlytics'
 
 android {
     compileSdk Versions.compileSdkVersion
@@ -36,6 +38,10 @@ android {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            applicationIdSuffix ".debug"
+            debuggable true
         }
     }
     compileOptions {
@@ -84,6 +90,14 @@ dependencies {
     implementation Libs.AndroidX.Room.runtime
     kapt Libs.AndroidX.Room.compiler
     implementation Libs.AndroidX.Room.ktx
+
+    // Firebase
+    implementation Libs.Firebase.remoteConfig
+    implementation Libs.Firebase.inAppMessaging
+    implementation Libs.Firebase.cloudMessaging
+    implementation Libs.Firebase.crashlytics
+    implementation Libs.Firebase.analytics
+    implementation platform(Libs.Firebase.bom)
 
     // Compose
     implementation Libs.AndroidX.Compose.runtime

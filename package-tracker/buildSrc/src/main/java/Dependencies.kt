@@ -11,6 +11,15 @@ object Libs {
         const val extensions = "org.jetbrains.kotlin:kotlin-android-extensions:$version"
     }
 
+    object Firebase {
+        const val remoteConfig = "com.google.firebase:firebase-config-ktx"
+        const val cloudMessaging = "com.google.firebase:firebase-messaging-ktx"
+        const val inAppMessaging = "com.google.firebase:firebase-inappmessaging-display"
+        const val crashlytics = "com.google.firebase:firebase-crashlytics-ktx"
+        const val analytics = "com.google.firebase:firebase-analytics-ktx"
+        const val bom = "com.google.firebase:firebase-bom:29.0.3"
+    }
+
     object Accompanist {
         const val version = "0.16.0"
         const val insets = "com.google.accompanist:accompanist-insets:$version"
