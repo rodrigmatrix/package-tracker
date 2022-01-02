@@ -1,11 +1,10 @@
 package com.rodrigmatrix.packagetracker.presentation.packages
 
-import com.google.accompanist.swiperefresh.SwipeRefreshState
 import com.rodrigmatrix.core.viewmodel.ViewState
 import com.rodrigmatrix.domain.entity.UserPackage
 
 data class PackagesViewState(
-    val isRefreshing: SwipeRefreshState = SwipeRefreshState(isRefreshing = false),
+    val isRefreshing: Boolean = true,
     val packagesList: List<UserPackage> = emptyList(),
     val deletePackageDialogVisible: Boolean = false,
     val selectedPackageId: String = "",
@@ -13,7 +12,7 @@ data class PackagesViewState(
 ): ViewState {
 
     fun loadingState(): PackagesViewState {
-        return this.copy(isRefreshing = SwipeRefreshState(isRefreshing = true))
+        return this.copy(isRefreshing = true)
     }
 
     fun showDialogDeleteState(packageId: String): PackagesViewState {
@@ -26,7 +25,7 @@ data class PackagesViewState(
 
     fun successState(packagesList: List<UserPackage>): PackagesViewState {
         return this.copy(
-            isRefreshing = SwipeRefreshState(isRefreshing = false),
+            isRefreshing = false,
             packagesList = packagesList,
             deletePackageDialogVisible = false,
             selectedPackageId = "",
@@ -36,7 +35,7 @@ data class PackagesViewState(
 
     fun errorState(throwable: Throwable): PackagesViewState {
         return this.copy(
-            isRefreshing = SwipeRefreshState(isRefreshing = false),
+            isRefreshing = false,
             selectedPackageId = "",
             exception = throwable
         )

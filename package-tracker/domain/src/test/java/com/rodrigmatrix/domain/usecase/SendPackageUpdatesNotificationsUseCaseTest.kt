@@ -1,8 +1,9 @@
 package com.rodrigmatrix.domain.usecase
 
-import com.rodrigmatrix.domain.entity.StatusAddress
-import com.rodrigmatrix.domain.entity.StatusUpdate
-import com.rodrigmatrix.domain.entity.UserPackage
+import com.rodrigmatrix.stubs.PackageTestStubs.deliveredPackage
+import com.rodrigmatrix.stubs.PackageTestStubs.emptyPackage
+import com.rodrigmatrix.stubs.PackageTestStubs.inProgressPackage
+import com.rodrigmatrix.stubs.PackageTestStubs.outForDeliveryPackage
 import io.mockk.coEvery
 import io.mockk.mockk
 import io.mockk.verify
@@ -30,41 +31,8 @@ class SendPackageUpdatesNotificationsUseCaseTest {
     @Test
     fun `given package with update Then notify about it`() {
         // Given
-        val cachedPackages = listOf(
-            UserPackage(
-            "H6XAJ123BN12",
-            "Google Pixel 4",
-            "",
-            "20/07/2022",
-            listOf(
-                StatusUpdate(
-                    date = "22/07/2022",
-                    description = "Saiu para entrega",
-                    from = StatusAddress()
-                )
-            )
-        )
-        )
-        val remotePackages = listOf(
-            UserPackage(
-            "H6XAJ123BN12",
-            "Google Pixel 4",
-            "",
-            "20/07/2022",
-            listOf(
-                StatusUpdate(
-                    date = "22/07/2022",
-                    description = "Entregue",
-                    from = StatusAddress()
-                ),
-                StatusUpdate(
-                    date = "22/07/2022",
-                    description = "Saiu para entrega",
-                    from = StatusAddress()
-                )
-            )
-        )
-        )
+        val cachedPackages = listOf(outForDeliveryPackage)
+        val remotePackages = listOf(deliveredPackage)
 
         coEvery { getAllPackagesUseCase() } returns flow { emit(cachedPackages) }
         coEvery { fetchAllPackagesUseCase() } returns flow { emit(remotePackages) }
@@ -77,7 +45,7 @@ class SendPackageUpdatesNotificationsUseCaseTest {
             verify {
                 sendNotificationUseCase(
                     title = "Google Pixel 4",
-                    description = "Entregue - 22/07/2022"
+                    description = "Objeto entregue ao destinatario - 22/07/2022"
                 )
             }
         }
@@ -86,46 +54,8 @@ class SendPackageUpdatesNotificationsUseCaseTest {
     @Test
     fun `given package with 2 updates Then notify about the last one`() {
         // Given
-        val cachedPackages = listOf(
-            UserPackage(
-                "H6XAJ123BN12",
-                "Google Pixel 4",
-                "",
-                "20/07/2022",
-                listOf(
-                    StatusUpdate(
-                        date = "22/07/2022",
-                        description = "Em progresso",
-                        from = StatusAddress()
-                    )
-                )
-            )
-        )
-        val remotePackages = listOf(
-            UserPackage(
-                "H6XAJ123BN12",
-                "Google Pixel 4",
-                "",
-                "20/07/2022",
-                listOf(
-                    StatusUpdate(
-                        date = "22/07/2022",
-                        description = "Entregue",
-                        from = StatusAddress()
-                    ),
-                    StatusUpdate(
-                        date = "22/07/2022",
-                        description = "Saiu para entrega",
-                        from = StatusAddress()
-                    ),
-                    StatusUpdate(
-                        date = "22/07/2022",
-                        description = "Em progresso",
-                        from = StatusAddress()
-                    )
-                )
-            )
-        )
+        val cachedPackages = listOf(inProgressPackage)
+        val remotePackages = listOf(deliveredPackage)
 
         coEvery { getAllPackagesUseCase() } returns flow { emit(cachedPackages) }
         coEvery { fetchAllPackagesUseCase() } returns flow { emit(remotePackages) }
@@ -138,10 +68,79 @@ class SendPackageUpdatesNotificationsUseCaseTest {
             verify {
                 sendNotificationUseCase(
                     title = "Google Pixel 4",
-                    description = "Entregue - 22/07/2022"
+                    description = "Objeto entregue ao destinatario - 22/07/2022"
                 )
             }
             verify(exactly = 1) {
+                sendNotificationUseCase(
+                    title = any(),
+                    description = any()
+                )
+            }
+        }
+    }
+
+    @Test
+    fun `given empty remote package Then do not send any notification`() {
+        // Given
+        val cachedPackages = listOf(inProgressPackage)
+        val remotePackages = listOf(emptyPackage)
+
+        coEvery { getAllPackagesUseCase() } returns flow { emit(cachedPackages) }
+        coEvery { fetchAllPackagesUseCase() } returns flow { emit(remotePackages) }
+
+        runBlockingTest {
+            // When
+            useCase()
+
+            // Then
+            verify(exactly = 0) {
+                sendNotificationUseCase(
+                    title = any(),
+                    description = any()
+                )
+            }
+        }
+    }
+
+    @Test
+    fun `given empty local package Then do not send any notification`() {
+        // Given
+        val cachedPackages = listOf(emptyPackage)
+        val remotePackages = listOf(inProgressPackage)
+
+        coEvery { getAllPackagesUseCase() } returns flow { emit(cachedPackages) }
+        coEvery { fetchAllPackagesUseCase() } returns flow { emit(remotePackages) }
+
+        runBlockingTest {
+            // When
+            useCase()
+
+            // Then
+            verify(exactly = 0) {
+                sendNotificationUseCase(
+                    title = any(),
+                    description = any()
+                )
+            }
+        }
+    }
+
+    @Test
+    fun `given both empty packages Then do not send any notification`() {
+        // Given
+        val cachedPackages = listOf(emptyPackage)
+        val remotePackages = listOf(emptyPackage)
+
+        coEvery { getAllPackagesUseCase() } returns flow { emit(cachedPackages) }
+        coEvery { fetchAllPackagesUseCase() } returns flow { emit(remotePackages) }
+
+        runBlockingTest {
+            // When
+            useCase()
+
+            // Then
+            verify(exactly = 0) {
                 sendNotificationUseCase(
                     title = any(),
                     description = any()

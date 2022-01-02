@@ -65,13 +65,6 @@ fun DetailsScreen(
         null -> Unit
     }
 
-    if (viewState.deletePackageDialogVisible) {
-        DeletePackageDialog(
-            onConfirmButtonClick = { viewModel.deletePackage(packageId) },
-            onDismissButtonClick = viewModel::hideDeleteDialog
-        )
-    }
-
     AnimatedVisibility(visible = true) {
         DetailsScreen(
             viewState = viewState,
@@ -81,7 +74,11 @@ fun DetailsScreen(
                     .newInstance(packageId)
                     .show(fragmentManager, null)
             },
-            onDeleteButtonClick = viewModel::showDeleteDialog
+            onDeleteButtonClick = viewModel::showDeleteDialog,
+            onConfirmDeletePackage = {
+                viewModel.deletePackage(packageId)
+            },
+            onDismissDeletePackageDialog = viewModel::hideDeleteDialog
         )
     }
 }
@@ -91,8 +88,14 @@ private fun DetailsScreen(
     viewState: PackageStatusViewState,
     onBackButtonClick: () -> Unit,
     onEditButtonClick: () -> Unit,
-    onDeleteButtonClick: () -> Unit
+    onDeleteButtonClick: () -> Unit,
+    onConfirmDeletePackage: () -> Unit,
+    onDismissDeletePackageDialog: () -> Unit
 ) {
+    if (viewState.deletePackageDialogVisible) {
+        DeletePackageDialog(onConfirmDeletePackage, onDismissDeletePackageDialog)
+    }
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -155,7 +158,9 @@ fun DetailsScreenPreview() {
             ),
             onBackButtonClick = { },
             onEditButtonClick = { },
-            onDeleteButtonClick = { }
+            onDeleteButtonClick = { },
+            onConfirmDeletePackage = { },
+            onDismissDeletePackageDialog = { }
         )
     }
 }

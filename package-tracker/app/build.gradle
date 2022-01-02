@@ -1,4 +1,5 @@
 import com.rodrigmatrix.packagetracker.buildSrc.Libs
+import com.rodrigmatrix.packagetracker.buildSrc.Versions
 
 plugins {
     id 'com.android.application'
@@ -7,12 +8,12 @@ plugins {
 }
 
 android {
-    compileSdk 31
+    compileSdk Versions.compileSdkVersion
 
     defaultConfig {
         applicationId "com.rodrigmatrix.packagetracker"
-        minSdk 21
-        targetSdk 31
+        minSdk Versions.minSdkVersion
+        targetSdk Versions.targetSdkVersion
         versionCode 1
         versionName "1.0"
 
@@ -52,6 +53,9 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion "1.0.1"
         kotlinCompilerVersion '1.4.32'
+    }
+    packagingOptions {
+        resources.excludes.add("META-INF/*")
     }
 }
 
@@ -116,8 +120,11 @@ dependencies {
     testImplementation Libs.Test.junit
     androidTestImplementation Libs.Test.Ext.junit
     androidTestImplementation Libs.Test.espressoCore
+    androidTestImplementation Libs.Test.composeTest
     testImplementation Libs.Coroutines.test
     testImplementation Libs.Test.mockk
     testImplementation Libs.Test.core
     testImplementation Libs.Koin.test
+    debugImplementation Libs.Test.debugComposeTest
+    androidTestImplementation Libs.Test.androidJunit
 }

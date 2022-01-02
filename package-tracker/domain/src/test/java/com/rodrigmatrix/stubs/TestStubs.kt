@@ -1,12 +1,12 @@
-package com.rodrigmatrix.packagetracker.presentation.utils
+package com.rodrigmatrix.stubs
 
-import com.rodrigmatrix.domain.entity.PackageProgressStatus
 import com.rodrigmatrix.domain.entity.StatusAddress
 import com.rodrigmatrix.domain.entity.StatusUpdate
 import com.rodrigmatrix.domain.entity.UserPackage
 
-val PreviewPackageItemsList = listOf(
-    UserPackage(
+internal object PackageTestStubs {
+
+    val deliveredPackage = UserPackage(
         "H6XAJ123BN12",
         "Google Pixel 4",
         "",
@@ -29,6 +29,25 @@ val PreviewPackageItemsList = listOf(
             ),
             StatusUpdate(
                 date = "21/07/2022",
+                description = "Enviado",
+                from = StatusAddress()
+            )
+        )
+    )
+
+    val outForDeliveryPackage = UserPackage(
+        "H6XAJ123BN12",
+        "Google Pixel 4",
+        "",
+        "20/07/2022",
+        listOf(
+            StatusUpdate(
+                date = "22/07/2022",
+                description = "Saiu para entrega",
+                from = StatusAddress()
+            ),
+            StatusUpdate(
+                date = "21/07/2022",
                 description = "Em progresso",
                 from = StatusAddress()
             ),
@@ -38,58 +57,32 @@ val PreviewPackageItemsList = listOf(
                 from = StatusAddress()
             )
         )
-    ),
-    UserPackage(
+    )
+
+    val inProgressPackage = UserPackage(
         "H6XAJ123BN12",
-        "Google Pixel 6 Pro",
+        "Google Pixel 4",
         "",
         "20/07/2022",
         listOf(
             StatusUpdate(
                 date = "21/07/2022",
-                description = "Entregue",
+                description = "Em progresso",
+                from = StatusAddress()
+            ),
+            StatusUpdate(
+                date = "21/07/2022",
+                description = "Enviado",
                 from = StatusAddress()
             )
         )
     )
-)
 
-val PreviewPackageItem = UserPackage(
-    "H6XAJ123BN12",
-    "Google Pixel 4",
-    "",
-    "20/07/2022",
-    listOf(
-        StatusUpdate(
-            date = "22/07/2022",
-            description = "Objeto entregue ao destinatario",
-            from = StatusAddress()
-        ),
-        StatusUpdate(
-            date = "22/07/2022",
-            description = "Saiu para entrega",
-            from = StatusAddress()
-        ),
-        StatusUpdate(
-            date = "21/07/2022",
-            description = "Objeto em trânsito",
-            from = StatusAddress()
-        ),
-        StatusUpdate(
-            date = "21/07/2022",
-            description = "Objeto em trânsito",
-            from = StatusAddress()
-        ),
-        StatusUpdate(
-            date = "21/07/2022",
-            description = "Postado",
-            from = StatusAddress()
-        )
+    val emptyPackage = UserPackage(
+        "H6XAJ123BN12",
+        "Google Pixel 4",
+        "",
+        "20/07/2022",
+        listOf()
     )
-)
-
-val PreviewPackageProgressStatus = PackageProgressStatus(
-    mailed = true,
-    inProgress = true,
-    delivered = false
-)
+}

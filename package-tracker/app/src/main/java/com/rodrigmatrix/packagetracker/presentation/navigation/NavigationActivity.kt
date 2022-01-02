@@ -44,7 +44,8 @@ class NavigationActivity : AppCompatActivity() {
                             NavigationBar {
                                 listOf(
                                     Screen.Home,
-                                    Screen.Settings
+                                    Screen.Settings,
+                                    Screen.About
                                 ).forEach { screen ->
                                     NavigationBarItem(
                                         icon = { Icon(screen.image, contentDescription = null) },

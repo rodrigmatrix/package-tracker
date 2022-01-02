@@ -24,6 +24,10 @@ class GetPackageProgressStatus {
     }
 
     private fun hasPackageBeenDelivered(userPackage: UserPackage): Boolean {
+        if (userPackage.statusUpdateList.isEmpty()) {
+            return true
+        }
+
         return userPackage.statusUpdateList.any {
             it.description.lowercase().contains(DELIVERED_MATCHER)
         }

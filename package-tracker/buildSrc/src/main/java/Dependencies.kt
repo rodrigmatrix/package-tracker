@@ -2,6 +2,7 @@ package com.rodrigmatrix.packagetracker.buildSrc
 
 object Libs {
 
+    private const val composeVersion = "1.1.0-beta01"
 
     object Kotlin {
         private const val version = "1.5.21"
@@ -29,19 +30,18 @@ object Libs {
         const val workManager = "androidx.work:work-runtime-ktx:2.7.0"
 
         object Compose {
-            private const val version = "1.1.0-beta01"
 
-            const val foundation = "androidx.compose.foundation:foundation:${version}"
-            const val layout = "androidx.compose.foundation:foundation-layout:${version}"
-            const val ui = "androidx.compose.ui:ui:${version}"
-            const val uiUtil = "androidx.compose.ui:ui-util:${version}"
-            const val runtime = "androidx.compose.runtime:runtime:${version}"
+            const val foundation = "androidx.compose.foundation:foundation:$composeVersion"
+            const val layout = "androidx.compose.foundation:foundation-layout:$composeVersion"
+            const val ui = "androidx.compose.ui:ui:$composeVersion"
+            const val uiUtil = "androidx.compose.ui:ui-util:$composeVersion"
+            const val runtime = "androidx.compose.runtime:runtime:$composeVersion"
             const val material3 = "androidx.compose.material3:material3:1.0.0-alpha01"
-            const val material = "androidx.compose.material:material:${version}"
-            const val animation = "androidx.compose.animation:animation:${version}"
-            const val tooling = "androidx.compose.ui:ui-tooling:${version}"
-            const val iconsExtended = "androidx.compose.material:material-icons-extended:$version"
-            const val uiTest = "androidx.compose.ui:ui-test-junit4:$version"
+            const val material = "androidx.compose.material:material:$composeVersion"
+            const val animation = "androidx.compose.animation:animation:$composeVersion"
+            const val tooling = "androidx.compose.ui:ui-tooling:$composeVersion"
+            const val iconsExtended = "androidx.compose.material:material-icons-extended:$composeVersion"
+            const val uiTest = "androidx.compose.ui:ui-test-junit4:$composeVersion"
             const val swipeRefresh = "com.google.accompanist:accompanist-swiperefresh:0.17.0"
             const val themeAdapter = "com.google.android.material:compose-theme-adapter:1.0.3"
         }
@@ -115,6 +115,7 @@ object Libs {
         const val core = "androidx.arch.core:core-testing:2.1.0"
         const val runner = "androidx.test:runner:$version"
         const val rules = "androidx.test:rules:$version"
+        const val androidJunit = "androidx.test.ext:junit:1.1.3"
 
         const val mockk = "io.mockk:mockk:$mockkVersion"
 
@@ -123,6 +124,8 @@ object Libs {
             const val junit = "androidx.test.ext:junit-ktx:$version"
         }
         const val espressoCore = "androidx.test.espresso:espresso-core:3.2.0"
+        const val composeTest = "androidx.compose.ui:ui-test-junit4:$composeVersion"
+        const val debugComposeTest = "androidx.compose.ui:ui-test-manifest:$composeVersion"
     }
 
 }

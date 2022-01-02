@@ -16,14 +16,17 @@ class SendPackageUpdatesNotificationsUseCase(
         val updatedPackages = fetchAllPackagesUseCase().first()
 
         cachedPackages
-            .toMutableList()
             .filterNot { getPackageProgressStatus(it).delivered }
-            .mapIndexed { index, userPackage ->
-                getNotifications(
-                    userPackage,
-                    updatedPackages[index]
-                ).firstOrNull()?.run {
-                    sendNotification(userPackage, statusUpdate = this)
+            .map { userPackage ->
+                updatedPackages.find {
+                    it.packageId == userPackage.packageId
+                }?.let { updatedPackage ->
+                    getNotifications(
+                        userPackage,
+                        updatedPackage
+                    ).firstOrNull()?.run {
+                        sendNotification(userPackage, statusUpdate = this)
+                    }
                 }
             }
     }
@@ -32,6 +35,10 @@ class SendPackageUpdatesNotificationsUseCase(
         cachedPackage: UserPackage,
         updatedPackage: UserPackage
     ): List<StatusUpdate> {
+        if (updatedPackage.statusUpdateList.isEmpty()) {
+            return emptyList()
+        }
+
         return cachedPackage.statusUpdateList.plus(updatedPackage.statusUpdateList)
             .groupBy { it.description + it.date }
             .filter { it.value.size == 1 }

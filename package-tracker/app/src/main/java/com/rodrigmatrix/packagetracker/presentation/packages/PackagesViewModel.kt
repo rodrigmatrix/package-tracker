@@ -39,7 +39,7 @@ class PackagesViewModel(
                     setState {
                         it.successState(
                             packagesList.sortedBy { userPackage ->
-                                getPackageProgressStatus(userPackage).inProgress
+                                getPackageProgressStatus(userPackage).delivered
                             }
                         )
                     }

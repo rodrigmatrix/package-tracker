@@ -28,23 +28,24 @@ fun UserPackage.getLastStatus(): PackageLastStatus {
 }
 
 fun StatusUpdate?.getStatusIconAndColor(): Pair<Color, ImageVector> {
+    val statusDescription = this?.description.orEmpty().lowercase()
     return when {
         this == null ->
             Pair(md_theme_light_error, Icons.Outlined.Info)
 
-        description.contains("entregue") ->
+        statusDescription.contains("entregue") ->
             Pair(theme_light_done, Icons.Outlined.Done)
 
-        description.contains("saiu para entrega") ->
+        statusDescription.contains("saiu para entrega") ->
             Pair(theme_light_inRoute, Icons.Outlined.LocalShipping)
 
-        description.contains("em trânsito") ->
+        statusDescription.contains("em trânsito") ->
             Pair(theme_light_inProgress, Icons.Outlined.Cached)
 
-        description.contains("Encaminhado") ->
+        statusDescription.contains("encaminhado") ->
             Pair(theme_light_inProgress, Icons.Outlined.Cached)
 
-        description.contains("postado") ->
+        statusDescription.contains("postado") ->
             Pair(theme_light_shipped, Icons.Outlined.FlightTakeoff)
 
         else -> Pair(theme_light_alert, Icons.Outlined.Info)

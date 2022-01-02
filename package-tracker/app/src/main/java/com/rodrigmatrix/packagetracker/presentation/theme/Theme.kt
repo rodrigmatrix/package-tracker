@@ -1,5 +1,6 @@
 package com.rodrigmatrix.packagetracker.presentation.theme
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -64,6 +65,7 @@ private val DarkThemeColors = darkColorScheme(
 	inverseSurface = md_theme_dark_inverseSurface,
 )
 
+@SuppressLint("NewApi")
 @Composable
 fun PackageTrackerTheme(
 	useDarkTheme: Boolean = isSystemInDarkTheme(),

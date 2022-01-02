@@ -4,38 +4,48 @@ import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.LargeFloatingActionButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.airbnb.lottie.compose.LottieAnimation
-import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieCompositionSpec.RawRes
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.SwipeRefreshState
-import com.google.android.material.progressindicator.CircularProgressIndicator
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.rodrigmatrix.domain.entity.UserPackage
 import com.rodrigmatrix.packagetracker.R
 import com.rodrigmatrix.packagetracker.presentation.components.DeletePackageDialog
 import com.rodrigmatrix.packagetracker.presentation.theme.PackageTrackerTheme
 import com.rodrigmatrix.packagetracker.presentation.utils.PreviewPackageItemsList
 import org.koin.androidx.compose.getViewModel
+
+const val PACKAGES_LIST_TAG = "packages_list_tag"
 
 @Composable
 fun PackagesScreen(
@@ -44,15 +54,6 @@ fun PackagesScreen(
     viewModel: PackagesViewModel = getViewModel()
 ) {
     val viewState by viewModel.viewState.collectAsState()
-
-    if (viewState.deletePackageDialogVisible) {
-        DeletePackageDialog(
-            onConfirmButtonClick = {
-                viewModel.deletePackage(viewState.selectedPackageId)
-            },
-            onDismissButtonClick = viewModel::hideDeleteDialog
-        )
-    }
 
     PackagesScreen(
         viewState = viewState,
@@ -63,26 +64,43 @@ fun PackagesScreen(
         },
         onLongClick = { id ->
             viewModel.showDeletePackageDialog(id)
-        }
+        },
+        onConfirmDeletePackage = {
+            viewModel.deletePackage(viewState.selectedPackageId)
+        },
+        onDismissDeletePackageDialog = viewModel::hideDeleteDialog
     )
 }
 
 @Composable
-private fun PackagesScreen(
+fun PackagesScreen(
     viewState: PackagesViewState,
     onSwipeRefresh: () -> Unit,
     onAddPackageClick: () -> Unit,
     onPackageClick: (id: String) -> Unit,
-    onLongClick: (id: String) -> Unit
+    onLongClick: (id: String) -> Unit,
+    onConfirmDeletePackage: () -> Unit,
+    onDismissDeletePackageDialog: () -> Unit
 ) {
+    if (viewState.deletePackageDialogVisible) {
+        DeletePackageDialog(onConfirmDeletePackage, onDismissDeletePackageDialog)
+    }
+
     Column {
         SwipeRefresh(
-            state = viewState.isRefreshing,
+            state = rememberSwipeRefreshState(viewState.isRefreshing),
             onRefresh = onSwipeRefresh
         ) {
-            BoxWithConstraints(modifier = Modifier.weight(1f)) {
+            BoxWithConstraints(
+                modifier = Modifier
+                .weight(1f)
+            ) {
                 when {
-                    viewState.packagesList.isNotEmpty() -> {
+                    viewState.packagesList.isEmpty() && !viewState.isRefreshing -> {
+                        PackagesListEmptyState()
+                    }
+
+                    else -> {
                         PackagesList(
                             onItemClick = {
                                 onPackageClick(it)
@@ -93,8 +111,6 @@ private fun PackagesScreen(
                             viewState.packagesList
                         )
                     }
-
-                    else ->  PackagesListEmptyState()
                 }
 
                 LargeFloatingActionButton(
@@ -107,7 +123,7 @@ private fun PackagesScreen(
                     Icon(
                         imageVector = Icons.Filled.Add,
                         modifier = Modifier.size(24.dp),
-                        contentDescription = "Add"
+                        contentDescription = null
                     )
                 }
             }
@@ -128,7 +144,8 @@ private fun PackagesList(
             exit = fadeOut()
         ) {
             LazyColumn(
-                contentPadding = PaddingValues(bottom = 200.dp)
+                contentPadding = PaddingValues(bottom = 200.dp),
+                modifier = Modifier.testTag(PACKAGES_LIST_TAG)
             ) {
                 items(packagesList) { packageItem ->
                     Package(
@@ -166,6 +183,7 @@ private fun PackagesListEmptyState() {
 }
 
 @Preview(name = "Light Theme")
+@Preview("Tablet View", device = Devices.PIXEL_C)
 @Preview(name = "Dark Theme", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Preview(name = "Large Font", fontScale = 2f)
 @Composable
@@ -173,13 +191,15 @@ fun PackagesPreview() {
     PackageTrackerTheme {
         PackagesScreen(
             viewState = PackagesViewState(
-                isRefreshing = SwipeRefreshState(false),
+                isRefreshing = false,
                 packagesList = PreviewPackageItemsList
             ),
             onSwipeRefresh = { },
             onAddPackageClick = { },
             onPackageClick = { },
-            onLongClick =  { }
+            onLongClick =  { },
+            onConfirmDeletePackage = { },
+            onDismissDeletePackageDialog = { }
         )
     }
 }
@@ -194,7 +214,9 @@ fun PackagesEmptyStatePreview() {
             onSwipeRefresh = { },
             onAddPackageClick = { },
             onPackageClick = { },
-            onLongClick =  { }
+            onLongClick =  { },
+            onConfirmDeletePackage = { },
+            onDismissDeletePackageDialog = { }
         )
     }
 }

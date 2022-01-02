@@ -21,15 +21,22 @@ class PackageTrackerApp: Application() {
 
     override fun onCreate() {
         super.onCreate()
+        startKoin()
+        notificationService.createAllNotificationChannel()
+        startNotificationWorker()
+    }
+
+    private fun startKoin() {
         startKoin {
             androidContext(this@PackageTrackerApp)
             loadKoinModules(listOf(dataModule, presentationModule, coreModule))
         }
-        notificationService.createAllNotificationChannel()
+    }
 
+    private fun startNotificationWorker() {
         val periodicWorkRequest = PeriodicWorkRequest.Builder(
             UpdatePackagesAndSendNotificationsWorker::class.java,
-            2,
+            20,
             TimeUnit.MINUTES
         ).build()
 

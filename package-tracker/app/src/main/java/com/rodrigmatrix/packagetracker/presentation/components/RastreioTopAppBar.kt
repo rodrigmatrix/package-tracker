@@ -24,10 +24,6 @@ fun PackageTrackerTopAppBar(
     val backgroundColor = backgroundColors.containerColor(
         scrollFraction = scrollBehavior?.scrollFraction ?: 0f
     ).value
-    val foregroundColors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-        containerColor = Color.Transparent,
-        scrolledContainerColor = Color.Transparent
-    )
     Box(modifier = Modifier.background(backgroundColor)) {
         SmallTopAppBar(
             modifier = modifier,

@@ -58,7 +58,15 @@ class NotificationServiceImpl(
         val resultIntent = Intent("action.packagetracker.open")
         return TaskStackBuilder.create(applicationContext).run {
             addNextIntentWithParentStack(resultIntent)
-            getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
+            getPendingIntent(0, getPendingIntentFlag())
+        }
+    }
+
+    private fun getPendingIntentFlag(): Int {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        } else {
+            PendingIntent.FLAG_UPDATE_CURRENT
         }
     }
 }

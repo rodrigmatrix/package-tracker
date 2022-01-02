@@ -1,4 +1,5 @@
 import com.rodrigmatrix.packagetracker.buildSrc.Libs
+import com.rodrigmatrix.packagetracker.buildSrc.Versions
 
 plugins {
     id 'com.android.library'
@@ -7,12 +8,11 @@ plugins {
 }
 
 android {
-    compileSdk 31
-    buildToolsVersion "30.0.3"
+    compileSdk Versions.compileSdkVersion
 
     defaultConfig {
-        minSdk 21
-        targetSdk 31
+        minSdk Versions.minSdkVersion
+        targetSdk Versions.targetSdkVersion
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"

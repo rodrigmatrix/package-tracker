@@ -107,6 +107,14 @@
         <entry key="../../../../../../layout/compose-model-1640986179807.xml" value="0.11644782308223911" />
         <entry key="../../../../../../layout/compose-model-1641051314815.xml" value="0.11679336558396683" />
         <entry key="../../../../../../layout/compose-model-1641051346508.xml" value="0.1" />
+        <entry key="../../../../../../layout/compose-model-1641054785955.xml" value="0.11644782308223911" />
+        <entry key="../../../../../../layout/compose-model-1641054841180.xml" value="0.1" />
+        <entry key="../../../../../../layout/compose-model-1641055436318.xml" value="0.34074074074074073" />
+        <entry key="../../../../../../layout/compose-model-1641055447977.xml" value="0.22323983972524328" />
+        <entry key="../../../../../../layout/compose-model-1641070559007.xml" value="0.25" />
+        <entry key="../../../../../../layout/compose-model-1641070559046.xml" value="0.1" />
+        <entry key="../../../../../../layout/compose-model-1641087609217.xml" value="0.25" />
+        <entry key="../../../../../../layout/compose-model-1641087609254.xml" value="0.11644782308223911" />
         <entry key="app/src/main/res/drawable/ic_add.xml" value="0.21354166666666666" />
         <entry key="app/src/main/res/drawable/ic_home.xml" value="0.1535" />
         <entry key="app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.2025" />
@@ -117,6 +125,8 @@
         <entry key="app/src/main/res/menu/bottom_navigation_menu.xml" value="0.3546875" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.189" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.189" />
+        <entry key="app/src/main/res/mipmap-anydpi-v31/ic_launcher.xml" value="0.33692307692307694" />
+        <entry key="app/src/main/res/mipmap-anydpi-v31/ic_launcher_round.xml" value="0.33692307692307694" />
         <entry key="app/src/main/res/xml/network_security_domain.xml" value="0.3546875" />
         <entry key="data/src/main/res/drawable/ic_notification.xml" value="0.1525" />
       </map>

@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Package Tracker</string>
     <string name="packages">Packages</string>
-    <string name="settings">Configuraçoes</string>
+    <string name="settings">Configurações</string>
     <string name="home">Home</string>
     <string name="delete_package_title">Deseja realmente deletar essa encomenda?</string>
     <string name="delete">Deletar</string>
@@ -14,4 +14,5 @@
     <string name="name">Nome</string>
     <string name="edit_package">Editar encomenda</string>
     <string name="empty_packages">Nenhuma encomenda cadastrada. Adicione uma encomenda no botão abaixo</string>
+    <string name="about">Sobre</string>
 </resources>
