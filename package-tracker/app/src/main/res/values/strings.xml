@@ -8,6 +8,7 @@
     <string name="cancel">Cancelar</string>
     <string name="details">Detalhes</string>
     <string name="edit">Editar</string>
+    <string name="back">Voltar</string>
     <string name="add_package">Adicionar pacote</string>
     <string name="add">Adicionar</string>
     <string name="package_id">Código</string>
@@ -15,4 +16,7 @@
     <string name="edit_package">Editar encomenda</string>
     <string name="empty_packages">Nenhuma encomenda cadastrada. Adicione uma encomenda no botão abaixo</string>
     <string name="about">Sobre</string>
+    <string name="developed_by">Desenvolvido por Rodrigo Gomes</string>
+    <string name="about_description">Esse é um projeto open source e seu código pode ser encontrado no meu github</string>
+    <string name="app_theme">Tema do aplicativo</string>
 </resources>

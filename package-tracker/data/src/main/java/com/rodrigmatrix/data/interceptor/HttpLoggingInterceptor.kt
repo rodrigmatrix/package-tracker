@@ -1,4 +1,4 @@
-package com.rodrigmatrix.di
+package com.rodrigmatrix.data.interceptor
 
 import android.util.Log
 import okhttp3.Interceptor

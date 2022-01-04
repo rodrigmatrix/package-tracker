@@ -49,9 +49,8 @@ class NotificationServiceImpl(
                 .bigText(description))
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setContentIntent(createIntent())
-            .build()
 
-        notificationManager.notify(Random.nextInt(), builder)
+        notificationManager.notify(Random.nextInt(), builder.build())
     }
 
     private fun createIntent(): PendingIntent? {

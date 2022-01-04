@@ -45,7 +45,7 @@ object Libs {
             const val ui = "androidx.compose.ui:ui:$composeVersion"
             const val uiUtil = "androidx.compose.ui:ui-util:$composeVersion"
             const val runtime = "androidx.compose.runtime:runtime:$composeVersion"
-            const val material3 = "androidx.compose.material3:material3:1.0.0-alpha01"
+            const val material3 = "androidx.compose.material3:material3:1.0.0-alpha02"
             const val material = "androidx.compose.material:material:$composeVersion"
             const val animation = "androidx.compose.animation:animation:$composeVersion"
             const val tooling = "androidx.compose.ui:ui-tooling:$composeVersion"
@@ -90,6 +90,8 @@ object Libs {
 
     const val lottie = "com.airbnb.android:lottie-compose:4.1.0"
 
+    const val coil = "io.coil-kt:coil-compose:1.4.0"
+
     object Koin {
         private const val version = "3.1.2"
 
@@ -106,13 +108,11 @@ object Libs {
 
         const val retrofit = "com.squareup.retrofit2:retrofit:$retrofitVersion"
         const val okHttp = "com.squareup.okhttp3:okhttp:$okHttpVersion"
-        const val gsonConverter = "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+        const val kotlinSerializationConverter = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0"
     }
 
     object Serialization {
-        private const val gsonVersion = "2.8.6"
-
-        const val gson = "com.google.code.gson:gson:$gsonVersion"
+        const val kotlinSerialization = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.1"
     }
 
     object Test {

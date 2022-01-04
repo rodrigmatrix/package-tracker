@@ -46,7 +46,7 @@ class SendPackageUpdatesNotificationsUseCase(
     }
 
     private fun sendNotification(userPackage: UserPackage, statusUpdate: StatusUpdate) {
-        val description = statusUpdate.description + " - " + statusUpdate.date
+        val description = statusUpdate.description + " - " + statusUpdate.getDateWithHour()
         sendNotificationUseCase(userPackage.name, description)
     }
 }

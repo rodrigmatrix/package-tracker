@@ -3,12 +3,14 @@ package com.rodrigmatrix.data.repository
 import com.rodrigmatrix.data.local.PackageLocalDataSource
 import com.rodrigmatrix.data.mapper.PackageEntityMapper
 import com.rodrigmatrix.data.mapper.PackageMapper
-import com.rodrigmatrix.data.model.PackageStatusResponse
 import com.rodrigmatrix.data.model.UserPackageAndUpdatesEntity
 import com.rodrigmatrix.data.remote.PackageRemoteDataSource
 import com.rodrigmatrix.domain.entity.UserPackage
 import com.rodrigmatrix.domain.repository.PackageRepository
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 
 class PackageRepositoryImpl(
     private val packagesLocalDataSource: PackageLocalDataSource,
@@ -19,13 +21,11 @@ class PackageRepositoryImpl(
 
     private fun fetchPackage(packageId: String): Flow<UserPackageAndUpdatesEntity> {
         return packagesRemoteDataSource.getPackage(packageId)
-            .catch { throw it }
             .map { packageEntityMapper.map(it) }
     }
 
     override fun addPackage(name: String, packageId: String): Flow<UserPackage> {
         return fetchPackage(packageId)
-            .catch { throw it }
             .map { userPackageEntity ->
                 userPackageEntity.name = name
                 packagesLocalDataSource.savePackage(userPackageEntity)

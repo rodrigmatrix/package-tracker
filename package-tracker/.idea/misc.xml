@@ -115,6 +115,19 @@
         <entry key="../../../../../../layout/compose-model-1641070559046.xml" value="0.1" />
         <entry key="../../../../../../layout/compose-model-1641087609217.xml" value="0.25" />
         <entry key="../../../../../../layout/compose-model-1641087609254.xml" value="0.11644782308223911" />
+        <entry key="../../../../../../layout/compose-model-1641139460117.xml" value="0.1" />
+        <entry key="../../../../../../layout/compose-model-1641139473211.xml" value="0.3101851851851852" />
+        <entry key="../../../../../../layout/compose-model-1641148134005.xml" value="0.25" />
+        <entry key="../../../../../../layout/compose-model-1641148134016.xml" value="0.1" />
+        <entry key="../../../../../../layout/compose-model-1641148853386.xml" value="0.1" />
+        <entry key="../../../../../../layout/compose-model-1641149101476.xml" value="0.25" />
+        <entry key="../../../../../../layout/compose-model-1641150460678.xml" value="0.3101851851851852" />
+        <entry key="../../../../../../layout/compose-model-1641151588157.xml" value="0.1" />
+        <entry key="../../../../../../layout/compose-model-1641257847164.xml" value="0.1" />
+        <entry key="../../../../../../layout/compose-model-1641257955820.xml" value="0.3074074074074074" />
+        <entry key="../../../../../../layout/compose-model-1641259602837.xml" value="0.10822093770070648" />
+        <entry key="../../../../../../layout/compose-model-1641259610898.xml" value="0.3074074074074074" />
+        <entry key="../../../../../../layout/compose-model-1641262308425.xml" value="0.1" />
         <entry key="app/src/debug/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.3101851851851852" />
         <entry key="app/src/debug/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.3101851851851852" />
         <entry key="app/src/main/res/drawable/ic_add.xml" value="0.21354166666666666" />
@@ -122,7 +135,7 @@
         <entry key="app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.2025" />
         <entry key="app/src/main/res/layout/activity_home.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_package.xml" value="0.19739583333333333" />
-        <entry key="app/src/main/res/layout/fragment_add_new_package.xml" value="0.45" />
+        <entry key="app/src/main/res/layout/fragment_add_new_package.xml" value="0.335" />
         <entry key="app/src/main/res/layout/recycler_item_package.xml" value="0.3546875" />
         <entry key="app/src/main/res/menu/bottom_navigation_menu.xml" value="0.3546875" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.189" />

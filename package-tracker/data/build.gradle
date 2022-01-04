@@ -5,6 +5,7 @@ plugins {
     id 'com.android.library'
     id 'kotlin-android'
     id 'kotlin-kapt'
+    id 'kotlinx-serialization'
 }
 
 def localPropertiesFile = rootProject.file("local.properties")
@@ -58,6 +59,10 @@ dependencies {
     implementation Libs.Coroutines.android
     implementation Libs.Coroutines.core
 
+    // Firebase
+    implementation platform(Libs.Firebase.bom)
+    implementation Libs.Firebase.remoteConfig
+
     // Room
     implementation Libs.AndroidX.Room.runtime
     kapt Libs.AndroidX.Room.compiler
@@ -66,7 +71,8 @@ dependencies {
     // Okhttp
     implementation Libs.Network.retrofit
     implementation Libs.Network.okHttp
-    implementation Libs.Network.gsonConverter
+    implementation Libs.Network.kotlinSerializationConverter
+    implementation Libs.Serialization.kotlinSerialization
 
     // Work Manager
     implementation Libs.AndroidX.workManager
@@ -76,8 +82,6 @@ dependencies {
     implementation Libs.Koin.androidCompat
     implementation Libs.Koin.compose
     implementation Libs.Koin.koinWorkManager
-
-    implementation Libs.Serialization.gson
 
     testImplementation Libs.Test.junit
     androidTestImplementation Libs.Test.Ext.junit

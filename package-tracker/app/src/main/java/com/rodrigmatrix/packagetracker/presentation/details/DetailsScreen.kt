@@ -108,7 +108,10 @@ private fun DetailsScreen(
             },
             navigationIcon = {
                 IconButton(onClick = onBackButtonClick) {
-                    Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "Back")
+                    Icon(
+                        imageVector = Icons.Filled.ArrowBack,
+                        contentDescription = stringResource(R.string.back)
+                    )
                 }
             },
             actions = {

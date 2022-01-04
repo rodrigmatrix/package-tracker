@@ -4,5 +4,7 @@ import com.rodrigmatrix.core.viewmodel.ViewEffect
 
 sealed class SettingsViewEffect : ViewEffect {
 
+    data class ShowToast(val message: String): SettingsViewEffect()
 
+    object UpdateTheme: SettingsViewEffect()
 }

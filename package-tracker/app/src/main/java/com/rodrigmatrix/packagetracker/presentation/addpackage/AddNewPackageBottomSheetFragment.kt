@@ -4,18 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.color.DynamicColors
+import com.rodrigmatrix.core.extensions.toast
 import com.rodrigmatrix.packagetracker.R
 import com.rodrigmatrix.packagetracker.databinding.FragmentAddNewPackageBinding
 import com.rodrigmatrix.packagetracker.presentation.addpackage.AddPackageViewEffect.PackageAdded
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -48,15 +44,13 @@ class AddNewPackageBottomSheetFragment: BottomSheetDialogFragment() {
         binding.textButton.setOnClickListener {
             addPackage()
         }
-        binding.textInputName.setText("Google Pixel")
-        binding.textInputPackageId.setText("qb405350993br")
     }
 
     private fun setObservers() {
         lifecycleScope.launchWhenStarted {
             viewModel.viewState.collect { viewState ->
                 viewState.error?.let {
-                    Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+                    toast(it)
                 }
                 if (viewState.isEditPackage) {
                     setEditView()

@@ -1,6 +1,5 @@
 package com.rodrigmatrix.packagetracker.presentation.components
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,15 +17,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import com.rodrigmatrix.domain.entity.SingleChoicePreference
 
 @Composable
-fun SingleChoiceDialog(
+fun SingleChoiceSettingDialog(
     title: String,
-    options: List<Pair<String, Boolean>>,
+    options: List<SingleChoicePreference>,
     onOptionSelected: (String) -> Unit,
     onDismiss: () -> Unit
 ) {
-
     Dialog(
         onDismissRequest = onDismiss
     ) {
@@ -43,7 +42,7 @@ fun SingleChoiceDialog(
 
                 LazyColumn(modifier = Modifier.padding(top = 16.dp)) {
                     items(options) {
-                        ChoiceItem(it.first, it.second, onOptionSelected)
+                        ChoiceItem(it, onOptionSelected)
                     }
                 }
             }
@@ -53,31 +52,30 @@ fun SingleChoiceDialog(
 
 @Composable
 fun ChoiceItem(
-    title: String,
-    selected: Boolean,
+    choice: SingleChoicePreference,
     onClick: (String) -> Unit
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .selectable(
-                selected = selected,
+                selected = choice.selected,
                 onClick = {
-                    onClick(title)
+                    onClick(choice.preferenceKey)
                 }
             )
     ) {
         Text(
-            text = title,
-            style = MaterialTheme.typography.headlineSmall,
+            text = choice.name,
+            style = MaterialTheme.typography.titleMedium,
             modifier = Modifier
                 .padding(start = 16.dp)
                 .align(Alignment.CenterVertically)
         )
         RadioButton(
-            selected = selected,
+            selected = choice.selected,
             onClick = {
-                onClick(title)
+                onClick(choice.preferenceKey)
             },
             modifier = Modifier.align(Alignment.CenterVertically)
         )

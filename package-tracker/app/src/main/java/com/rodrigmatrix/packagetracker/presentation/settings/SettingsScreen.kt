@@ -1,60 +1,95 @@
 package com.rodrigmatrix.packagetracker.presentation.settings
 
 import android.content.res.Configuration
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.rodrigmatrix.packagetracker.R
 import com.rodrigmatrix.packagetracker.presentation.components.SettingWithText
-import com.rodrigmatrix.packagetracker.presentation.components.SwitchWithDescription
+import com.rodrigmatrix.packagetracker.presentation.components.SingleChoiceSettingDialog
+import com.rodrigmatrix.packagetracker.presentation.components.Toast
+import com.rodrigmatrix.packagetracker.presentation.settings.SettingsViewEffect.ShowToast
 import com.rodrigmatrix.packagetracker.presentation.theme.PackageTrackerTheme
+import com.rodrigmatrix.packagetracker.presentation.utils.ThemeUtils
+import org.koin.androidx.compose.get
+import org.koin.androidx.compose.getViewModel
 
 @Composable
-fun SettingsScreen() {
-    Column(Modifier.fillMaxSize()) {
-        val checked = remember { mutableStateOf(false) }
+fun SettingsScreen(
+    viewModel: SettingsViewModel = getViewModel(),
+    themeUtils: ThemeUtils = get()
+) {
 
-        SwitchWithDescription(
-            checked = checked.value,
-            description = "Receber Notificações de encomendas",
-            null,
-            modifier = Modifier
-                .padding(
-                    start = 16.dp,
-                    end = 32.dp,
-                    top = 16.dp,
-                    bottom = 16.dp
-                )
+    val viewState by viewModel.viewState.collectAsState()
+    val viewEffect by viewModel.viewEffect.collectAsState(initial = null)
+
+    when (viewEffect) {
+        is ShowToast -> {
+            Toast(text = (viewEffect as ShowToast).message)
+        }
+
+        is SettingsViewEffect.UpdateTheme -> {
+            themeUtils.setTheme()
+        }
+    }
+
+    SettingsScreen(
+        viewState = viewState,
+        onThemeDialogDismiss = viewModel::hideThemeDialog,
+        onThemeSelected = { newTheme ->
+            viewModel.setTheme(newTheme)
+        },
+        onOpenThemeDialog = viewModel::showThemeDialog
+    )
+}
+
+@Composable
+fun SettingsScreen(
+    viewState: SettingsViewState,
+    onThemeDialogDismiss: () -> Unit,
+    onThemeSelected: (String) -> Unit,
+    onOpenThemeDialog: () -> Unit
+) {
+
+    if (viewState.themeDialogVisible) {
+        SingleChoiceSettingDialog(
+            title = stringResource(R.string.app_theme),
+            options = viewState.singleOptionPreferences,
+            onOptionSelected = onThemeSelected,
+            onDismiss = onThemeDialogDismiss
         )
+    }
+
+    Column(
+        Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(bottom = 100.dp)
+    ) {
 
         SettingWithText(
-            title = "Intervalo de atualização",
-            selectedSetting = "15 minutos",
-            onClick = { },
-            modifier = Modifier
-                .padding(
-                    start = 16.dp,
-                    end = 16.dp
-                )
-        )
-
-        SettingWithText(
-            title = "Tema do aplicativo",
-            selectedSetting = "Padrão do sistema",
-            onClick = { },
+            title = stringResource(R.string.app_theme),
+            selectedSetting = viewState.selectedTheme,
             modifier = Modifier
                 .padding(
                     start = 16.dp,
                     end = 16.dp,
                     top = 16.dp
                 )
+                .clickable { onOpenThemeDialog() }
         )
     }
+
 }
 
 @Preview(name = "Light Theme")

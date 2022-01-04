@@ -6,8 +6,8 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
 }
-apply plugin: 'com.google.firebase.crashlytics'
 
 android {
     compileSdk Versions.compileSdkVersion
@@ -36,7 +36,7 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug {
@@ -86,18 +86,13 @@ dependencies {
     // Work Manager
     implementation Libs.AndroidX.workManager
 
-    // Room
-    implementation Libs.AndroidX.Room.runtime
-    kapt Libs.AndroidX.Room.compiler
-    implementation Libs.AndroidX.Room.ktx
-
     // Firebase
+    implementation platform(Libs.Firebase.bom)
     implementation Libs.Firebase.remoteConfig
     implementation Libs.Firebase.inAppMessaging
     implementation Libs.Firebase.cloudMessaging
     implementation Libs.Firebase.crashlytics
     implementation Libs.Firebase.analytics
-    implementation platform(Libs.Firebase.bom)
 
     // Compose
     implementation Libs.AndroidX.Compose.runtime
@@ -115,21 +110,16 @@ dependencies {
 
     implementation Libs.lottie
 
+    implementation Libs.coil
+
     implementation Libs.Accompanist.insets
     implementation Libs.Accompanist.systemuicontroller
-
-    // Okhttp
-    implementation Libs.Network.retrofit
-    implementation Libs.Network.okHttp
-    implementation Libs.Network.gsonConverter
 
     // Koin
     implementation Libs.Koin.android
     implementation Libs.Koin.androidCompat
     implementation Libs.Koin.compose
     implementation Libs.Koin.koinWorkManager
-
-    implementation Libs.Serialization.gson
 
     testImplementation Libs.Test.junit
     androidTestImplementation Libs.Test.Ext.junit

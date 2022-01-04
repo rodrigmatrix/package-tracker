@@ -1,4 +1,6 @@
-package com.rodrigmatrix.data.util
+package com.rodrigmatrix.packagetracker.presentation.utils
 
 interface ThemeUtils {
+
+    fun setTheme()
 }

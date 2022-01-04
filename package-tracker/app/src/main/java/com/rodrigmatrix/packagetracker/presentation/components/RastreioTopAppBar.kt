@@ -9,7 +9,9 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.rodrigmatrix.packagetracker.R
 import com.rodrigmatrix.packagetracker.presentation.theme.PackageTrackerTheme
 
 @Composable
@@ -43,7 +45,7 @@ fun PackageTrackerAppBarPreview() {
             }) {
                 Icon(
                     imageVector = Icons.Filled.ArrowBack,
-                    contentDescription = "Back"
+                    contentDescription = stringResource(R.string.back)
                 )
             }
         })
@@ -59,7 +61,7 @@ fun PackageTrackerAppBarPreviewDark() {
             }) {
                 Icon(
                     imageVector = Icons.Filled.ArrowBack,
-                    contentDescription = "Back"
+                    contentDescription = stringResource(R.string.back)
                 )
             }
         })

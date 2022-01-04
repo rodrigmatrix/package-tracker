@@ -9,6 +9,7 @@ import com.rodrigmatrix.data.util.NotificationService
 import com.rodrigmatrix.data.worker.UpdatePackagesAndSendNotificationsWorker
 import com.rodrigmatrix.di.dataModule
 import com.rodrigmatrix.packagetracker.di.presentationModule
+import com.rodrigmatrix.packagetracker.presentation.utils.ThemeUtils
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.loadKoinModules
@@ -18,18 +19,20 @@ import java.util.concurrent.TimeUnit
 class PackageTrackerApp: Application() {
 
     private val notificationService by inject<NotificationService>()
+    private val themeUtils by inject<ThemeUtils>()
 
     override fun onCreate() {
         super.onCreate()
         startKoin()
         notificationService.createAllNotificationChannel()
         startNotificationWorker()
+        themeUtils.setTheme()
     }
 
     private fun startKoin() {
         startKoin {
             androidContext(this@PackageTrackerApp)
-            loadKoinModules(listOf(dataModule, presentationModule, coreModule))
+            loadKoinModules(dataModule + presentationModule + coreModule)
         }
     }
 

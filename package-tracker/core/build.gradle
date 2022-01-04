@@ -47,8 +47,6 @@ dependencies {
     implementation Libs.Koin.android
     implementation Libs.Koin.androidCompat
 
-    implementation Libs.Serialization.gson
-
     testImplementation Libs.Test.junit
     androidTestImplementation Libs.Test.Ext.junit
     androidTestImplementation Libs.Test.espressoCore
