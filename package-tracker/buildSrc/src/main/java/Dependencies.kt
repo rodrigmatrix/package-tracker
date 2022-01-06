@@ -135,6 +135,7 @@ object Libs {
         const val espressoCore = "androidx.test.espresso:espresso-core:3.2.0"
         const val composeTest = "androidx.compose.ui:ui-test-junit4:$composeVersion"
         const val debugComposeTest = "androidx.compose.ui:ui-test-manifest:$composeVersion"
+        const val turbine = "app.cash.turbine:turbine:0.7.0"
     }
 
 }

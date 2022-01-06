@@ -3,7 +3,7 @@ package com.rodrigmatrix.packagetracker.presentation.details
 import androidx.lifecycle.viewModelScope
 import com.rodrigmatrix.core.viewmodel.ViewModel
 import com.rodrigmatrix.domain.usecase.DeletePackageUseCase
-import com.rodrigmatrix.domain.usecase.GetPackageProgressStatus
+import com.rodrigmatrix.domain.usecase.GetPackageProgressStatusUseCase
 import com.rodrigmatrix.domain.usecase.GetPackageStatusUseCase
 import com.rodrigmatrix.packagetracker.presentation.details.PackageStatusViewEffect.Toast
 import kotlinx.coroutines.CoroutineDispatcher
@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 
 class PackagesDetailsViewModel(
     private val getPackageStatusUseCase: GetPackageStatusUseCase,
-    private val getPackageProgressStatus: GetPackageProgressStatus,
+    private val getPackageProgressStatusUseCase: GetPackageProgressStatusUseCase,
     private val deletePackageUseCase: DeletePackageUseCase,
     private val coroutineDispatcher: CoroutineDispatcher = Dispatchers.IO
 ): ViewModel<PackageStatusViewState, PackageStatusViewEffect>(PackageStatusViewState()) {
@@ -34,7 +34,7 @@ class PackagesDetailsViewModel(
                         it.copy(
                             isLoading = false,
                             userPackage = userPackage,
-                            packageProgressStatus = getPackageProgressStatus(userPackage)
+                            packageProgressStatus = getPackageProgressStatusUseCase(userPackage)
                         )
                     }
                 }

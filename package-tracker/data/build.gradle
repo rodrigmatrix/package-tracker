@@ -90,4 +90,5 @@ dependencies {
     testImplementation Libs.Test.mockk
     testImplementation Libs.Test.core
     testImplementation Libs.Koin.test
+    testImplementation Libs.Test.turbine
 }

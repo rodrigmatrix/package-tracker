@@ -45,4 +45,5 @@ dependencies {
     testImplementation Libs.Coroutines.test
     testImplementation Libs.Test.mockk
     testImplementation Libs.Test.core
+    testImplementation Libs.Test.turbine
 }

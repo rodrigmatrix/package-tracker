@@ -1,9 +1,9 @@
 package com.rodrigmatrix.domain.usecase
 
-import com.rodrigmatrix.stubs.PackageTestStubs.deliveredPackage
-import com.rodrigmatrix.stubs.PackageTestStubs.emptyPackage
-import com.rodrigmatrix.stubs.PackageTestStubs.inProgressPackage
-import com.rodrigmatrix.stubs.PackageTestStubs.outForDeliveryPackage
+import com.rodrigmatrix.stubs.deliveredPackage
+import com.rodrigmatrix.stubs.emptyPackage
+import com.rodrigmatrix.stubs.inProgressPackage
+import com.rodrigmatrix.stubs.outForDeliveryPackage
 import io.mockk.coEvery
 import io.mockk.mockk
 import io.mockk.verify
@@ -13,11 +13,11 @@ import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Test
 
 @ExperimentalCoroutinesApi
-class SendPackageUpdatesNotificationsUseCaseTest {
+internal class SendPackageUpdatesNotificationsUseCaseTest {
 
     private val getAllPackagesUseCase = mockk<GetAllPackagesUseCase>()
     private val fetchAllPackagesUseCase = mockk<FetchAllPackagesUseCase>()
-    private val getPackageProgressStatus = GetPackageProgressStatus()
+    private val getPackageProgressStatus = GetPackageProgressStatusUseCase()
     private val sendNotificationUseCase = mockk<SendPackageUpdateNotificationUseCase>(
         relaxed = true
     )
@@ -45,7 +45,7 @@ class SendPackageUpdatesNotificationsUseCaseTest {
             verify {
                 sendNotificationUseCase(
                     title = "Google Pixel 4",
-                    description = "Objeto entregue ao destinatario - 22/07/2022"
+                    description = "Objeto entregue ao destinatario - 22/07/2022 - 12:00"
                 )
             }
         }
@@ -68,7 +68,7 @@ class SendPackageUpdatesNotificationsUseCaseTest {
             verify {
                 sendNotificationUseCase(
                     title = "Google Pixel 4",
-                    description = "Objeto entregue ao destinatario - 22/07/2022"
+                    description = "Objeto entregue ao destinatario - 22/07/2022 - 12:00"
                 )
             }
             verify(exactly = 1) {

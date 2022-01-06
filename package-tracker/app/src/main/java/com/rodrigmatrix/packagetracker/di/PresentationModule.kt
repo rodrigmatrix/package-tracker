@@ -1,6 +1,6 @@
 package com.rodrigmatrix.packagetracker.di
 
-import com.rodrigmatrix.domain.usecase.GetPackageProgressStatus
+import com.rodrigmatrix.domain.usecase.GetPackageProgressStatusUseCase
 import com.rodrigmatrix.packagetracker.presentation.addpackage.AddNewPackageViewModel
 import com.rodrigmatrix.packagetracker.presentation.details.PackagesDetailsViewModel
 import com.rodrigmatrix.packagetracker.presentation.packages.PackagesViewModel
@@ -27,7 +27,7 @@ private val viewModelModules = module {
             getAllPackagesUseCase = get(),
             fetchAllPackagesUseCase = get(),
             deletePackageUseCase = get(),
-            getPackageProgressStatus = GetPackageProgressStatus()
+            getPackageProgressStatus = GetPackageProgressStatusUseCase()
         )
     }
     viewModel { (packageId: String) ->

@@ -32,7 +32,7 @@ import com.rodrigmatrix.domain.usecase.DeletePackageUseCase
 import com.rodrigmatrix.domain.usecase.EditPackageUseCase
 import com.rodrigmatrix.domain.usecase.FetchAllPackagesUseCase
 import com.rodrigmatrix.domain.usecase.GetAllPackagesUseCase
-import com.rodrigmatrix.domain.usecase.GetPackageProgressStatus
+import com.rodrigmatrix.domain.usecase.GetPackageProgressStatusUseCase
 import com.rodrigmatrix.domain.usecase.GetPackageStatusUseCase
 import com.rodrigmatrix.domain.usecase.SendPackageUpdateNotificationUseCase
 import com.rodrigmatrix.domain.usecase.SendPackageUpdatesNotificationsUseCase
@@ -58,12 +58,12 @@ private val useCaseModule = module {
         SendPackageUpdatesNotificationsUseCase(
             getAllPackagesUseCase = get(),
             fetchAllPackagesUseCase = get(),
-            getPackageProgressStatus = get(),
+            getPackageProgressStatusUseCase = get(),
             sendNotificationUseCase = get()
         )
     }
     factory { SendPackageUpdateNotificationUseCase(notificationsRepository = get()) }
-    factory { GetPackageProgressStatus() }
+    factory { GetPackageProgressStatusUseCase() }
 }
 
 private val repositoryModule = module {

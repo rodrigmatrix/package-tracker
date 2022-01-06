@@ -5,7 +5,7 @@ import com.rodrigmatrix.domain.entity.UserPackage
 
 private const val DELIVERED_MATCHER = "entregue"
 
-class GetPackageProgressStatus {
+class GetPackageProgressStatusUseCase {
 
     operator fun invoke(userPackage: UserPackage): PackageProgressStatus {
         return PackageProgressStatus(

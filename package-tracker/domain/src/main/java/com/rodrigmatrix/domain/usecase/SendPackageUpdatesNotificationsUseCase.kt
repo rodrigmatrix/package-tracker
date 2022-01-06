@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.first
 class SendPackageUpdatesNotificationsUseCase(
     private val getAllPackagesUseCase: GetAllPackagesUseCase,
     private val fetchAllPackagesUseCase: FetchAllPackagesUseCase,
-    private val getPackageProgressStatus: GetPackageProgressStatus,
+    private val getPackageProgressStatusUseCase: GetPackageProgressStatusUseCase,
     private val sendNotificationUseCase: SendPackageUpdateNotificationUseCase
 ) {
 
@@ -16,7 +16,7 @@ class SendPackageUpdatesNotificationsUseCase(
         val updatedPackages = fetchAllPackagesUseCase().first()
 
         cachedPackages
-            .filterNot { getPackageProgressStatus(it).delivered }
+            .filterNot { getPackageProgressStatusUseCase(it).delivered }
             .map { userPackage ->
                 updatedPackages.find {
                     it.packageId == userPackage.packageId
