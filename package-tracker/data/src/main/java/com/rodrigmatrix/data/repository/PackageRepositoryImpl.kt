@@ -25,6 +25,7 @@ class PackageRepositoryImpl(
     }
 
     override fun addPackage(name: String, packageId: String): Flow<UserPackage> {
+
         return fetchPackage(packageId)
             .map { userPackageEntity ->
                 userPackageEntity.name = name

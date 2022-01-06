@@ -2,10 +2,9 @@ package com.rodrigmatrix.packagetracker.presentation.components
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
+import com.rodrigmatrix.core.extensions.toast
 
 @Composable
 fun Toast(text: String) {
-    android.widget.Toast
-        .makeText(LocalContext.current, text, android.widget.Toast.LENGTH_SHORT)
-        .show()
+    LocalContext.current.toast(text)
 }

@@ -37,7 +37,6 @@ fun SettingsScreen(
         is ShowToast -> {
             Toast(text = (viewEffect as ShowToast).message)
         }
-
         is SettingsViewEffect.UpdateTheme -> {
             themeUtils.setTheme()
         }
@@ -98,6 +97,11 @@ fun SettingsScreen(
 @Composable
 fun SettingsPreview() {
     PackageTrackerTheme {
-        SettingsScreen()
+        SettingsScreen(
+            viewState = SettingsViewState(),
+            {},
+            {},
+            {}
+        )
     }
 }

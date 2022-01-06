@@ -30,6 +30,9 @@ abstract class PackagesDAO {
     @Query("DELETE FROM packages WHERE id LIKE :packageId")
     abstract fun deletePackage(packageId: String)
 
+    @Query("DELETE FROM status_update WHERE statusId LIKE :statusId")
+    abstract fun deleteStatusUpdate(statusId: String)
+
     @Transaction
     open fun savePackage(userPackage: UserPackageAndUpdatesEntity) {
         upsertPackage(

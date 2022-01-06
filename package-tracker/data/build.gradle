@@ -22,6 +22,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
 
+        buildConfigField "String", "CORREIOS_URL", "\"https://webservice.correios.com.br/service/rest/rastro/\""
         buildConfigField "String", "CORREIOS_USER", localProperties['correios.user']
         buildConfigField "String", "CORREIOS_PASSWORD", localProperties['correios.password']
         buildConfigField "String", "CORREIOS_TOKEN", localProperties['correios.token']

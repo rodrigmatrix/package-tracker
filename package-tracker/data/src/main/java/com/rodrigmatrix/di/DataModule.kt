@@ -2,10 +2,9 @@ package com.rodrigmatrix.di
 
 import android.app.NotificationManager
 import android.content.Context
-import android.content.SharedPreferences
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-import com.rodrigmatrix.data.interceptor.HttpLoggingInterceptor
+import com.rodrigmatrix.data.BuildConfig
 import com.rodrigmatrix.data.local.PackageLocalDataSource
 import com.rodrigmatrix.data.local.PackageLocalDataSourceImpl
 import com.rodrigmatrix.data.local.SharedPrefDataSource
@@ -15,6 +14,8 @@ import com.rodrigmatrix.data.remote.FirebaseRemoteConfigDataSource
 import com.rodrigmatrix.data.remote.FirebaseRemoteConfigDataSourceImpl
 import com.rodrigmatrix.data.remote.PackageRemoteDataSource
 import com.rodrigmatrix.data.remote.PackageRemoteDataSourceImpl
+import com.rodrigmatrix.data.remote.builder.RetrofitClientGenerator
+import com.rodrigmatrix.data.remote.builder.RetrofitServiceGenerator
 import com.rodrigmatrix.data.repository.AppThemeRepositoryImpl
 import com.rodrigmatrix.data.repository.NotificationsRepositoryImpl
 import com.rodrigmatrix.data.repository.PackageRepositoryImpl
@@ -38,12 +39,10 @@ import com.rodrigmatrix.domain.usecase.SendPackageUpdatesNotificationsUseCase
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.OkHttpClient
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.Module
 import org.koin.dsl.module
-import retrofit2.Retrofit
 
 val dataModule: List<Module>
     get() = useCaseModule + repositoryModule + dataSourceModule + otherModules
@@ -117,20 +116,16 @@ private val otherModules = module {
             isLenient = true
         }
     }
-    factory { HttpLoggingInterceptor() }
-
     single { PackagesDatabase(androidApplication()) }
     factory { get<PackagesDatabase>().packagesDAO() }
-    factory {
-        Retrofit.Builder()
-            .baseUrl("https://webservice.correios.com.br/service/rest/rastro/")
-            .client( OkHttpClient.Builder().addInterceptor(get<HttpLoggingInterceptor>()).build())
-            .addConverterFactory(
-                get<Json>().asConverterFactory("application/json".toMediaType())
-            )
-            .build()
-            .create(CorreiosService::class.java)
+    single {
+        RetrofitClientGenerator().create(
+            baseUrl = BuildConfig.CORREIOS_URL,
+            converterFactory = get<Json>().asConverterFactory("application/json".toMediaType())
+        )
     }
+    single { RetrofitServiceGenerator(retrofit = get()) }
+    factory { get<RetrofitServiceGenerator>().createService(CorreiosService::class.java) }
     factory {
         androidApplication().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     }

@@ -5,7 +5,7 @@ import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.flow.*
 import androidx.lifecycle.ViewModel as AndroidxViewModel
 
-abstract class ViewModel<S: ViewState, E: ViewEffect?>(initialState: S): AndroidxViewModel() {
+abstract class ViewModel<S: ViewState, E: ViewEffect>(initialState: S): AndroidxViewModel() {
 
     private val _viewState = MutableStateFlow(initialState)
     val viewState: StateFlow<S> = _viewState

@@ -1,6 +1,5 @@
 package com.rodrigmatrix.data.remote
 
-import android.content.Context
 import com.rodrigmatrix.core.resource.ResourceProvider
 import com.rodrigmatrix.data.R
 import com.rodrigmatrix.data.model.CorreiosSecretKeys

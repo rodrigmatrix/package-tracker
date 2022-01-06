@@ -38,31 +38,7 @@ class NavigationActivity : AppCompatActivity() {
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
                     bottomBar = {
-                        val navBackStackEntry by navController.currentBackStackEntryAsState()
-                        val currentDestination = navBackStackEntry?.destination
-                        if (currentDestination?.route?.contains("package")?.not() == true) {
-                            NavigationBar {
-                                listOf(
-                                    Screen.Home,
-                                    Screen.Settings,
-                                    Screen.About
-                                ).forEach { screen ->
-                                    NavigationBarItem(
-                                        icon = { Icon(screen.image, contentDescription = null) },
-                                        label = { Text(stringResource(screen.resourceId)) },
-                                        onClick = {
-                                            navController.navigate(screen.route) {
-                                                restoreState = true
-                                                launchSingleTop = true
-                                            }
-                                        },
-                                        selected = currentDestination.hierarchy.any {
-                                            it.route == screen.route
-                                        }
-                                    )
-                                }
-                            }
-                        }
+                        HomeBottomBar(navController)
                     }
                 ) {
                     HomeNavHost(navController, supportFragmentManager)

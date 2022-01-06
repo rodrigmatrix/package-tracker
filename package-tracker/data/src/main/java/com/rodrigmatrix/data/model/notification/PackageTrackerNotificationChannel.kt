@@ -3,7 +3,8 @@ package com.rodrigmatrix.data.model.notification
 import androidx.annotation.StringRes
 import com.rodrigmatrix.data.R
 
-enum class PackageTrackerNotificationChannel(
+enum class
+PackageTrackerNotificationChannel(
     val id: String,
     @StringRes val titleStringRes: Int,
     @StringRes val descriptionStringRes: Int
