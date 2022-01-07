@@ -3,10 +3,12 @@ package com.rodrigmatrix.packagetracker.presentation.addpackage
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.res.Configuration
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -17,13 +19,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.rodrigmatrix.core.extensions.toast
 import com.rodrigmatrix.packagetracker.R
 import com.rodrigmatrix.packagetracker.presentation.components.TextEdit
+import com.rodrigmatrix.packagetracker.presentation.details.DetailsScreen
+import com.rodrigmatrix.packagetracker.presentation.details.PackageStatusViewState
+import com.rodrigmatrix.packagetracker.presentation.theme.PackageTrackerTheme
+import com.rodrigmatrix.packagetracker.presentation.utils.PreviewPackageItem
+import com.rodrigmatrix.packagetracker.presentation.utils.PreviewPackageProgressStatus
 import org.koin.androidx.compose.getViewModel
 import org.koin.core.parameter.parametersOf
-
 
 @Composable
 fun AddPackageScreen(
@@ -81,6 +89,7 @@ fun AddPackageScreen(
             value = viewState.nameText,
             onValueChange = onNameValueChanged,
             singleLine = true,
+            keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
             label = {
                 Text(
                     text = stringResource(R.string.name),
@@ -99,6 +108,7 @@ fun AddPackageScreen(
         TextEdit(
             value = viewState.packageIdText,
             onValueChange = onPackageIdValueChanged,
+            keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Characters),
             enabled = viewState.isEditPackage.not(),
             singleLine = true,
             label = {
@@ -147,4 +157,38 @@ private fun copyPackageIdToClipboard(context: Context, packageId: String?) {
     )
     clipboard?.setPrimaryClip(clip)
     context.toast(R.string.package_id_copied)
+}
+
+
+@Preview(name = "Light Theme")
+@Preview(name = "Dark Theme", uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(name = "Large Font", fontScale = 2f)
+@Composable
+fun AddPackagePreview() {
+    PackageTrackerTheme {
+        AddPackageScreen(
+            viewState = AddPackageViewState(),
+            onNameValueChanged = { },
+            onPackageIdValueChanged = { },
+            onAddButtonClicked = { }
+        )
+    }
+}
+
+
+@Preview(name = "Light Theme")
+@Preview(name = "Dark Theme", uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(name = "Large Font", fontScale = 2f)
+@Composable
+fun EditPackagePreview() {
+    PackageTrackerTheme {
+        AddPackageScreen(
+            viewState = AddPackageViewState(
+                isEditPackage = true
+            ),
+            onNameValueChanged = { },
+            onPackageIdValueChanged = { },
+            onAddButtonClicked = { }
+        )
+    }
 }

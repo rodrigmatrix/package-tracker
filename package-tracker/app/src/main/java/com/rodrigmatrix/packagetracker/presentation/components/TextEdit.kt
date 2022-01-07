@@ -59,7 +59,7 @@ fun TextEdit(
                 ContentAlpha.medium),
             textColor = MaterialTheme.colorScheme.onBackground
         ),
-        shape = MaterialTheme2.shapes.medium.copy(CornerSize(26)),
+        shape = MaterialTheme2.shapes.medium.copy(CornerSize(34)),
         modifier = modifier
     )
 }
