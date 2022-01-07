@@ -6,12 +6,13 @@ import com.rodrigmatrix.domain.usecase.AddPackageUseCase
 import com.rodrigmatrix.domain.usecase.EditPackageUseCase
 import com.rodrigmatrix.domain.usecase.GetPackageStatusUseCase
 import com.rodrigmatrix.packagetracker.presentation.addpackage.AddPackageViewEffect.PackageAdded
-import com.rodrigmatrix.packagetracker.presentation.addpackage.AddPackageViewEffect.SetPackageData
+import com.rodrigmatrix.packagetracker.presentation.addpackage.AddPackageViewEffect.ShowToast
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
@@ -34,24 +35,31 @@ class AddNewPackageViewModel(
         viewModelScope.launch {
             getPackageStatusUseCase(packageId)
                 .flowOn(dispatcher)
-                .onStart { setState { it.loadingState() } }
+                .onStart { setState { it.copy(isLoading = true) } }
+                .onCompletion { setState { it.copy(isLoading = false) } }
                 .catch { error ->
-                    setState { it.errorState(error.message.orEmpty()) }
+                    setEffect { ShowToast(error.message.orEmpty()) }
                 }
-                .collect {
-                    setEffect {
-                        SetPackageData(it.name, it.packageId)
+                .collect { userPackage ->
+                    setState {
+                        it.copy(
+                            nameText = userPackage.name,
+                            packageIdText = userPackage.packageId
+                        )
                     }
                 }
         }
     }
-    fun editPackage(name: String, packageId: String) {
+    fun editPackage() {
         viewModelScope.launch {
-            editPackageUseCase(name, packageId)
+            val state = viewState.value
+
+            editPackageUseCase(state.nameText, state.packageIdText)
                 .flowOn(dispatcher)
-                .onStart { setState { it.loadingState() } }
+                .onStart { setState { it.copy(isLoading = true) } }
+                .onCompletion { setState { it.copy(isLoading = false) } }
                 .catch { error ->
-                    setState { it.errorState(error.message.orEmpty()) }
+                    setEffect { ShowToast(error.message.orEmpty()) }
                 }
                 .collect {
                     setEffect {
@@ -61,15 +69,26 @@ class AddNewPackageViewModel(
         }
     }
 
-    fun addPackage(name: String, packageId: String) {
+    fun addPackage() {
         viewModelScope.launch {
-            addPackageUseCase(name, packageId)
+            val state = viewState.value
+
+            addPackageUseCase(state.nameText, state.packageIdText)
                 .flowOn(dispatcher)
-                .onStart { setState { it.loadingState() } }
+                .onStart { setState { it.copy(isLoading = true) } }
+                .onCompletion { setState { it.copy(isLoading = false) } }
                 .catch { error ->
-                    setState { it.errorState(error.message.orEmpty()) }
+                    setEffect { ShowToast(error.message.orEmpty()) }
                 }
                 .collect { setEffect { PackageAdded } }
         }
+    }
+
+    fun onNameChanged(value: String) {
+        setState { it.copy(nameText = value) }
+    }
+
+    fun onPackageIdChanged(value: String) {
+        setState { it.copy(packageIdText = value) }
     }
 }

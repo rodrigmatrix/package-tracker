@@ -18,7 +18,7 @@ private val viewModelModules = module {
     viewModel {
         PackagesDetailsViewModel(
             getPackageStatusUseCase = get(),
-            getPackageProgressStatus = get(),
+            getPackageProgressStatusUseCase = get(),
             deletePackageUseCase = get()
         )
     }
@@ -27,7 +27,7 @@ private val viewModelModules = module {
             getAllPackagesUseCase = get(),
             fetchAllPackagesUseCase = get(),
             deletePackageUseCase = get(),
-            getPackageProgressStatus = GetPackageProgressStatusUseCase()
+            getPackageProgressStatusUseCase = GetPackageProgressStatusUseCase()
         )
     }
     viewModel { (packageId: String) ->

@@ -6,8 +6,5 @@ sealed class AddPackageViewEffect: ViewEffect {
 
     object PackageAdded: AddPackageViewEffect()
 
-    data class SetPackageData(
-        val name: String,
-        val packageId: String
-    ): AddPackageViewEffect()
+    data class ShowToast(val message: String): AddPackageViewEffect()
 }
