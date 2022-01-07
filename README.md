@@ -1,7 +1,9 @@
 # Rastreio de encomendas
 
+<a href='https://play.google.com/store/apps/details?id=com.rodrigmatrix.packagetracker&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img width="250" alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/></a>
+
 ## Sobre o app
-Esse é um app gratuito e open source feito usando o Jetpack Compose e o Material You. Abaixo você encontra algumas imagens com diferentes cores do sistema usando o Material You.
+Esse é um app open source feito usando o Jetpack Compose, Material You, MVI, Kotlin Flow e Clean Arch. Abaixo você encontra algumas imagens com diferentes cores do sistema usando o Material You.
 
 <p float="center">
   <img src="https://user-images.githubusercontent.com/7853887/148313743-85184580-89ce-4d1f-bd98-48a2d95cb7c1.png" width="300" />
