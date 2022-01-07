@@ -9,6 +9,7 @@ import androidx.compose.ui.platform.ViewCompositionStrategy.DisposeOnViewTreeLif
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.color.DynamicColors
+import com.rodrigmatrix.core.extensions.toast
 import com.rodrigmatrix.packagetracker.presentation.addpackage.AddPackageViewEffect.PackageAdded
 import com.rodrigmatrix.packagetracker.presentation.theme.PackageTrackerTheme
 import kotlinx.coroutines.flow.collect
@@ -54,6 +55,9 @@ class AddNewPackageBottomSheetFragment: BottomSheetDialogFragment() {
                 when (it) {
                     is PackageAdded -> {
                         dismiss()
+                    }
+                    is AddPackageViewEffect.ShowToast -> {
+                        toast(it.message)
                     }
                 }
             }

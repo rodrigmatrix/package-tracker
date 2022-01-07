@@ -4,6 +4,8 @@ import android.content.res.Configuration
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -20,14 +22,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.constraintlayout.compose.Dimension
-import com.rodrigmatrix.domain.entity.StatusAddress
-import com.rodrigmatrix.domain.entity.StatusUpdate
 import com.rodrigmatrix.domain.entity.UserPackage
 import com.rodrigmatrix.packagetracker.extensions.getLastStatus
 import com.rodrigmatrix.packagetracker.extensions.getStatusIconAndColor
 import com.rodrigmatrix.packagetracker.presentation.theme.PackageTrackerTheme
+import com.rodrigmatrix.packagetracker.presentation.utils.PreviewPackageItem
 
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -35,7 +34,7 @@ import com.rodrigmatrix.packagetracker.presentation.theme.PackageTrackerTheme
 fun Package(
     onItemClick: (id: String) -> Unit,
     onLongClick: (id: String) -> Unit,
-    packageItem: UserPackage
+    packageItem: UserPackage,
 ) {
     val lastStatus = packageItem.getLastStatus()
 
@@ -63,94 +62,51 @@ fun Package(
                 }
             )
     ) {
-        ConstraintLayout {
-            val (
-                name, lastUpdate, image, packageId, date
-            ) = createRefs()
-
+        Row {
             Icon(
                 imageVector = iconVector,
                 contentDescription = null,
                 tint = Color.White,
                 modifier = Modifier
+                    .padding(start = 16.dp, top = 16.dp)
                     .size(42.dp)
                     .clip(CircleShape)
                     .background(statusColor)
                     .padding(8.dp)
-                    .constrainAs(image) {
-                        start.linkTo(parent.start, 16.dp)
-                        top.linkTo(parent.top, 16.dp)
-                    },
             )
 
-            Text(
-                text = packageItem.name,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                style = MaterialTheme.typography.headlineSmall,
-                modifier = Modifier.constrainAs(name) {
-                    linkTo(
-                        start = image.end,
-                        end = parent.end,
-                        startMargin = 8.dp,
-                        endMargin = 16.dp,
-                        bias = 0f
-                    )
-                    top.linkTo(parent.top, 16.dp)
-                }
-            )
+            Column(
+                modifier = Modifier
+                    .padding(top = 16.dp, start = 16.dp)
+            ) {
+                Text(
+                    text = packageItem.name,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    style = MaterialTheme.typography.headlineSmall,
+                    modifier = Modifier.padding(bottom = 8.dp)
+                )
 
-            Text(
-                text = lastStatus.title,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.constrainAs(lastUpdate) {
-                    linkTo(
-                        start = image.end,
-                        end = parent.end,
-                        startMargin = 8.dp,
-                        endMargin = 16.dp,
-                        bias = 0f
-                    )
-                    top.linkTo(name.bottom, 8.dp)
-                }
-            )
+                Text(
+                    text = lastStatus.title,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    style = MaterialTheme.typography.bodyMedium
+                )
 
-            Text(
-                text = statusUpdate?.getDateWithHour() ?: "-",
-                maxLines = 1,
-                style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.constrainAs(date) {
-                    linkTo(
-                        start = image.end,
-                        end = parent.end,
-                        startMargin = 8.dp,
-                        endMargin = 16.dp,
-                        bias = 0f
-                    )
-                    top.linkTo(lastUpdate.bottom)
-                }
-            )
+                Text(
+                    text = statusUpdate?.getDateWithHour() ?: "-",
+                    maxLines = 1,
+                    style = MaterialTheme.typography.bodyMedium
+                )
 
-            Text(
-                text = packageItem.packageId,
-                maxLines = 1,
-                style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.constrainAs(packageId) {
-                    linkTo(
-                        start = image.end,
-                        end = parent.end,
-                        startMargin = 8.dp,
-                        endMargin = 16.dp,
-                        bias = 0f
-                    )
-                    top.linkTo(date.bottom, 0.dp)
-                    bottom.linkTo(parent.bottom, 16.dp)
-
-                    width = Dimension.preferredWrapContent
-                }
-            )
+                Text(
+                    text = packageItem.packageId,
+                    maxLines = 1,
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.padding(bottom = 16.dp)
+                )
+            }
         }
     }
 }
@@ -160,25 +116,12 @@ fun Package(
 @Preview(name = "Large Font", fontScale = 2f)
 @Composable
 fun PackagePreview() {
-    val packageItem = UserPackage(
-        "H6XAJ123BN12",
-        "Google Pixel 4",
-        "",
-        "20/07/2022",
-        listOf(
-            StatusUpdate(
-            date = "20/07/2022",
-            description = "Saiu para entrega",
-            from = StatusAddress()
-        )
-        )
-    )
 
     PackageTrackerTheme {
         Package(
             onItemClick = { },
             onLongClick =  { },
-            packageItem = packageItem
+            packageItem = PreviewPackageItem
         )
     }
 }

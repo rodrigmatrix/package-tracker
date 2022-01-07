@@ -15,27 +15,32 @@ val PreviewPackageItemsList = listOf(
             StatusUpdate(
                 date = "22/07/2022",
                 description = "Objeto entregue ao destinatario",
-                from = StatusAddress()
+                from = StatusAddress(),
+                hour = "12:00"
             ),
             StatusUpdate(
                 date = "22/07/2022",
                 description = "Saiu para entrega",
-                from = StatusAddress()
+                from = StatusAddress(),
+                hour = "12:00"
             ),
             StatusUpdate(
                 date = "21/07/2022",
                 description = "Em progresso",
-                from = StatusAddress()
+                from = StatusAddress(),
+                hour = "12:00"
             ),
             StatusUpdate(
                 date = "21/07/2022",
                 description = "Em progresso",
-                from = StatusAddress()
+                from = StatusAddress(),
+                hour = "12:00"
             ),
             StatusUpdate(
                 date = "21/07/2022",
                 description = "Enviado",
-                from = StatusAddress()
+                from = StatusAddress(),
+                hour = "12:00"
             )
         )
     ),
@@ -48,7 +53,8 @@ val PreviewPackageItemsList = listOf(
             StatusUpdate(
                 date = "21/07/2022",
                 description = "Entregue",
-                from = StatusAddress()
+                from = StatusAddress(),
+                hour = "12:00"
             )
         )
     )
@@ -63,27 +69,32 @@ val PreviewPackageItem = UserPackage(
         StatusUpdate(
             date = "22/07/2022",
             description = "Objeto entregue ao destinatario",
-            from = StatusAddress()
+            from = StatusAddress(),
+            hour = "12:00"
         ),
         StatusUpdate(
             date = "22/07/2022",
             description = "Saiu para entrega",
-            from = StatusAddress()
+            from = StatusAddress(),
+            hour = "12:00"
         ),
         StatusUpdate(
             date = "21/07/2022",
             description = "Objeto em trânsito",
-            from = StatusAddress()
+            from = StatusAddress(),
+            hour = "12:00"
         ),
         StatusUpdate(
             date = "21/07/2022",
             description = "Objeto em trânsito",
-            from = StatusAddress()
+            from = StatusAddress(),
+            hour = "12:00"
         ),
         StatusUpdate(
             date = "21/07/2022",
             description = "Postado",
-            from = StatusAddress()
+            from = StatusAddress(),
+            hour = "12:00"
         )
     )
 )
