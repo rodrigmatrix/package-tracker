@@ -1,20 +1,23 @@
 package com.rodrigmatrix.packagetracker.presentation.about.model
 
+import androidx.annotation.DrawableRes
+import com.rodrigmatrix.packagetracker.R
+
 enum class SocialNetwork(
     val link: String,
-    val icon: String
+    @DrawableRes val icon: Int
 ) {
 
     GITHUB(
         link = "https://github.com/rodrigmatrix",
-        icon = "https://cdn-icons-png.flaticon.com/512/25/25231.png"
+        icon = R.drawable.ic_github
     ),
     TWITTER(
         link = "https://twitter.com/rodrigmatrix",
-        icon = "https://cdn-icons-png.flaticon.com/512/81/81609.png"
+        icon = R.drawable.ic_twitter
     ),
     LINKEDIN(
         link = "https://www.linkedin.com/in/rodrigmatrix",
-        icon = "https://cdn-icons-png.flaticon.com/512/174/174857.png"
+        icon = R.drawable.ic_linkedin
     ),
 }

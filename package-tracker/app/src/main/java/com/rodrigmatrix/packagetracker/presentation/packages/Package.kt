@@ -48,8 +48,12 @@ fun Package(
         shape = RoundedCornerShape(24.dp),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp)
-            .combinedClickable(
+            .padding(
+                start = 16.dp,
+                end = 16.dp,
+                top = 8.dp,
+                bottom = 8.dp
+            ).combinedClickable(
                 onLongClick = {
                     onLongClick(packageItem.packageId)
                 },
@@ -77,6 +81,7 @@ fun Package(
 
             Column(
                 modifier = Modifier
+                    .fillMaxWidth()
                     .padding(top = 16.dp, start = 16.dp)
             ) {
                 Text(

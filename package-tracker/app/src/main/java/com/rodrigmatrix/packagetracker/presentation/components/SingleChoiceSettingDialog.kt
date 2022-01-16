@@ -20,10 +20,10 @@ import androidx.compose.ui.window.Dialog
 import com.rodrigmatrix.domain.entity.SingleChoicePreference
 
 @Composable
-fun SingleChoiceSettingDialog(
+fun <T> SingleChoiceSettingDialog(
     title: String,
-    options: List<SingleChoicePreference>,
-    onOptionSelected: (String) -> Unit,
+    options: List<SingleChoicePreference<T>>,
+    onOptionSelected: (T) -> Unit,
     onDismiss: () -> Unit
 ) {
     Dialog(
@@ -51,9 +51,9 @@ fun SingleChoiceSettingDialog(
 }
 
 @Composable
-fun ChoiceItem(
-    choice: SingleChoicePreference,
-    onClick: (String) -> Unit
+fun <T> ChoiceItem(
+    choice: SingleChoicePreference<T>,
+    onClick: (T) -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -61,7 +61,7 @@ fun ChoiceItem(
             .selectable(
                 selected = choice.selected,
                 onClick = {
-                    onClick(choice.preferenceKey)
+                    onClick(choice.value)
                 }
             )
     ) {
@@ -75,7 +75,7 @@ fun ChoiceItem(
         RadioButton(
             selected = choice.selected,
             onClick = {
-                onClick(choice.preferenceKey)
+                onClick(choice.value)
             },
             modifier = Modifier.align(Alignment.CenterVertically)
         )

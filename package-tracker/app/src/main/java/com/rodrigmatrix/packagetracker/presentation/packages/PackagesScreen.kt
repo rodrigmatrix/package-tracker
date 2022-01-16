@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -13,7 +14,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Icon
@@ -89,7 +92,8 @@ fun PackagesScreen(
     Column {
         SwipeRefresh(
             state = rememberSwipeRefreshState(viewState.isRefreshing),
-            onRefresh = onSwipeRefresh
+            onRefresh = onSwipeRefresh,
+            swipeEnabled = viewState.packagesList.isNotEmpty()
         ) {
             BoxWithConstraints(
                 modifier = Modifier
@@ -145,7 +149,9 @@ private fun PackagesList(
         ) {
             LazyColumn(
                 contentPadding = PaddingValues(bottom = 200.dp),
-                modifier = Modifier.testTag(PACKAGES_LIST_TAG)
+                modifier = Modifier
+                    .fillMaxSize()
+                    .testTag(PACKAGES_LIST_TAG)
             ) {
                 items(packagesList) { packageItem ->
                     Package(
@@ -161,7 +167,14 @@ private fun PackagesList(
 
 @Composable
 private fun PackagesListEmptyState() {
-    Column(Modifier.fillMaxSize()) {
+    Column(
+        Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(bottom = 100.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         val composition by rememberLottieComposition(RawRes(R.raw.empty_box))
         val progress by animateLottieCompositionAsState(composition)
         LottieAnimation(
@@ -169,15 +182,17 @@ private fun PackagesListEmptyState() {
             progress,
             modifier = Modifier
                 .size(width = 200.dp, height = 200.dp)
-                .align(Alignment.CenterHorizontally)
         )
         Text(
             text = stringResource(R.string.empty_packages),
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier
-                .padding(16.dp)
-                .align(Alignment.CenterHorizontally)
+                .padding(
+                    start = 16.dp,
+                    end = 16.dp,
+                    bottom = 100.dp
+                )
         )
     }
 }
@@ -204,13 +219,13 @@ fun PackagesPreview() {
     }
 }
 
-@Preview(name = "Light Theme")
-@Preview(name = "Dark Theme", uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(name = "Empty Light Theme")
+@Preview(name = "Empty Dark Theme", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun PackagesEmptyStatePreview() {
     PackageTrackerTheme {
         PackagesScreen(
-            viewState = PackagesViewState(),
+            viewState = PackagesViewState(isRefreshing = false),
             onSwipeRefresh = { },
             onAddPackageClick = { },
             onPackageClick = { },

@@ -16,14 +16,14 @@ import com.rodrigmatrix.data.remote.PackageRemoteDataSource
 import com.rodrigmatrix.data.remote.PackageRemoteDataSourceImpl
 import com.rodrigmatrix.data.remote.builder.RetrofitClientGenerator
 import com.rodrigmatrix.data.remote.builder.RetrofitServiceGenerator
-import com.rodrigmatrix.data.repository.AppThemeRepositoryImpl
+import com.rodrigmatrix.data.repository.SettingsRepositoryImpl
 import com.rodrigmatrix.data.repository.NotificationsRepositoryImpl
 import com.rodrigmatrix.data.repository.PackageRepositoryImpl
 import com.rodrigmatrix.data.repository.RemoteConfigRepositoryImpl
 import com.rodrigmatrix.data.service.CorreiosService
 import com.rodrigmatrix.data.util.NotificationService
 import com.rodrigmatrix.data.util.NotificationServiceImpl
-import com.rodrigmatrix.domain.repository.AppThemeRepository
+import com.rodrigmatrix.domain.repository.SettingsRepository
 import com.rodrigmatrix.domain.repository.NotificationsRepository
 import com.rodrigmatrix.domain.repository.PackageRepository
 import com.rodrigmatrix.domain.repository.RemoteConfigRepository
@@ -77,8 +77,8 @@ private val repositoryModule = module {
     factory<RemoteConfigRepository> {
         RemoteConfigRepositoryImpl(firebaseRemoteConfigDataSource = get())
     }
-    factory<AppThemeRepository> {
-        AppThemeRepositoryImpl(
+    factory<SettingsRepository> {
+        SettingsRepositoryImpl(
             sharedPrefDataSource = get(),
             resourceProvider = get()
         )

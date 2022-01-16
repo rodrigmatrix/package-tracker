@@ -25,16 +25,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Devices.PIXEL_C
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.rememberImagePainter
 import com.rodrigmatrix.packagetracker.R
 import com.rodrigmatrix.packagetracker.presentation.about.model.SocialNetwork
 import com.rodrigmatrix.packagetracker.presentation.theme.PackageTrackerTheme
-
-private const val PROFILE_PIC_URL = "https://avatars.githubusercontent.com/u/7853887?v=4"
 
 @Composable
 fun AboutScreen() {
@@ -45,7 +44,7 @@ fun AboutScreen() {
             .padding(bottom = 100.dp)
     ) {
         Image(
-            painter =  rememberImagePainter(PROFILE_PIC_URL),
+            painter = painterResource(R.drawable.ic_about),
             contentDescription = null,
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
@@ -99,7 +98,7 @@ private fun SocialCard(modifier: Modifier = Modifier) {
 private fun SocialNetwork(socialNetwork: SocialNetwork) {
     val context = LocalContext.current
     Icon(
-        painter = rememberImagePainter(socialNetwork.icon),
+        painter = painterResource(socialNetwork.icon),
         contentDescription = null,
         modifier = Modifier
             .size(64.dp)
@@ -116,6 +115,7 @@ private fun SocialNetwork(socialNetwork: SocialNetwork) {
 
 @Preview(name = "Light Theme")
 @Preview(name = "Dark Theme", uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(name = "Tablet", uiMode = Configuration.UI_MODE_NIGHT_YES, device = PIXEL_C)
 @Composable
 fun AboutScreenPreview() {
     PackageTrackerTheme {

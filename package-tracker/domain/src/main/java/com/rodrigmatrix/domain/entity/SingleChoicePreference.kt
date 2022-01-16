@@ -1,7 +1,7 @@
 package com.rodrigmatrix.domain.entity
 
-class SingleChoicePreference(
+class SingleChoicePreference<T>(
     val name: String,
-    val preferenceKey: String,
+    val value: T,
     val selected: Boolean
 )

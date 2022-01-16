@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">Package Tracker</string>
-    <string name="packages">Packages</string>
+    <string name="app_name">Rastreio de Encomendas</string>
+    <string name="packages">Encomendas</string>
     <string name="settings">Configurações</string>
     <string name="home">Home</string>
     <string name="delete_package_title">Deseja realmente deletar essa encomenda?</string>
@@ -20,4 +20,7 @@
     <string name="about_description">Esse é um projeto open source e seu código pode ser encontrado no meu github</string>
     <string name="app_theme">Tema do aplicativo</string>
     <string name="package_id_copied">Id do pacote copiado</string>
+    <string name="enable_notifications">Receber notificações de atualizações de encomendas</string>
+    <string name="update_interval">Intervalo de atualização</string>
+    <string name="x_minutes">%d minutos</string>
 </resources>

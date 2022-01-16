@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -19,17 +20,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.ProgressBarRangeInfo
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.rodrigmatrix.core.extensions.toast
 import com.rodrigmatrix.packagetracker.R
 import com.rodrigmatrix.packagetracker.presentation.components.TextEdit
-import com.rodrigmatrix.packagetracker.presentation.details.DetailsScreen
-import com.rodrigmatrix.packagetracker.presentation.details.PackageStatusViewState
 import com.rodrigmatrix.packagetracker.presentation.theme.PackageTrackerTheme
-import com.rodrigmatrix.packagetracker.presentation.utils.PreviewPackageItem
-import com.rodrigmatrix.packagetracker.presentation.utils.PreviewPackageProgressStatus
 import org.koin.androidx.compose.getViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -85,6 +83,15 @@ fun AddPackageScreen(
                 )
         )
 
+        if (viewState.isLoading) {
+            LinearProgressIndicator(
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 10.dp)
+            )
+        }
+
         TextEdit(
             value = viewState.nameText,
             onValueChange = onNameValueChanged,
@@ -132,6 +139,7 @@ fun AddPackageScreen(
 
         Button(
             onClick = onAddButtonClicked,
+            enabled = viewState.isLoading.not(),
             modifier = Modifier
                 .align(Alignment.End)
                 .padding(end = 16.dp, bottom = 16.dp)

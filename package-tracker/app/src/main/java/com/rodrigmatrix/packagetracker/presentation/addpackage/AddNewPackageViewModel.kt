@@ -43,6 +43,7 @@ class AddNewPackageViewModel(
                 .collect { userPackage ->
                     setState {
                         it.copy(
+                            isLoading = false,
                             nameText = userPackage.name,
                             packageIdText = userPackage.packageId
                         )

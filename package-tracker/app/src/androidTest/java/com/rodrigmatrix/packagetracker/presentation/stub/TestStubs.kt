@@ -8,7 +8,7 @@ internal object PackageTestStubs {
 
     val deliveredPackage = UserPackage(
         "H6XAJ123BN12",
-        "Google Pixel 4",
+        "Google Pixel",
         "",
         "20/07/2022",
         listOf(
@@ -61,7 +61,7 @@ internal object PackageTestStubs {
 
     val inProgressPackage = UserPackage(
         "H6XAJ123BN12",
-        "Google Pixel 4",
+        "Google Pixel 6",
         "",
         "20/07/2022",
         listOf(
@@ -80,7 +80,7 @@ internal object PackageTestStubs {
 
     val emptyPackage = UserPackage(
         "H6XAJ123BN12",
-        "Google Pixel 4",
+        "Google Pixel 6 Pro",
         "",
         "20/07/2022",
         listOf()

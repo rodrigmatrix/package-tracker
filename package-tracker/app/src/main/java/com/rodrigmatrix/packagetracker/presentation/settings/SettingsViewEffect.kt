@@ -7,4 +7,6 @@ sealed class SettingsViewEffect : ViewEffect {
     data class ShowToast(val message: String): SettingsViewEffect()
 
     object UpdateTheme: SettingsViewEffect()
+
+    object UpdateNotificationsInterval: SettingsViewEffect()
 }

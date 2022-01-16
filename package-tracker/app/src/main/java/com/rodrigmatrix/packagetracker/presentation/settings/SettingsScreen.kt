@@ -1,9 +1,9 @@
 package com.rodrigmatrix.packagetracker.presentation.settings
 
 import android.content.res.Configuration
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import com.rodrigmatrix.packagetracker.R
 import com.rodrigmatrix.packagetracker.presentation.components.SettingWithText
 import com.rodrigmatrix.packagetracker.presentation.components.SingleChoiceSettingDialog
+import com.rodrigmatrix.packagetracker.presentation.components.SwitchWithDescription
 import com.rodrigmatrix.packagetracker.presentation.components.Toast
 import com.rodrigmatrix.packagetracker.presentation.settings.SettingsViewEffect.ShowToast
 import com.rodrigmatrix.packagetracker.presentation.theme.PackageTrackerTheme
@@ -40,6 +41,9 @@ fun SettingsScreen(
         is SettingsViewEffect.UpdateTheme -> {
             themeUtils.setTheme()
         }
+        SettingsViewEffect.UpdateNotificationsInterval -> {
+
+        }
     }
 
     SettingsScreen(
@@ -48,7 +52,12 @@ fun SettingsScreen(
         onThemeSelected = { newTheme ->
             viewModel.setTheme(newTheme)
         },
-        onOpenThemeDialog = viewModel::showThemeDialog
+        onOpenThemeDialog = viewModel::showThemeDialog,
+        onNotificationOptionChanged = { checked, interval ->
+            viewModel.onNewNotificationConfig(checked, interval)
+        },
+        onOpenNotificationsDialog = viewModel::showNotificationsDialog,
+        onNotificationDialogDismiss = viewModel::hideNotificationsDialog
     )
 }
 
@@ -57,15 +66,29 @@ fun SettingsScreen(
     viewState: SettingsViewState,
     onThemeDialogDismiss: () -> Unit,
     onThemeSelected: (String) -> Unit,
-    onOpenThemeDialog: () -> Unit
+    onOpenThemeDialog: () -> Unit,
+    onNotificationOptionChanged: (Boolean, Int) -> Unit,
+    onOpenNotificationsDialog: () -> Unit,
+    onNotificationDialogDismiss: () -> Unit
 ) {
 
     if (viewState.themeDialogVisible) {
         SingleChoiceSettingDialog(
             title = stringResource(R.string.app_theme),
-            options = viewState.singleOptionPreferences,
+            options = viewState.themeOptionsList,
             onOptionSelected = onThemeSelected,
             onDismiss = onThemeDialogDismiss
+        )
+    }
+
+    if (viewState.notificationIntervalDialogVisible) {
+        SingleChoiceSettingDialog(
+            title = stringResource(R.string.update_interval),
+            options = viewState.notificationsIntervalOptionsList,
+            onOptionSelected = { interval ->
+                onNotificationOptionChanged(viewState.notificationsEnabled, interval)
+            },
+            onDismiss = onNotificationDialogDismiss
         )
     }
 
@@ -79,13 +102,13 @@ fun SettingsScreen(
         SettingWithText(
             title = stringResource(R.string.app_theme),
             selectedSetting = viewState.selectedTheme,
+            onClick = onOpenThemeDialog,
             modifier = Modifier
                 .padding(
                     start = 16.dp,
                     end = 16.dp,
                     top = 16.dp
                 )
-                .clickable { onOpenThemeDialog() }
         )
     }
 
@@ -100,6 +123,9 @@ fun SettingsPreview() {
         SettingsScreen(
             viewState = SettingsViewState(),
             {},
+            {},
+            {},
+            { _, _ -> },
             {},
             {}
         )

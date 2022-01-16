@@ -40,11 +40,11 @@ private val viewModelModules = module {
     }
     viewModel {
         SettingsViewModel(
-            appThemeRepository = get()
+            settingsRepository = get()
         )
     }
 }
 
 private val otherModules = module {
-    factory<ThemeUtils> { ThemeUtilsImpl(appThemeRepository = get()) }
+    factory<ThemeUtils> { ThemeUtilsImpl(settingsRepository = get()) }
 }
