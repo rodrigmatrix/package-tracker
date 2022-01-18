@@ -8,6 +8,14 @@
 *.aar
 *.ap_
 *.aab
+.gradle
+.idea/
+*.iml
+build/
+/local.properties
+.DS_Store
+/captures
+google-services.json
 
 # Files for the ART/Dalvik VM
 *.dex
@@ -250,6 +258,7 @@ Thumbs.db
 hs_err_pid*
 
 ## Plugin-specific files:
+google-services.json
 
 # mpeltonen/sbt-idea plugin
 .idea_modules/
