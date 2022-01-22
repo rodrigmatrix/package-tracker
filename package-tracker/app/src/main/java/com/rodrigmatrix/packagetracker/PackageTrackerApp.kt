@@ -39,7 +39,9 @@ class PackageTrackerApp: Application() {
     private fun startNotificationWorker() {
         val periodicWorkRequest = PeriodicWorkRequest.Builder(
             UpdatePackagesAndSendNotificationsWorker::class.java,
-            20,
+            30,
+            TimeUnit.MINUTES,
+            10,
             TimeUnit.MINUTES
         ).build()
 
