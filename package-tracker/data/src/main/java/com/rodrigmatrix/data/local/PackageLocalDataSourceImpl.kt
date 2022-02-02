@@ -20,7 +20,7 @@ class PackageLocalDataSourceImpl(
     }
 
     override fun savePackage(userPackage: UserPackageAndUpdatesEntity) {
-      packagesDAO.savePackage(userPackage)
+        packagesDAO.savePackage(userPackage)
     }
 
     override fun getPackage(packageId: String): Flow<UserPackageAndUpdatesEntity> {

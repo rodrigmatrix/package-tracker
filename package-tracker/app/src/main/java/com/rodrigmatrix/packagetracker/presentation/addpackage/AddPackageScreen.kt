@@ -4,6 +4,7 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.res.Configuration
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -66,7 +67,7 @@ fun AddPackageScreen(
     onAddButtonClicked: () -> Unit
 ) {
     val context = LocalContext.current
-    Column {
+    Column(Modifier.background(MaterialTheme.colorScheme.background)) {
         Text(
             text = if (viewState.isEditPackage) {
                 stringResource(R.string.edit_package)

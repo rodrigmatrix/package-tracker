@@ -17,4 +17,14 @@ class NotificationsRepositoryImpl(
             PackageTrackerNotificationChannel.PACKAGE_UPDATES.id
         )
     }
+
+    override fun sendLinkNotification(title: String, description: String, link: String) {
+        notificationService.sendLinkNotification(
+            title = title,
+            description = description,
+            link = link,
+            R.drawable.ic_notification,
+            PackageTrackerNotificationChannel.PACKAGE_UPDATES.id
+        )
+    }
 }

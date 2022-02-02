@@ -44,6 +44,7 @@ class NotificationServiceImpl(
             .setSmallIcon(icon)
             .setContentTitle(title)
             .setContentText(description)
+            .setAutoCancel(true)
             .setStyle(
                 NotificationCompat.BigTextStyle()
                 .bigText(description))
@@ -53,8 +54,30 @@ class NotificationServiceImpl(
         notificationManager.notify(Random.nextInt(), builder.build())
     }
 
-    private fun createIntent(): PendingIntent? {
-        val resultIntent = Intent("action.packagetracker.open")
+    override fun sendLinkNotification(
+        title: String,
+        description: String,
+        link: String,
+        icon: Int,
+        notificationChannel: String
+    ) {
+        val builder = NotificationCompat.Builder(applicationContext, notificationChannel)
+            .setSmallIcon(icon)
+            .setContentTitle(title)
+            .setContentText(description)
+            .setAutoCancel(true)
+            .setStyle(
+                NotificationCompat.BigTextStyle()
+                    .bigText(description))
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setContentIntent(createIntent(link))
+
+        notificationManager.notify(Random.nextInt(), builder.build())
+    }
+
+    private fun createIntent(link: String? = null): PendingIntent? {
+        val resultIntent = mainActivityIntent(applicationContext)
+        resultIntent.putExtra("link", link)
         return TaskStackBuilder.create(applicationContext).run {
             addNextIntentWithParentStack(resultIntent)
             getPendingIntent(0, getPendingIntentFlag())

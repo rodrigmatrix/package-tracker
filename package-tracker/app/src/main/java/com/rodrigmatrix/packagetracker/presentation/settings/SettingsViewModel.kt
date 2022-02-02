@@ -5,7 +5,6 @@ import com.rodrigmatrix.core.viewmodel.ViewModel
 import com.rodrigmatrix.domain.entity.SingleChoicePreference
 import com.rodrigmatrix.domain.repository.SettingsRepository
 import com.rodrigmatrix.packagetracker.presentation.settings.SettingsViewEffect.ShowToast
-import com.rodrigmatrix.packagetracker.presentation.settings.SettingsViewEffect.UpdateNotificationsInterval
 import com.rodrigmatrix.packagetracker.presentation.settings.SettingsViewEffect.UpdateTheme
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -116,7 +115,6 @@ class SettingsViewModel(
             .collect {
                 getNotificationsPreference()
                 hideNotificationsDialog()
-                setEffect { UpdateNotificationsInterval }
             }
         }
     }

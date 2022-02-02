@@ -12,4 +12,12 @@ interface NotificationService {
         @DrawableRes icon: Int,
         notificationChannel: String
     )
+
+    fun sendLinkNotification(
+        title: String,
+        description: String,
+        link: String,
+        @DrawableRes icon: Int,
+        notificationChannel: String
+    )
 }
