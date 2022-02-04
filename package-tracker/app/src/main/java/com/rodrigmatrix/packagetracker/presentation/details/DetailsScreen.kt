@@ -86,6 +86,7 @@ fun DetailsScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun DetailsScreen(
     viewState: PackageStatusViewState,
@@ -98,56 +99,57 @@ private fun DetailsScreen(
     if (viewState.deletePackageDialogVisible) {
         DeletePackageDialog(onConfirmDeletePackage, onDismissDeletePackageDialog)
     }
-
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        PackageTrackerTopAppBar(
-            title = {
-                Text(
-                    text = viewState.userPackage?.name ?: stringResource(R.string.details),
-                    style = MaterialTheme.typography.bodyLarge
-                )
-            },
-            navigationIcon = {
-                IconButton(onClick = onBackButtonClick) {
-                    Icon(
-                        imageVector = Icons.Filled.ArrowBack,
-                        contentDescription = stringResource(R.string.back)
+    Scaffold(
+        topBar = {
+            PackageTrackerTopAppBar(
+                title = {
+                    Text(
+                        text = viewState.userPackage?.name ?: stringResource(R.string.details),
+                        style = MaterialTheme.typography.bodyLarge
                     )
+                },
+                navigationIcon = {
+                    IconButton(onClick = onBackButtonClick) {
+                        Icon(
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = stringResource(R.string.back)
+                        )
+                    }
+                },
+                actions = {
+                    IconButton(onClick = onEditButtonClick) {
+                        Icon(
+                            imageVector = Icons.Outlined.Edit,
+                            modifier = Modifier
+                                .padding(horizontal = 12.dp, vertical = 16.dp)
+                                .height(24.dp),
+                            contentDescription = null
+                        )
+                    }
+                    IconButton(onClick = onDeleteButtonClick) {
+                        Icon(
+                            imageVector = Icons.Outlined.Delete,
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier
+                                .padding(horizontal = 12.dp, vertical = 16.dp)
+                                .height(24.dp),
+                            contentDescription = null
+                        )
+                    }
                 }
-            },
-            actions = {
-                IconButton(onClick = onEditButtonClick) {
-                    Icon(
-                        imageVector = Icons.Outlined.Edit,
-                        modifier = Modifier
-                            .padding(horizontal = 12.dp, vertical = 16.dp)
-                            .height(24.dp),
-                        contentDescription = null
-                    )
-                }
-
-                IconButton(onClick = onDeleteButtonClick) {
-                    Icon(
-                        imageVector = Icons.Outlined.Delete,
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier
-                            .padding(horizontal = 12.dp, vertical = 16.dp)
-                            .height(24.dp),
-                        contentDescription = null
-                    )
-                }
-            }
-        )
-
-        viewState.packageProgressStatus?.let {
-            PackageStatus(it)
+            )
         }
-
-        PackageUpdatesList(
-            statusUpdateList = viewState.userPackage?.statusUpdateList.orEmpty()
-        )
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            viewState.packageProgressStatus?.let {
+                PackageStatus(it)
+            }
+            PackageUpdatesList(
+                statusUpdateList = viewState.userPackage?.statusUpdateList.orEmpty()
+            )
+        }
     }
 }
 
