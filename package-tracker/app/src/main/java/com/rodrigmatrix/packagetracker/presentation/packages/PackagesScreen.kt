@@ -19,10 +19,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.Icon
-import androidx.compose.material3.LargeFloatingActionButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -75,6 +72,7 @@ fun PackagesScreen(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PackagesScreen(
     viewState: PackagesViewState,
@@ -88,46 +86,40 @@ fun PackagesScreen(
     if (viewState.deletePackageDialogVisible) {
         DeletePackageDialog(onConfirmDeletePackage, onDismissDeletePackageDialog)
     }
-
-    Column {
-        SwipeRefresh(
-            state = rememberSwipeRefreshState(viewState.isRefreshing),
-            onRefresh = onSwipeRefresh,
-            swipeEnabled = viewState.packagesList.isNotEmpty()
-        ) {
-            BoxWithConstraints(
-                modifier = Modifier
-                .weight(1f)
-            ) {
-                when {
-                    viewState.packagesList.isEmpty() && !viewState.isRefreshing -> {
-                        PackagesListEmptyState()
-                    }
-
-                    else -> {
-                        PackagesList(
-                            onItemClick = {
-                                onPackageClick(it)
-                            },
-                            onLongClick = {
-                                onLongClick(it)
-                            },
-                            viewState.packagesList
-                        )
-                    }
-                }
-
+    SwipeRefresh(
+        state = rememberSwipeRefreshState(viewState.isRefreshing),
+        onRefresh = onSwipeRefresh,
+        swipeEnabled = viewState.packagesList.isNotEmpty()
+    ) {
+        Scaffold(
+            floatingActionButton = {
                 LargeFloatingActionButton(
                     onClick = onAddPackageClick,
-                    modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                        .padding(bottom = 100.dp),
+                    modifier = Modifier.padding(bottom = 80.dp),
                     shape = RoundedCornerShape(100)
                 ) {
                     Icon(
                         imageVector = Icons.Filled.Add,
                         modifier = Modifier.size(24.dp),
                         contentDescription = null
+                    )
+                }
+            },
+            floatingActionButtonPosition = FabPosition.Center
+        ) {
+            when {
+                viewState.packagesList.isEmpty() && !viewState.isRefreshing -> {
+                    PackagesListEmptyState()
+                }
+                else -> {
+                    PackagesList(
+                        onItemClick = {
+                            onPackageClick(it)
+                        },
+                        onLongClick = {
+                            onLongClick(it)
+                        },
+                        viewState.packagesList
                     )
                 }
             }
