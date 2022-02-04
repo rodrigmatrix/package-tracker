@@ -29,18 +29,30 @@ import com.rodrigmatrix.core.extensions.toast
 import com.rodrigmatrix.packagetracker.R
 import com.rodrigmatrix.packagetracker.presentation.components.TextEdit
 import com.rodrigmatrix.packagetracker.presentation.theme.PackageTrackerTheme
+import com.rodrigmatrix.packagetracker.presentation.utils.LaunchViewEffect
 import org.koin.androidx.compose.getViewModel
 import org.koin.core.parameter.parametersOf
 
 @Composable
 fun AddPackageScreen(
     packageId: String?,
+    onDismiss: () -> Unit,
     viewModel: AddNewPackageViewModel = getViewModel {
         parametersOf(packageId)
     }
 ) {
     val viewState by viewModel.viewState.collectAsState()
-
+    val context = LocalContext.current
+    LaunchViewEffect(viewModel) { viewEffect ->
+        when (viewEffect) {
+            is AddPackageViewEffect.PackageAdded -> {
+                onDismiss()
+            }
+            is AddPackageViewEffect.ShowToast -> {
+                context.toast(viewEffect.message)
+            }
+        }
+    }
     AddPackageScreen(
         viewState = viewState,
         onNameValueChanged = {
@@ -131,7 +143,8 @@ fun AddPackageScreen(
                     start = 16.dp,
                     end = 16.dp,
                     bottom = 10.dp
-                ).clickable {
+                )
+                .clickable {
                     if (viewState.isEditPackage) {
                         copyPackageIdToClipboard(context, viewState.packageIdText)
                     }

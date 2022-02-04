@@ -12,9 +12,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.rodrigmatrix.core.extensions.toast
 import com.rodrigmatrix.packagetracker.R
 import com.rodrigmatrix.packagetracker.presentation.components.SettingWithText
 import com.rodrigmatrix.packagetracker.presentation.components.SingleChoiceSettingDialog
@@ -22,6 +24,7 @@ import com.rodrigmatrix.packagetracker.presentation.components.SwitchWithDescrip
 import com.rodrigmatrix.packagetracker.presentation.components.Toast
 import com.rodrigmatrix.packagetracker.presentation.settings.SettingsViewEffect.ShowToast
 import com.rodrigmatrix.packagetracker.presentation.theme.PackageTrackerTheme
+import com.rodrigmatrix.packagetracker.presentation.utils.LaunchViewEffect
 import com.rodrigmatrix.packagetracker.presentation.utils.ThemeUtils
 import org.koin.androidx.compose.get
 import org.koin.androidx.compose.getViewModel
@@ -31,19 +34,19 @@ fun SettingsScreen(
     viewModel: SettingsViewModel = getViewModel(),
     themeUtils: ThemeUtils = get()
 ) {
-
     val viewState by viewModel.viewState.collectAsState()
-    val viewEffect by viewModel.viewEffect.collectAsState(initial = null)
+    val context = LocalContext.current
 
-    when (viewEffect) {
-        is ShowToast -> {
-            Toast(text = (viewEffect as ShowToast).message)
-        }
-        is SettingsViewEffect.UpdateTheme -> {
-            themeUtils.setTheme()
+    LaunchViewEffect(viewModel) { viewEffect ->
+        when (viewEffect) {
+            is ShowToast -> {
+                context.toast(viewEffect.message)
+            }
+            is SettingsViewEffect.UpdateTheme -> {
+                themeUtils.setTheme()
+            }
         }
     }
-
     SettingsScreen(
         viewState = viewState,
         onThemeDialogDismiss = viewModel::hideThemeDialog,

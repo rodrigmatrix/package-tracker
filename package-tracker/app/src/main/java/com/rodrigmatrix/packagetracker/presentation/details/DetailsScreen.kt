@@ -39,8 +39,11 @@ import com.rodrigmatrix.packagetracker.presentation.utils.PreviewPackageItem
 import com.rodrigmatrix.packagetracker.presentation.utils.PreviewPackageProgressStatus
 import kotlinx.coroutines.flow.onEach
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.ui.platform.LocalContext
+import com.rodrigmatrix.core.extensions.toast
 import com.rodrigmatrix.packagetracker.presentation.components.DeletePackageDialog
 import com.rodrigmatrix.packagetracker.presentation.components.Toast
+import com.rodrigmatrix.packagetracker.presentation.utils.LaunchViewEffect
 import org.koin.androidx.compose.getViewModel
 
 @Composable
@@ -51,20 +54,20 @@ fun DetailsScreen(
     viewModel: PackagesDetailsViewModel = getViewModel()
 ) {
     val viewState by viewModel.viewState.collectAsState()
-    val viewEffect by viewModel.viewEffect.collectAsState(null)
+    val context = LocalContext.current
 
     viewModel.getPackageStatus(packageId)
 
-    when (viewEffect) {
-        is PackageStatusViewEffect.Close -> {
-            navController.navigateUp()
+    LaunchViewEffect (viewModel) { viewEffect ->
+        when (viewEffect) {
+            is PackageStatusViewEffect.Close -> {
+                navController.navigateUp()
+            }
+            is PackageStatusViewEffect.Toast -> {
+                context.toast(viewEffect.message)
+            }
         }
-        is PackageStatusViewEffect.Toast -> {
-            Toast((viewEffect as PackageStatusViewEffect.Toast).message)
-        }
-        null -> Unit
     }
-
     AnimatedVisibility(visible = true) {
         DetailsScreen(
             viewState = viewState,

@@ -48,9 +48,9 @@ fun AboutScreen() {
             contentDescription = null,
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
+                .clip(CircleShape)
                 .padding(top = 16.dp)
                 .size(130.dp)
-                .clip(CircleShape)
         )
         SocialCard(
             modifier = Modifier
