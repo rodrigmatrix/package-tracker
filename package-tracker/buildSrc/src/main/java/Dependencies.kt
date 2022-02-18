@@ -2,7 +2,7 @@ package com.rodrigmatrix.packagetracker.buildSrc
 
 object Libs {
 
-    private const val composeVersion = "1.1.0-beta01"
+    private const val composeVersion = "1.1.0"
 
     object Kotlin {
         private const val version = "1.5.21"
@@ -66,7 +66,7 @@ object Libs {
         }
 
         object Navigation {
-            const val navigationCompose = "androidx.navigation:navigation-compose:2.4.0-alpha06"
+            const val navigationCompose = "androidx.navigation:navigation-compose:2.4.0-alpha07"
             const val composeNavAccompanist = "com.google.accompanist:accompanist-navigation-animation:0.16.1"
         }
 

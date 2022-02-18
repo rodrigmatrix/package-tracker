@@ -99,7 +99,6 @@ fun SettingsScreen(
             .verticalScroll(rememberScrollState())
             .padding(bottom = 100.dp)
     ) {
-
         SettingWithText(
             title = stringResource(R.string.app_theme),
             selectedSetting = viewState.selectedTheme,
