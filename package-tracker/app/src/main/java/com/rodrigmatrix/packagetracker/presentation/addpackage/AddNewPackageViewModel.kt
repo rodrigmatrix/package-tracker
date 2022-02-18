@@ -2,9 +2,12 @@ package com.rodrigmatrix.packagetracker.presentation.addpackage
 
 import androidx.lifecycle.viewModelScope
 import com.rodrigmatrix.core.viewmodel.ViewModel
+import com.rodrigmatrix.data.analytics.PackageTrackerAnalytics
 import com.rodrigmatrix.domain.usecase.AddPackageUseCase
 import com.rodrigmatrix.domain.usecase.EditPackageUseCase
 import com.rodrigmatrix.domain.usecase.GetPackageStatusUseCase
+import com.rodrigmatrix.packagetracker.analytics.ADD_PACKAGE_BUTTON_CLICK
+import com.rodrigmatrix.packagetracker.analytics.EDIT_PACKAGE_NAME_BUTTON_CLICK
 import com.rodrigmatrix.packagetracker.presentation.addpackage.AddPackageViewEffect.PackageAdded
 import com.rodrigmatrix.packagetracker.presentation.addpackage.AddPackageViewEffect.ShowToast
 import kotlinx.coroutines.CoroutineDispatcher
@@ -21,6 +24,7 @@ class AddNewPackageViewModel(
     private val addPackageUseCase: AddPackageUseCase,
     private val getPackageStatusUseCase: GetPackageStatusUseCase,
     private val editPackageUseCase: EditPackageUseCase,
+    private val packageTrackerAnalytics: PackageTrackerAnalytics,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel<AddPackageViewState, AddPackageViewEffect>(AddPackageViewState()) {
 
@@ -52,6 +56,7 @@ class AddNewPackageViewModel(
         }
     }
     fun editPackage() {
+        packageTrackerAnalytics.sendEvent(EDIT_PACKAGE_NAME_BUTTON_CLICK)
         viewModelScope.launch {
             val state = viewState.value
 
@@ -71,6 +76,7 @@ class AddNewPackageViewModel(
     }
 
     fun addPackage() {
+        packageTrackerAnalytics.sendEvent(ADD_PACKAGE_BUTTON_CLICK)
         viewModelScope.launch {
             val state = viewState.value
 

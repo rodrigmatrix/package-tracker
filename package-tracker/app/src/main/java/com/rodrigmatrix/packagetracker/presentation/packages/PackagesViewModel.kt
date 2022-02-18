@@ -2,10 +2,14 @@ package com.rodrigmatrix.packagetracker.presentation.packages
 
 import androidx.lifecycle.viewModelScope
 import com.rodrigmatrix.core.viewmodel.ViewModel
+import com.rodrigmatrix.data.analytics.PackageTrackerAnalytics
 import com.rodrigmatrix.domain.usecase.DeletePackageUseCase
 import com.rodrigmatrix.domain.usecase.FetchAllPackagesUseCase
 import com.rodrigmatrix.domain.usecase.GetAllPackagesUseCase
 import com.rodrigmatrix.domain.usecase.GetPackageProgressStatusUseCase
+import com.rodrigmatrix.packagetracker.analytics.ADD_PACKAGE_FAB_CLICK
+import com.rodrigmatrix.packagetracker.analytics.PACKAGE_DELETE_CLICK
+import com.rodrigmatrix.packagetracker.analytics.PACKAGE_DETAILS_CLICK
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
@@ -19,6 +23,7 @@ class PackagesViewModel(
     private val fetchAllPackagesUseCase: FetchAllPackagesUseCase,
     private val deletePackageUseCase: DeletePackageUseCase,
     private val getPackageProgressStatusUseCase: GetPackageProgressStatusUseCase,
+    private val packageTrackerAnalytics: PackageTrackerAnalytics,
     private val coroutineDispatcher: CoroutineDispatcher = Dispatchers.IO
 ): ViewModel<PackagesViewState, PackagesViewEffect>(PackagesViewState()) {
 
@@ -64,6 +69,7 @@ class PackagesViewModel(
                 .onStart { setState { it.loadingState() } }
                 .catch { exception -> setState { it.errorState(exception) } }
                 .collect()
+            packageTrackerAnalytics.sendEvent(PACKAGE_DELETE_CLICK)
         }
     }
 
@@ -73,5 +79,13 @@ class PackagesViewModel(
 
     fun hideDeleteDialog() {
         setState { it.hideDialogDelete() }
+    }
+
+    fun trackAddPackageClick() {
+        packageTrackerAnalytics.sendEvent(ADD_PACKAGE_FAB_CLICK)
+    }
+
+    fun trackPackageDetailsClick() {
+        packageTrackerAnalytics.sendEvent(PACKAGE_DETAILS_CLICK)
     }
 }

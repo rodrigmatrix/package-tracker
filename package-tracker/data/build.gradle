@@ -36,7 +36,6 @@ android {
             }
         }
     }
-
     buildTypes {
         release {
             minifyEnabled false
@@ -63,6 +62,7 @@ dependencies {
     // Firebase
     implementation platform(Libs.Firebase.bom)
     implementation Libs.Firebase.remoteConfig
+    implementation Libs.Firebase.analytics
 
     // Room
     implementation Libs.AndroidX.Room.runtime

@@ -2,9 +2,12 @@ package com.rodrigmatrix.di
 
 import android.app.NotificationManager
 import android.content.Context
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.rodrigmatrix.data.BuildConfig
+import com.rodrigmatrix.data.analytics.PackageTrackerAnalytics
+import com.rodrigmatrix.data.analytics.PackageTrackerAnalyticsImpl
 import com.rodrigmatrix.data.local.PackageLocalDataSource
 import com.rodrigmatrix.data.local.PackageLocalDataSourceImpl
 import com.rodrigmatrix.data.local.SharedPrefDataSource
@@ -73,7 +76,12 @@ private val repositoryModule = module {
             packagesRemoteDataSource = get()
         )
     }
-    factory<NotificationsRepository> { NotificationsRepositoryImpl(notificationService = get()) }
+    factory<NotificationsRepository> {
+        NotificationsRepositoryImpl(
+            notificationService = get(),
+            packageTrackerAnalytics = get()
+        )
+    }
     factory<RemoteConfigRepository> {
         RemoteConfigRepositoryImpl(firebaseRemoteConfigDataSource = get())
     }
@@ -134,6 +142,11 @@ private val otherModules = module {
             applicationContext = androidApplication(),
             resourceProvider = get(),
             notificationManager =  get()
+        )
+    }
+    single<PackageTrackerAnalytics> {
+        PackageTrackerAnalyticsImpl(
+            firebaseAnalytics = FirebaseAnalytics.getInstance(androidApplication())
         )
     }
 }

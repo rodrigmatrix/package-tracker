@@ -58,8 +58,12 @@ fun PackagesScreen(
     PackagesScreen(
         viewState = viewState,
         onSwipeRefresh = viewModel::fetchPackages,
-        onAddPackageClick = onAddPackageClick,
+        onAddPackageClick = {
+            viewModel.trackAddPackageClick()
+            onAddPackageClick()
+        },
         onPackageClick = { id ->
+            viewModel.trackPackageDetailsClick()
             navController.navigate("package/$id")
         },
         onLongClick = { id ->
