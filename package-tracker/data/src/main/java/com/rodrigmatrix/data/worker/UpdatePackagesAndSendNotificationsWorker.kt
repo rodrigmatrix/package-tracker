@@ -5,9 +5,7 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.rodrigmatrix.domain.repository.SettingsRepository
 import com.rodrigmatrix.domain.usecase.SendPackageUpdatesNotificationsUseCase
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.onEach
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 

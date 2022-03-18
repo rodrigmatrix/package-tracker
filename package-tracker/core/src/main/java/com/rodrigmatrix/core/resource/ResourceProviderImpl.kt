@@ -2,7 +2,7 @@ package com.rodrigmatrix.core.resource
 
 import android.content.Context
 import android.graphics.drawable.Drawable
-import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.content.ContextCompat
 
 class ResourceProviderImpl(
     private val applicationContext: Context
@@ -13,6 +13,6 @@ class ResourceProviderImpl(
     }
 
     override fun getDrawable(drawableRes: Int): Drawable? {
-        return AppCompatResources.getDrawable(applicationContext, drawableRes)
+        return ContextCompat.getDrawable(applicationContext, drawableRes)
     }
 }

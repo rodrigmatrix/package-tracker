@@ -1,6 +1,3 @@
-import com.rodrigmatrix.packagetracker.buildSrc.Libs
-import com.rodrigmatrix.packagetracker.buildSrc.Versions
-
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
@@ -31,19 +28,16 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    namespace 'com.rodrigmatrix.domain'
 }
 
 dependencies {
     implementation project(':core')
 
-    implementation Libs.Kotlin.stdlib
-    implementation Libs.Coroutines.android
-    implementation Libs.Coroutines.core
+    implementation(Dependencies.kotlinStdlib)
+    implementation(Dependencies.kotlinCoroutinesCore)
+    implementation(Dependencies.kotlinCoroutinesAndroid)
 
-    testImplementation Libs.Test.junit
-    androidTestImplementation Libs.Test.Ext.junit
-    testImplementation Libs.Coroutines.test
-    testImplementation Libs.Test.mockk
-    testImplementation Libs.Test.core
-    testImplementation Libs.Test.turbine
+    testImplementation(Dependencies.junit)
+    testImplementation(Dependencies.mockk)
 }

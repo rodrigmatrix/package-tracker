@@ -1,6 +1,3 @@
-import com.rodrigmatrix.packagetracker.buildSrc.Libs
-import com.rodrigmatrix.packagetracker.buildSrc.Versions
-
 plugins {
     id 'com.android.library'
     id 'kotlin-android'
@@ -49,46 +46,47 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    namespace 'com.rodrigmatrix.data'
 }
 
 dependencies {
     implementation project(':core')
     implementation project(':domain')
 
-    implementation Libs.Kotlin.stdlib
-    implementation Libs.Coroutines.android
-    implementation Libs.Coroutines.core
+    implementation(Dependencies.androidxCore)
+    implementation(Dependencies.lifecycle)
+    implementation(Dependencies.androidxWindow)
 
-    // Firebase
-    implementation platform(Libs.Firebase.bom)
-    implementation Libs.Firebase.remoteConfig
-    implementation Libs.Firebase.analytics
+    implementation(Dependencies.kotlinStdlib)
+    implementation(Dependencies.kotlinCoroutinesCore)
+    implementation(Dependencies.kotlinCoroutinesAndroid)
+    implementation(Dependencies.kotlinSerialization)
 
-    // Room
-    implementation Libs.AndroidX.Room.runtime
-    kapt Libs.AndroidX.Room.compiler
-    implementation Libs.AndroidX.Room.ktx
+    implementation(Dependencies.composeUi)
 
-    // Okhttp
-    implementation Libs.Network.retrofit
-    implementation Libs.Network.okHttp
-    implementation Libs.Network.kotlinSerializationConverter
-    implementation Libs.Serialization.kotlinSerialization
+    implementation platform(Dependencies.firebaseBom)
+    implementation(Dependencies.firebaseRemoteConfig)
+    implementation(Dependencies.firebaseAnalytics)
 
-    // Work Manager
-    implementation Libs.AndroidX.workManager
+    implementation(Dependencies.roomRuntime)
+    kapt(Dependencies.roomCompiler)
+    implementation(Dependencies.roomKtx)
 
-    // Koin
-    implementation Libs.Koin.android
-    implementation Libs.Koin.androidCompat
-    implementation Libs.Koin.compose
-    implementation Libs.Koin.koinWorkManager
+    implementation(Dependencies.retrofit)
+    implementation(Dependencies.okHttp)
+    implementation(Dependencies.retrofitKotlinx)
+    implementation(Dependencies.okHttpLoggingInterceptor)
 
-    testImplementation Libs.Test.junit
-    androidTestImplementation Libs.Test.Ext.junit
-    testImplementation Libs.Coroutines.test
-    testImplementation Libs.Test.mockk
-    testImplementation Libs.Test.core
-    testImplementation Libs.Koin.test
-    testImplementation Libs.Test.turbine
+    implementation(Dependencies.koinAndroid)
+
+    implementation(Dependencies.jodaTime)
+
+    implementation(Dependencies.workManager)
+
+    implementation(Dependencies.playServicesLocation)
+
+    testImplementation(Dependencies.junit)
+
+    testImplementation(Dependencies.junit)
+    testImplementation(Dependencies.mockk)
 }

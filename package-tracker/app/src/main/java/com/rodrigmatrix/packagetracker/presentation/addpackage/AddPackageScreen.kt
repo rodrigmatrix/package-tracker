@@ -4,22 +4,26 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.res.Configuration
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.LinearProgressIndicator
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.ContentCopy
+import androidx.compose.material.icons.outlined.FileCopy
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.ProgressBarRangeInfo
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -124,33 +128,49 @@ fun AddPackageScreen(
                     bottom = 10.dp
                 )
         )
-
-        TextEdit(
-            value = viewState.packageIdText,
-            onValueChange = onPackageIdValueChanged,
-            keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Characters),
-            enabled = viewState.isEditPackage.not(),
-            singleLine = true,
-            label = {
-                Text(
-                    text = stringResource(R.string.package_id),
-                    color = MaterialTheme.colorScheme.onBackground,
-                )
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(
-                    start = 16.dp,
-                    end = 16.dp,
-                    bottom = 10.dp
-                )
-                .clickable {
-                    if (viewState.isEditPackage) {
-                        copyPackageIdToClipboard(context, viewState.packageIdText)
+        Box {
+            TextEdit(
+                value = viewState.packageIdText,
+                onValueChange = onPackageIdValueChanged,
+                keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Characters),
+                enabled = viewState.isEditPackage.not(),
+                singleLine = true,
+                label = {
+                    Text(
+                        text = stringResource(R.string.package_id),
+                        color = MaterialTheme.colorScheme.onBackground,
+                    )
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        start = 16.dp,
+                        end = 16.dp,
+                        bottom = 10.dp
+                    )
+                    .clickable {
+                        if (viewState.isEditPackage) {
+                            copyPackageIdToClipboard(context, viewState.packageIdText)
+                        }
                     }
+            )
+            if (viewState.isEditPackage) {
+                IconButton(
+                    onClick = {
+                        copyPackageIdToClipboard(context, viewState.packageIdText)
+                    },
+                    modifier = Modifier
+                        .align(Alignment.CenterEnd)
+                        .padding(start = 16.dp, end = 16.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.ContentCopy,
+                        tint = MaterialTheme.colorScheme.onBackground,
+                        contentDescription = stringResource(R.string.copy_package_id)
+                    )
                 }
-        )
-
+            }
+        }
         Button(
             onClick = onAddButtonClicked,
             enabled = viewState.isLoading.not(),

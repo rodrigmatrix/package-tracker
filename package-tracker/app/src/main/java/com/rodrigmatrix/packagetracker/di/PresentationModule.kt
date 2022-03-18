@@ -37,6 +37,7 @@ private val viewModelModules = module {
             addPackageUseCase = get(),
             getPackageStatusUseCase = get(),
             editPackageUseCase = get(),
+            resourceProvider = get(),
             packageTrackerAnalytics = get()
         )
     }

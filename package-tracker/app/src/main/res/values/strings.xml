@@ -9,9 +9,9 @@
     <string name="details">Detalhes</string>
     <string name="edit">Editar</string>
     <string name="back">Voltar</string>
-    <string name="add_package">Adicionar pacote</string>
+    <string name="add_package">Adicionar encomenda</string>
     <string name="add">Adicionar</string>
-    <string name="package_id">Código</string>
+    <string name="package_id">Código dos correios</string>
     <string name="name">Nome</string>
     <string name="edit_package">Editar encomenda</string>
     <string name="empty_packages">Nenhuma encomenda cadastrada. Adicione uma encomenda no botão abaixo</string>
@@ -23,4 +23,8 @@
     <string name="enable_notifications">Receber notificações de atualizações de encomendas</string>
     <string name="update_interval">Intervalo de atualização</string>
     <string name="x_minutes">%d minutos</string>
+    <string name="error_add_package">Erro ao adicionar encomenda</string>
+    <string name="error_edit_package">Erro ao editar encomenda</string>
+    <string name="error_load_package">Erro ao carregar encomenda</string>
+    <string name="copy_package_id">Copiar código da encomenda</string>
 </resources>

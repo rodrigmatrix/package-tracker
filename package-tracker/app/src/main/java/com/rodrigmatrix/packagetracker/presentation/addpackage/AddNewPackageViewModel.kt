@@ -1,11 +1,15 @@
 package com.rodrigmatrix.packagetracker.presentation.addpackage
 
+import androidx.annotation.StringRes
 import androidx.lifecycle.viewModelScope
+import com.rodrigmatrix.core.resource.ResourceProvider
 import com.rodrigmatrix.core.viewmodel.ViewModel
 import com.rodrigmatrix.data.analytics.PackageTrackerAnalytics
+import com.rodrigmatrix.data.exceptions.PackageNotFoundException
 import com.rodrigmatrix.domain.usecase.AddPackageUseCase
 import com.rodrigmatrix.domain.usecase.EditPackageUseCase
 import com.rodrigmatrix.domain.usecase.GetPackageStatusUseCase
+import com.rodrigmatrix.packagetracker.R
 import com.rodrigmatrix.packagetracker.analytics.ADD_PACKAGE_BUTTON_CLICK
 import com.rodrigmatrix.packagetracker.analytics.EDIT_PACKAGE_NAME_BUTTON_CLICK
 import com.rodrigmatrix.packagetracker.presentation.addpackage.AddPackageViewEffect.PackageAdded
@@ -25,6 +29,7 @@ class AddNewPackageViewModel(
     private val getPackageStatusUseCase: GetPackageStatusUseCase,
     private val editPackageUseCase: EditPackageUseCase,
     private val packageTrackerAnalytics: PackageTrackerAnalytics,
+    private val resourceProvider: ResourceProvider,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel<AddPackageViewState, AddPackageViewEffect>(AddPackageViewState()) {
 
@@ -42,7 +47,7 @@ class AddNewPackageViewModel(
                 .onStart { setState { it.copy(isLoading = true) } }
                 .onCompletion { setState { it.copy(isLoading = false) } }
                 .catch { error ->
-                    setEffect { ShowToast(error.message.orEmpty()) }
+                    error.handleError(R.string.error_load_package)
                 }
                 .collect { userPackage ->
                     setState {
@@ -65,13 +70,9 @@ class AddNewPackageViewModel(
                 .onStart { setState { it.copy(isLoading = true) } }
                 .onCompletion { setState { it.copy(isLoading = false) } }
                 .catch { error ->
-                    setEffect { ShowToast(error.message.orEmpty()) }
+                    error.handleError(R.string.error_edit_package)
                 }
-                .collect {
-                    setEffect {
-                        PackageAdded
-                    }
-                }
+                .collect { setEffect { PackageAdded } }
         }
     }
 
@@ -85,7 +86,7 @@ class AddNewPackageViewModel(
                 .onStart { setState { it.copy(isLoading = true) } }
                 .onCompletion { setState { it.copy(isLoading = false) } }
                 .catch { error ->
-                    setEffect { ShowToast(error.message.orEmpty()) }
+                    error.handleError(R.string.error_add_package)
                 }
                 .collect { setEffect { PackageAdded } }
         }
@@ -97,5 +98,13 @@ class AddNewPackageViewModel(
 
     fun onPackageIdChanged(value: String) {
         setState { it.copy(packageIdText = value) }
+    }
+
+    private fun Throwable.handleError(@StringRes defaultError: Int) {
+        val error = when (this) {
+            is PackageNotFoundException -> this.error
+            else -> resourceProvider.getString(defaultError)
+        }
+        setEffect { ShowToast(error) }
     }
 }

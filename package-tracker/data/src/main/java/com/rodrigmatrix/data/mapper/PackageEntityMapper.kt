@@ -1,12 +1,17 @@
 package com.rodrigmatrix.data.mapper
 
 import com.rodrigmatrix.core.mapper.Mapper
+import com.rodrigmatrix.data.exceptions.PackageNotFoundException
 import com.rodrigmatrix.data.model.*
 
 class PackageEntityMapper: Mapper<PackageStatusResponse, UserPackageAndUpdatesEntity> {
 
     override fun map(source: PackageStatusResponse): UserPackageAndUpdatesEntity {
-        val userPackage = source.objeto?.firstOrNull() ?: throw Exception()
+        val userPackage = source.objeto?.firstOrNull() ?: throw PackageNotFoundException("")
+
+        if (userPackage.sigla.isNullOrEmpty()) {
+            throw PackageNotFoundException(userPackage.categoria.orEmpty())
+        }
 
         return UserPackageAndUpdatesEntity(
             id = userPackage.numero.orEmpty(),
