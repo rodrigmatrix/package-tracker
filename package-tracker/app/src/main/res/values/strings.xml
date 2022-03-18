@@ -2,7 +2,6 @@
     <string name="app_name">Rastreio de Encomendas</string>
     <string name="packages">Encomendas</string>
     <string name="settings">Configurações</string>
-    <string name="home">Home</string>
     <string name="delete_package_title">Deseja realmente deletar essa encomenda?</string>
     <string name="delete">Deletar</string>
     <string name="cancel">Cancelar</string>

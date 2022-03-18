@@ -11,8 +11,8 @@ sealed class Screen(
     @StringRes val resourceId: Int,
     val image: ImageVector
 ) {
-    object Home : Screen("home", R.string.home, Icons.Filled.Home)
+    object Packages : Screen("home", R.string.packages, Icons.Filled.LocalShipping)
     object Settings : Screen("settings", R.string.settings, Icons.Filled.Settings)
-    object Packages : Screen("package/{packageId}", R.string.packages, Icons.Filled.Construction)
+    object PackageDetails : Screen("package/{packageId}", R.string.details, Icons.Filled.Construction)
     object About : Screen("about", R.string.about, Icons.Filled.Info)
 }

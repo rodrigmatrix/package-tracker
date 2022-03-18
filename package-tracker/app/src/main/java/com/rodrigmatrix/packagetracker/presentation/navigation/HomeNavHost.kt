@@ -18,9 +18,9 @@ fun HomeNavHost(
 ) {
     NavHost(
         navHostController,
-        startDestination = Screen.Home.route
+        startDestination = Screen.Packages.route
     ) {
-        composable(Screen.Home.route) {
+        composable(Screen.Packages.route) {
             PackagesScreen(
                 navHostController,
                 onAddPackageClick = {
@@ -32,7 +32,7 @@ fun HomeNavHost(
         composable(Screen.Settings.route) {
             SettingsScreen()
         }
-        composable(Screen.Packages.route) { backStackEntry ->
+        composable(Screen.PackageDetails.route) { backStackEntry ->
             DetailsScreen(
                 backStackEntry.arguments?.getString("packageId").orEmpty(),
                 navHostController,

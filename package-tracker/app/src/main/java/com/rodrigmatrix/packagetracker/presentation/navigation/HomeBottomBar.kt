@@ -20,7 +20,7 @@ fun HomeBottomBar(
     if (currentDestination?.route?.contains("package")?.not() == true) {
         NavigationBar {
             listOf(
-                Screen.Home,
+                Screen.Packages,
                 Screen.Settings,
                 Screen.About
             ).forEach { screen ->
