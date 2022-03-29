@@ -1,9 +1,7 @@
 package com.rodrigmatrix.packagetracker
 
 import android.app.Application
-import androidx.work.ExistingPeriodicWorkPolicy
-import androidx.work.PeriodicWorkRequest
-import androidx.work.WorkManager
+import androidx.work.*
 import com.rodrigmatrix.core.di.coreModule
 import com.rodrigmatrix.data.util.NotificationService
 import com.rodrigmatrix.data.worker.UpdatePackagesAndSendNotificationsWorker
@@ -37,13 +35,16 @@ class PackageTrackerApp: Application() {
     }
 
     private fun startNotificationWorker() {
+        val workerConstraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
         val periodicWorkRequest = PeriodicWorkRequest.Builder(
             UpdatePackagesAndSendNotificationsWorker::class.java,
+            1,
+            TimeUnit.HOURS,
             30,
-            TimeUnit.MINUTES,
-            10,
             TimeUnit.MINUTES
-        ).build()
+        ).setConstraints(workerConstraints).build()
 
         WorkManager
             .getInstance(this)

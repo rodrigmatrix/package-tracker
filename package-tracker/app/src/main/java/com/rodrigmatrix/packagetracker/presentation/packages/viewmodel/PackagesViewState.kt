@@ -1,11 +1,14 @@
-package com.rodrigmatrix.packagetracker.presentation.packages
+package com.rodrigmatrix.packagetracker.presentation.packages.viewmodel
 
 import com.rodrigmatrix.core.viewmodel.ViewState
 import com.rodrigmatrix.domain.entity.UserPackage
+import com.rodrigmatrix.packagetracker.presentation.packages.model.PackagesFilter
 
 data class PackagesViewState(
     val isRefreshing: Boolean = true,
     val packagesList: List<UserPackage> = emptyList(),
+    val packagesListFilter: PackagesFilter = PackagesFilter.ALL,
+    val hasPackages: Boolean = false,
     val deletePackageDialogVisible: Boolean = false,
     val selectedPackageId: String = "",
     val exception: Throwable? = null
@@ -23,8 +26,9 @@ data class PackagesViewState(
         return this.copy(deletePackageDialogVisible = false, selectedPackageId = "")
     }
 
-    fun successState(packagesList: List<UserPackage>): PackagesViewState {
+    fun successState(hasPackages: Boolean, packagesList: List<UserPackage>): PackagesViewState {
         return this.copy(
+            hasPackages = hasPackages,
             isRefreshing = false,
             packagesList = packagesList,
             deletePackageDialogVisible = false,

@@ -3,7 +3,7 @@ package com.rodrigmatrix.packagetracker.di
 import com.rodrigmatrix.domain.usecase.GetPackageProgressStatusUseCase
 import com.rodrigmatrix.packagetracker.presentation.addpackage.AddNewPackageViewModel
 import com.rodrigmatrix.packagetracker.presentation.details.PackagesDetailsViewModel
-import com.rodrigmatrix.packagetracker.presentation.packages.PackagesViewModel
+import com.rodrigmatrix.packagetracker.presentation.packages.viewmodel.PackagesViewModel
 import com.rodrigmatrix.packagetracker.presentation.settings.SettingsViewModel
 import com.rodrigmatrix.packagetracker.presentation.utils.ThemeUtils
 import com.rodrigmatrix.packagetracker.presentation.utils.ThemeUtilsImpl

@@ -1,5 +1,6 @@
 package com.rodrigmatrix.packagetracker.presentation.packages
 
+import com.rodrigmatrix.packagetracker.presentation.packages.viewmodel.PackagesViewState
 import com.rodrigmatrix.packagetracker.presentation.stub.PackageTestStubs.deliveredPackage
 import com.rodrigmatrix.packagetracker.presentation.stub.PackageTestStubs.inProgressPackage
 import com.rodrigmatrix.packagetracker.presentation.theme.PackageTrackerTheme

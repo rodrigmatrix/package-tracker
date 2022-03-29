@@ -1,8 +1,9 @@
-package com.rodrigmatrix.packagetracker.presentation.packages
+package com.rodrigmatrix.packagetracker.presentation.packages.viewmodel
 
 import androidx.lifecycle.viewModelScope
 import com.rodrigmatrix.core.viewmodel.ViewModel
 import com.rodrigmatrix.data.analytics.PackageTrackerAnalytics
+import com.rodrigmatrix.domain.entity.UserPackage
 import com.rodrigmatrix.domain.usecase.DeletePackageUseCase
 import com.rodrigmatrix.domain.usecase.FetchAllPackagesUseCase
 import com.rodrigmatrix.domain.usecase.GetAllPackagesUseCase
@@ -10,6 +11,7 @@ import com.rodrigmatrix.domain.usecase.GetPackageProgressStatusUseCase
 import com.rodrigmatrix.packagetracker.analytics.ADD_PACKAGE_FAB_CLICK
 import com.rodrigmatrix.packagetracker.analytics.PACKAGE_DELETE_CLICK
 import com.rodrigmatrix.packagetracker.analytics.PACKAGE_DETAILS_CLICK
+import com.rodrigmatrix.packagetracker.presentation.packages.model.PackagesFilter
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
@@ -43,12 +45,25 @@ class PackagesViewModel(
                 .collect { packagesList ->
                     setState {
                         it.successState(
-                            packagesList.sortedBy { userPackage ->
-                                getPackageProgressStatusUseCase(userPackage).delivered
-                            }
+                            hasPackages = packagesList.isNotEmpty(),
+                            packagesList.filterPackages(),
                         )
                     }
                 }
+        }
+    }
+
+    private fun List<UserPackage>.filterPackages(): List<UserPackage> {
+        return when (viewState.value.packagesListFilter) {
+            PackagesFilter.ALL -> this
+            PackagesFilter.IN_PROGRESS -> this.filter {
+                val packageStatus = getPackageProgressStatusUseCase(it)
+                packageStatus.inProgress && packageStatus.delivered.not()
+            }
+            PackagesFilter.DELIVERED -> this.filter {
+                val packageStatus = getPackageProgressStatusUseCase(it)
+                packageStatus.delivered
+            }
         }
     }
 
@@ -79,6 +94,11 @@ class PackagesViewModel(
 
     fun hideDeleteDialog() {
         setState { it.hideDialogDelete() }
+    }
+
+    fun onFilterChanged(newFilter: PackagesFilter) {
+        setState { it.copy(packagesListFilter = newFilter) }
+        loadPackages()
     }
 
     fun trackAddPackageClick() {

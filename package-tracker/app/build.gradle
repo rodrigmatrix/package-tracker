@@ -13,8 +13,8 @@ android {
         applicationId "com.rodrigmatrix.packagetracker"
         minSdk Versions.minSdkVersion
         targetSdk Versions.targetSdkVersion
-        versionCode 8
-        versionName "1.0.6"
+        versionCode 10
+        versionName "1.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

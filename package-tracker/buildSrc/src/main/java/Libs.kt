@@ -19,7 +19,7 @@ object Dependencies {
     const val composeIconsExtended = "androidx.compose.material:material-icons-extended:${Versions.composeVersion}"
     const val composePreview = "androidx.compose.ui:ui-tooling-preview:${Versions.composeVersion}"
     const val composeActivity = "androidx.activity:activity-compose:${Versions.composeVersion}"
-    const val composeNavigation = "androidx.navigation:navigation-compose:2.5.0-alpha03"
+    const val composeNavigation = "androidx.navigation:navigation-compose:2.4.0"
     const val accompanistNavigation = "com.google.accompanist:accompanist-navigation-animation:0.16.1"
     const val accompanistFlowLayout = "com.google.accompanist:accompanist-flowlayout:0.24.0-alpha"
     const val accompanistSwipeRefresh = "com.google.accompanist:accompanist-swiperefresh:0.17.0"

@@ -4,19 +4,14 @@ import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.*
@@ -41,6 +36,10 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.rodrigmatrix.domain.entity.UserPackage
 import com.rodrigmatrix.packagetracker.R
 import com.rodrigmatrix.packagetracker.presentation.components.DeletePackageDialog
+import com.rodrigmatrix.packagetracker.presentation.components.SelectableChip
+import com.rodrigmatrix.packagetracker.presentation.packages.model.PackagesFilter
+import com.rodrigmatrix.packagetracker.presentation.packages.viewmodel.PackagesViewModel
+import com.rodrigmatrix.packagetracker.presentation.packages.viewmodel.PackagesViewState
 import com.rodrigmatrix.packagetracker.presentation.theme.PackageTrackerTheme
 import com.rodrigmatrix.packagetracker.presentation.utils.PreviewPackageItemsList
 import org.koin.androidx.compose.getViewModel
@@ -72,7 +71,10 @@ fun PackagesScreen(
         onConfirmDeletePackage = {
             viewModel.deletePackage(viewState.selectedPackageId)
         },
-        onDismissDeletePackageDialog = viewModel::hideDeleteDialog
+        onDismissDeletePackageDialog = viewModel::hideDeleteDialog,
+        onFilterChanged = { newFilter ->
+            viewModel.onFilterChanged(newFilter)
+        }
     )
 }
 
@@ -85,7 +87,8 @@ fun PackagesScreen(
     onPackageClick: (id: String) -> Unit,
     onLongClick: (id: String) -> Unit,
     onConfirmDeletePackage: () -> Unit,
-    onDismissDeletePackageDialog: () -> Unit
+    onDismissDeletePackageDialog: () -> Unit,
+    onFilterChanged: (PackagesFilter) -> Unit
 ) {
     if (viewState.deletePackageDialogVisible) {
         DeletePackageDialog(onConfirmDeletePackage, onDismissDeletePackageDialog)
@@ -112,18 +115,20 @@ fun PackagesScreen(
             floatingActionButtonPosition = FabPosition.Center
         ) {
             when {
-                viewState.packagesList.isEmpty() && !viewState.isRefreshing -> {
+                viewState.packagesList.isEmpty() && !viewState.isRefreshing && viewState.hasPackages.not() -> {
                     PackagesListEmptyState()
                 }
                 else -> {
                     PackagesList(
+                        packagesList = viewState.packagesList,
+                        selectedFilter = viewState.packagesListFilter,
                         onItemClick = {
                             onPackageClick(it)
                         },
                         onLongClick = {
                             onLongClick(it)
                         },
-                        viewState.packagesList
+                        onFilterChanged = onFilterChanged
                     )
                 }
             }
@@ -131,34 +136,103 @@ fun PackagesScreen(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun PackagesList(
+    packagesList: List<UserPackage>,
+    selectedFilter: PackagesFilter,
     onItemClick: (id: String) -> Unit,
     onLongClick: (id: String) -> Unit,
-    packagesList: List<UserPackage>
+    onFilterChanged: (PackagesFilter) -> Unit
 ) {
-    Box(Modifier.fillMaxSize()) {
-        AnimatedVisibility(
-            visible = packagesList.isNotEmpty(),
-            enter = fadeIn(),
-            exit = fadeOut()
-        ) {
-            LazyColumn(
-                contentPadding = PaddingValues(bottom = 200.dp),
-                modifier = Modifier
-                    .fillMaxSize()
-                    .testTag(PACKAGES_LIST_TAG)
-            ) {
-                items(packagesList) { packageItem ->
-                    Package(
-                        onItemClick,
-                        onLongClick,
-                        packageItem
-                    )
-                }
+    LazyColumn(
+        contentPadding = PaddingValues(bottom = 200.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .testTag(PACKAGES_LIST_TAG)
+    ) {
+        stickyHeader {
+            PackagesFilterHeader(
+                selectedFilter = selectedFilter,
+                onSelectionChanged = onFilterChanged
+            )
+        }
+        if (packagesList.isEmpty()) {
+            item {
+                NoPackagesForFilter()
+            }
+        } else {
+            items(packagesList) { packageItem ->
+                Package(
+                    onItemClick,
+                    onLongClick,
+                    packageItem
+                )
             }
         }
     }
+}
+
+@Composable
+fun NoPackagesForFilter() {
+    Column(
+        Modifier
+            .fillMaxSize()
+            .padding(bottom = 100.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        val composition by rememberLottieComposition(RawRes(R.raw.empty_box))
+        val progress by animateLottieCompositionAsState(composition)
+        LottieAnimation(
+            composition,
+            progress,
+            modifier = Modifier
+                .size(width = 200.dp, height = 200.dp)
+        )
+        Text(
+            text = stringResource(R.string.no_packages_filter),
+            textAlign = TextAlign.Center,
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier
+                .padding(
+                    start = 16.dp,
+                    end = 16.dp,
+                    bottom = 100.dp
+                )
+        )
+    }
+}
+
+@Composable
+fun PackagesFilterHeader(
+    selectedFilter: PackagesFilter,
+    onSelectionChanged: (PackagesFilter) -> Unit
+) {
+    Spacer(Modifier.height(10.dp))
+    Row(
+        horizontalArrangement = Arrangement.Center,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        SelectableChip(
+            title = stringResource(R.string.all),
+            isSelected = selectedFilter == PackagesFilter.ALL,
+            onclick = { onSelectionChanged(PackagesFilter.ALL) }
+        )
+        Spacer(Modifier.width(10.dp))
+        SelectableChip(
+            title = stringResource(R.string.in_progress),
+            isSelected = selectedFilter == PackagesFilter.IN_PROGRESS,
+            onclick = { onSelectionChanged(PackagesFilter.IN_PROGRESS) }
+        )
+        Spacer(Modifier.width(10.dp))
+        SelectableChip(
+            title = stringResource(R.string.delivered),
+            isSelected = selectedFilter == PackagesFilter.DELIVERED,
+            onclick = { onSelectionChanged(PackagesFilter.DELIVERED) }
+        )
+    }
+    Spacer(Modifier.height(10.dp))
 }
 
 @Composable
@@ -210,7 +284,8 @@ fun PackagesPreview() {
             onPackageClick = { },
             onLongClick =  { },
             onConfirmDeletePackage = { },
-            onDismissDeletePackageDialog = { }
+            onDismissDeletePackageDialog = { },
+            onFilterChanged = { }
         )
     }
 }
@@ -227,7 +302,8 @@ fun PackagesEmptyStatePreview() {
             onPackageClick = { },
             onLongClick =  { },
             onConfirmDeletePackage = { },
-            onDismissDeletePackageDialog = { }
+            onDismissDeletePackageDialog = { },
+            onFilterChanged = { }
         )
     }
 }
