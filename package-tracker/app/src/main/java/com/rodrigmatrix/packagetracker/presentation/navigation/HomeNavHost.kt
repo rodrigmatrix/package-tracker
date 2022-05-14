@@ -1,5 +1,6 @@
 package com.rodrigmatrix.packagetracker.presentation.navigation
 
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavHostController
@@ -13,15 +14,17 @@ import com.rodrigmatrix.packagetracker.presentation.settings.SettingsScreen
 
 @Composable
 fun HomeNavHost(
+    windowSizeClass: WindowSizeClass,
     navHostController: NavHostController,
     fragmentManager: FragmentManager
 ) {
     NavHost(
         navHostController,
-        startDestination = Screen.Packages.route
+        startDestination = HomeRoutes.Packages.route
     ) {
-        composable(Screen.Packages.route) {
+        composable(HomeRoutes.Packages.route) {
             PackagesScreen(
+                windowSizeClass = windowSizeClass,
                 navHostController,
                 onAddPackageClick = {
                     AddNewPackageBottomSheetFragment()
@@ -29,17 +32,17 @@ fun HomeNavHost(
                 }
             )
         }
-        composable(Screen.Settings.route) {
+        composable(HomeRoutes.Settings.route) {
             SettingsScreen()
         }
-        composable(Screen.PackageDetails.route) { backStackEntry ->
+        composable(PackageDetails().route) { backStackEntry ->
             DetailsScreen(
                 backStackEntry.arguments?.getString("packageId").orEmpty(),
                 navHostController,
                 fragmentManager
             )
         }
-        composable(Screen.About.route) {
+        composable(HomeRoutes.About.route) {
             AboutScreen()
         }
     }

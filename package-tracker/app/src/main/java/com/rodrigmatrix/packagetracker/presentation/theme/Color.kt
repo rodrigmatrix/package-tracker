@@ -6,6 +6,7 @@ val theme_light_alert = Color(0xC6FFD500)
 val theme_light_shipped = Color(0xFF2E62FD)
 val theme_light_inRoute = Color(0xFFFFA828)
 val theme_light_inProgress = Color(0xFF006877)
+val theme_light_done_variant = Color(0xFF03A9F4)
 val theme_light_done = Color(0xFF05B648)
 val theme_light_disabled = Color(0xFF414940)
 

@@ -30,4 +30,5 @@
     <string name="in_progress">Em progresso</string>
     <string name="delivered">Entregue</string>
     <string name="no_packages_filter">Nenhuma encomenda encontrada para esse filtro</string>
+    <string name="delete_package">Deletar encomenda</string>
 </resources>

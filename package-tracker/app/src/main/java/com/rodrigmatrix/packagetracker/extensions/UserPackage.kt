@@ -46,6 +46,15 @@ fun StatusUpdate?.getStatusIconAndColor(): Pair<Color, ImageVector> {
         statusDescription.contains("postado") ->
             Pair(theme_light_shipped, Icons.Outlined.FlightTakeoff)
 
+        statusDescription.contains("fiscalização aduaneira finalizada") ->
+            Pair(theme_light_done_variant, Icons.Outlined.Info)
+
+        statusDescription.contains("objeto recebido pelos correios do brasil") ->
+            Pair(theme_light_shipped, Icons.Outlined.FlightLand)
+
+        statusDescription.contains("objeto recebido na unidade de exportação do país de origem") ->
+            Pair(theme_light_shipped, Icons.Outlined.Flight)
+
         else -> Pair(theme_light_alert, Icons.Outlined.Info)
     }
 }

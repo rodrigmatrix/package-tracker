@@ -105,9 +105,17 @@ fun Address(address: StatusAddress?, isDestination: Boolean) {
         )
 
         Text(
-            text = "${address.localName}-${address.state}",
+            text = address.getLocationText(),
             style = MaterialTheme.typography.bodySmall
         )
+    }
+}
+
+private fun StatusAddress.getLocationText(): String {
+    return when {
+        localName.isNotEmpty() && state.isEmpty() -> localName
+        localName.isEmpty() && state.isNotEmpty() -> state
+        else -> "$localName - $state"
     }
 }
 

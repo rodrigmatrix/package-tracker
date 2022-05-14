@@ -58,7 +58,7 @@ class PackagesViewModel(
             PackagesFilter.ALL -> this
             PackagesFilter.IN_PROGRESS -> this.filter {
                 val packageStatus = getPackageProgressStatusUseCase(it)
-                packageStatus.inProgress && packageStatus.delivered.not()
+                packageStatus.delivered.not()
             }
             PackagesFilter.DELIVERED -> this.filter {
                 val packageStatus = getPackageProgressStatusUseCase(it)

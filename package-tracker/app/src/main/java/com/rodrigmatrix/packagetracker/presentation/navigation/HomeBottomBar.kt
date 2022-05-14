@@ -19,11 +19,7 @@ fun HomeBottomBar(
     val currentDestination = navBackStackEntry?.destination
     if (currentDestination?.route?.contains("package")?.not() == true) {
         NavigationBar {
-            listOf(
-                Screen.Packages,
-                Screen.Settings,
-                Screen.About
-            ).forEach { screen ->
+            HomeRoutes.values().forEach { screen ->
                 NavigationBarItem(
                     icon = { Icon(screen.image, contentDescription = null) },
                     label = { Text(stringResource(screen.resourceId)) },

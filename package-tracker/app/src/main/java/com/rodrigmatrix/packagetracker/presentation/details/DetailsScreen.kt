@@ -2,10 +2,7 @@ package com.rodrigmatrix.packagetracker.presentation.details
 
 import android.content.res.Configuration
 import androidx.compose.animation.*
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -86,7 +83,7 @@ fun DetailsScreen(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 private fun DetailsScreen(
     viewState: PackageStatusViewState,
@@ -120,28 +117,25 @@ private fun DetailsScreen(
                     IconButton(onClick = onEditButtonClick) {
                         Icon(
                             imageVector = Icons.Outlined.Edit,
-                            modifier = Modifier
-                                .padding(horizontal = 12.dp, vertical = 16.dp)
-                                .height(24.dp),
-                            contentDescription = null
+                            contentDescription = stringResource(R.string.edit_package)
                         )
                     }
                     IconButton(onClick = onDeleteButtonClick) {
                         Icon(
                             imageVector = Icons.Outlined.Delete,
                             tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier
-                                .padding(horizontal = 12.dp, vertical = 16.dp)
-                                .height(24.dp),
-                            contentDescription = null
+                            contentDescription = stringResource(R.string.delete_package)
                         )
                     }
                 }
             )
         }
-    ) {
+    ) { innerPadding ->
         Column(
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .padding(innerPadding)
+                .consumedWindowInsets(innerPadding)
         ) {
             viewState.packageProgressStatus?.let {
                 PackageStatus(it)

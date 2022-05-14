@@ -13,8 +13,8 @@ android {
         applicationId "com.rodrigmatrix.packagetracker"
         minSdk Versions.minSdkVersion
         targetSdk Versions.targetSdkVersion
-        versionCode 10
-        versionName "1.1"
+        versionCode 11
+        versionName "1.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -77,7 +77,7 @@ dependencies {
 
     implementation(Dependencies.composeUi)
     implementation(Dependencies.composeMaterial3)
-    implementation(Dependencies.composeMaterial2)
+    implementation(Dependencies.composeMaterial3WindowSizeClass)
     implementation(Dependencies.composeIconsExtended)
     implementation(Dependencies.composePreview)
     implementation(Dependencies.composeActivity)
