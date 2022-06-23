@@ -25,11 +25,7 @@ fun HomeNavHost(
         composable(HomeRoutes.Packages.route) {
             PackagesScreen(
                 windowSizeClass = windowSizeClass,
-                navHostController,
-                onAddPackageClick = {
-                    AddNewPackageBottomSheetFragment()
-                        .show(fragmentManager, "")
-                }
+                navHostController
             )
         }
         composable(HomeRoutes.Settings.route) {

@@ -6,11 +6,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.*
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
@@ -49,7 +47,6 @@ const val PACKAGES_LIST_TAG = "packages_list_tag"
 fun PackagesScreen(
     windowSizeClass: WindowSizeClass,
     navController: NavController,
-    onAddPackageClick: () -> Unit,
     viewModel: PackagesViewModel = getViewModel()
 ) {
     val viewState by viewModel.viewState.collectAsState()
@@ -58,10 +55,6 @@ fun PackagesScreen(
         viewState = viewState,
         windowSizeClass = windowSizeClass,
         onSwipeRefresh = viewModel::fetchPackages,
-        onAddPackageClick = {
-            viewModel.trackAddPackageClick()
-            onAddPackageClick()
-        },
         onPackageClick = { id ->
             viewModel.trackPackageDetailsClick()
             navController.navigate("package/$id")
@@ -79,13 +72,11 @@ fun PackagesScreen(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun PackagesScreen(
     viewState: PackagesViewState,
     windowSizeClass: WindowSizeClass,
     onSwipeRefresh: () -> Unit,
-    onAddPackageClick: () -> Unit,
     onPackageClick: (id: String) -> Unit,
     onLongClick: (id: String) -> Unit,
     onConfirmDeletePackage: () -> Unit,
@@ -100,45 +91,23 @@ fun PackagesScreen(
         onRefresh = onSwipeRefresh,
         swipeEnabled = viewState.packagesList.isNotEmpty()
     ) {
-        Scaffold(
-            floatingActionButton = {
-                LargeFloatingActionButton(
-                    onClick = onAddPackageClick,
-                    modifier = Modifier.padding(bottom = 80.dp),
-                    shape = RoundedCornerShape(100)
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.Add,
-                        modifier = Modifier.size(24.dp),
-                        contentDescription = null
-                    )
+        Column(modifier = Modifier.fillMaxSize()) {
+            when {
+                viewState.packagesList.isEmpty() && !viewState.isRefreshing && viewState.hasPackages.not() -> {
+                    PackagesListEmptyState()
                 }
-            },
-            floatingActionButtonPosition = FabPosition.Center
-        ) { innerPadding ->
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .padding(innerPadding)
-                    .consumedWindowInsets(innerPadding)
-            ) {
-                when {
-                    viewState.packagesList.isEmpty() && !viewState.isRefreshing && viewState.hasPackages.not() -> {
-                        PackagesListEmptyState()
-                    }
-                    else -> {
-                        PackagesList(
-                            packagesList = viewState.packagesList,
-                            selectedFilter = viewState.packagesListFilter,
-                            onItemClick = {
-                                onPackageClick(it)
-                            },
-                            onLongClick = {
-                                onLongClick(it)
-                            },
-                            onFilterChanged = onFilterChanged
-                        )
-                    }
+                else -> {
+                    PackagesList(
+                        packagesList = viewState.packagesList,
+                        selectedFilter = viewState.packagesListFilter,
+                        onItemClick = {
+                            onPackageClick(it)
+                        },
+                        onLongClick = {
+                            onLongClick(it)
+                        },
+                        onFilterChanged = onFilterChanged
+                    )
                 }
             }
         }
@@ -292,7 +261,6 @@ fun PackagesPreview() {
                 ),
                 windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(maxWidth, maxHeight)),
                 onSwipeRefresh = { },
-                onAddPackageClick = { },
                 onPackageClick = { },
                 onLongClick = { },
                 onConfirmDeletePackage = { },
@@ -314,7 +282,6 @@ fun PackagesEmptyStatePreview() {
                 viewState = PackagesViewState(isRefreshing = false),
                 windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(maxWidth, maxHeight)),
                 onSwipeRefresh = { },
-                onAddPackageClick = { },
                 onPackageClick = { },
                 onLongClick = { },
                 onConfirmDeletePackage = { },
