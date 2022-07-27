@@ -17,7 +17,7 @@ fun HomeBottomBar(
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
-    if (currentDestination?.route?.contains("package")?.not() == true) {
+    if (HomeRoutes.values().any { it.route == currentDestination?.route }) {
         NavigationBar {
             HomeRoutes.values().forEach { screen ->
                 NavigationBarItem(
@@ -29,9 +29,9 @@ fun HomeBottomBar(
                             launchSingleTop = true
                         }
                     },
-                    selected = currentDestination.hierarchy.any {
+                    selected = currentDestination?.hierarchy?.any {
                         it.route == screen.route
-                    }
+                    } ?: false
                 )
             }
         }

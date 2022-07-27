@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 
+private const val PACKAGE_NOTIFICATIONS_PERMISSION_REQUESTED = "package_notifications_requested"
 private const val PACKAGE_NOTIFICATIONS_ENABLED = "package_notifications_enabled"
 private const val PACKAGE_NOTIFICATIONS_INTERVAL_MINUTES = "package_notifications_interval_minutes"
 private const val THEME_PREF = "app_theme_pref"
@@ -28,27 +29,26 @@ class SettingsRepositoryImpl(
 ): SettingsRepository {
 
     override fun getThemeOptions(): Flow<List<SingleChoicePreference<String>>> {
-        val selected = getSelectedThemeKey()
-
-        val themeOptionsList = listOf(
-            SingleChoicePreference(
-                resourceProvider.getString(R.string.system_default),
-                SYSTEM_DEFAULT,
-                selected == SYSTEM_DEFAULT
-            ),
-            SingleChoicePreference(
-                resourceProvider.getString(R.string.light_theme),
-                LIGHT_THEME,
-                selected == LIGHT_THEME
-            ),
-            SingleChoicePreference(
-                resourceProvider.getString(R.string.dark_theme),
-                DARK_THEME,
-                selected == DARK_THEME
-            )
-        )
-
         return flow {
+            val selected = getSelectedThemeKey()
+
+            val themeOptionsList = listOf(
+                SingleChoicePreference(
+                    resourceProvider.getString(R.string.system_default),
+                    SYSTEM_DEFAULT,
+                    selected == SYSTEM_DEFAULT
+                ),
+                SingleChoicePreference(
+                    resourceProvider.getString(R.string.light_theme),
+                    LIGHT_THEME,
+                    selected == LIGHT_THEME
+                ),
+                SingleChoicePreference(
+                    resourceProvider.getString(R.string.dark_theme),
+                    DARK_THEME,
+                    selected == DARK_THEME
+                )
+            )
             emit(themeOptionsList)
         }
     }
@@ -128,6 +128,23 @@ class SettingsRepositoryImpl(
                 )
             )
             emit(intervalList)
+        }
+    }
+
+    override fun getPackageNotificationRequested(): Flow<Boolean> {
+        return flow {
+            val preference = sharedPrefDataSource.getBoolean(
+                PACKAGE_NOTIFICATIONS_PERMISSION_REQUESTED,
+                false
+            )
+            emit(preference)
+        }
+    }
+
+    override fun setPackageNotificationRequested(requested: Boolean): Flow<Unit> {
+        return flow {
+            sharedPrefDataSource.setBoolean(PACKAGE_NOTIFICATIONS_PERMISSION_REQUESTED, requested)
+            emit(Unit)
         }
     }
 }

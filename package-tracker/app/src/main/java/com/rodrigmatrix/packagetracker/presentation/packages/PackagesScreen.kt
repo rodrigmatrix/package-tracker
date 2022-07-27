@@ -1,6 +1,9 @@
 package com.rodrigmatrix.packagetracker.presentation.packages
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.content.res.Configuration
+import android.os.Build
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -12,10 +15,12 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -23,6 +28,7 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec.RawRes
@@ -34,10 +40,13 @@ import com.rodrigmatrix.domain.entity.UserPackage
 import com.rodrigmatrix.packagetracker.R
 import com.rodrigmatrix.packagetracker.presentation.components.DeletePackageDialog
 import com.rodrigmatrix.packagetracker.presentation.components.SelectableChip
+import com.rodrigmatrix.packagetracker.presentation.navigation.NavigationRoutes
 import com.rodrigmatrix.packagetracker.presentation.packages.model.PackagesFilter
+import com.rodrigmatrix.packagetracker.presentation.packages.viewmodel.PackagesViewEffect
 import com.rodrigmatrix.packagetracker.presentation.packages.viewmodel.PackagesViewModel
 import com.rodrigmatrix.packagetracker.presentation.packages.viewmodel.PackagesViewState
 import com.rodrigmatrix.packagetracker.presentation.theme.PackageTrackerTheme
+import com.rodrigmatrix.packagetracker.presentation.utils.LaunchViewEffect
 import com.rodrigmatrix.packagetracker.presentation.utils.PreviewPackageItemsList
 import org.koin.androidx.compose.getViewModel
 
@@ -50,6 +59,7 @@ fun PackagesScreen(
     viewModel: PackagesViewModel = getViewModel()
 ) {
     val viewState by viewModel.viewState.collectAsState()
+    val context = LocalContext.current
 
     PackagesScreen(
         viewState = viewState,
@@ -70,6 +80,24 @@ fun PackagesScreen(
             viewModel.onFilterChanged(newFilter)
         }
     )
+
+    LaunchViewEffect(viewModel) { effect ->
+        when (effect) {
+            PackagesViewEffect.OnRequestNotificationPermission -> {
+                navController.navigate(NavigationRoutes.NOTIFICATION_DIALOG_ROUTE)
+            }
+        }
+    }
+
+    LaunchedEffect(viewModel) {
+        if (Build.VERSION.SDK_INT >= 33) {
+            val isNotificationsEnabled = ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED
+            viewModel.onRequestNotificationPermission(isNotificationsEnabled)
+        }
+    }
 }
 
 @Composable

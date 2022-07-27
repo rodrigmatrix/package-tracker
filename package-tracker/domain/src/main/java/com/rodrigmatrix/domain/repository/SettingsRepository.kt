@@ -20,4 +20,8 @@ interface SettingsRepository {
     ): Flow<Unit>
 
     fun getPackageNotificationsIntervalList(): Flow<List<SingleChoicePreference<Int>>>
+
+    fun getPackageNotificationRequested(): Flow<Boolean>
+
+    fun setPackageNotificationRequested(requested: Boolean): Flow<Unit>
 }

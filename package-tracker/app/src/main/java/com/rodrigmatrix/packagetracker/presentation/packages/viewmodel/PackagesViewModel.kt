@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.rodrigmatrix.core.viewmodel.ViewModel
 import com.rodrigmatrix.data.analytics.PackageTrackerAnalytics
 import com.rodrigmatrix.domain.entity.UserPackage
+import com.rodrigmatrix.domain.repository.SettingsRepository
 import com.rodrigmatrix.domain.usecase.DeletePackageUseCase
 import com.rodrigmatrix.domain.usecase.FetchAllPackagesUseCase
 import com.rodrigmatrix.domain.usecase.GetAllPackagesUseCase
@@ -25,6 +26,7 @@ class PackagesViewModel(
     private val fetchAllPackagesUseCase: FetchAllPackagesUseCase,
     private val deletePackageUseCase: DeletePackageUseCase,
     private val getPackageProgressStatusUseCase: GetPackageProgressStatusUseCase,
+    private val settingsRepository: SettingsRepository,
     private val packageTrackerAnalytics: PackageTrackerAnalytics,
     private val coroutineDispatcher: CoroutineDispatcher = Dispatchers.IO
 ): ViewModel<PackagesViewState, PackagesViewEffect>(PackagesViewState()) {
@@ -107,5 +109,21 @@ class PackagesViewModel(
 
     fun trackPackageDetailsClick() {
         packageTrackerAnalytics.sendEvent(PACKAGE_DETAILS_CLICK)
+    }
+
+    fun onRequestNotificationPermission(isNotificationsEnabled: Boolean) {
+        if (isNotificationsEnabled.not()) {
+            viewModelScope.launch {
+                settingsRepository.getPackageNotificationRequested()
+                    .flowOn(coroutineDispatcher)
+                    .catch { }
+                    .collect { notificationsPermissionRequested ->
+                        if (notificationsPermissionRequested.not()) {
+                            settingsRepository.setPackageNotificationRequested(true).collect()
+                            setEffect { PackagesViewEffect.OnRequestNotificationPermission }
+                        }
+                    }
+            }
+        }
     }
 }

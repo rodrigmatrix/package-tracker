@@ -31,4 +31,8 @@
     <string name="delivered">Entregue</string>
     <string name="no_packages_filter">Nenhuma encomenda encontrada para esse filtro</string>
     <string name="delete_package">Deletar encomenda</string>
+    <string name="enable">Ativar</string>
+    <string name="want_to_enable_notifications">Quer receber notificações?</string>
+    <string name="we_need_notification_permission">Precisamos da sua permissão para te enviar notificações relacionadas a atualizacões de suas encomendas.</string>
+    <string name="not_now">Agora Não</string>
 </resources>

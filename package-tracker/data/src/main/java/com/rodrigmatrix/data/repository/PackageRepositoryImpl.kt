@@ -7,10 +7,7 @@ import com.rodrigmatrix.data.model.UserPackageAndUpdatesEntity
 import com.rodrigmatrix.data.remote.PackageRemoteDataSource
 import com.rodrigmatrix.domain.entity.UserPackage
 import com.rodrigmatrix.domain.repository.PackageRepository
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.*
 
 class PackageRepositoryImpl(
     private val packagesLocalDataSource: PackageLocalDataSource,
@@ -52,9 +49,12 @@ class PackageRepositoryImpl(
             packagesLocalDataSource.getAllPackages()
                 .first()
                 .map { userPackage ->
-                    fetchPackage(userPackage.id).first().apply {
-                        name = userPackage.name
-                    }
+                    fetchPackage(userPackage.id)
+                        .catch {
+                            emit(userPackage)
+                        }.first().apply {
+                            name = userPackage.name
+                        }
                 }.also { packagesList ->
                     packagesLocalDataSource.savePackages(packagesList)
                     emit(packagesList.map { packageMapper.map(it) })

@@ -1,6 +1,7 @@
 package com.rodrigmatrix.packagetracker.presentation.theme
 
 import android.annotation.SuppressLint
+import android.os.Build.VERSION
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -69,7 +70,7 @@ private val DarkThemeColors = darkColorScheme(
 @Composable
 fun PackageTrackerTheme(
 	useDarkTheme: Boolean = isSystemInDarkTheme(),
-	isDynamic: Boolean = BuildCompat.isAtLeastS(),
+	isDynamic: Boolean = VERSION.SDK_INT >= 31,
 	content: @Composable () -> Unit
 ) {
 	val colorScheme = when {

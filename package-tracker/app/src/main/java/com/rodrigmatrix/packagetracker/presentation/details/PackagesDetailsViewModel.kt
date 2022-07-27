@@ -25,8 +25,10 @@ class PackagesDetailsViewModel(
                 .onStart { setState { it.copy(isLoading = true) } }
                 .catch { error ->
                     setState { it.copy(isLoading = false) }
-                    setEffect {
-                        Toast(error.message.orEmpty())
+                    if (error !is NullPointerException) {
+                        setEffect {
+                            Toast(error.message.orEmpty())
+                        }
                     }
                 }
                 .collect { userPackage ->
