@@ -118,4 +118,12 @@ class SettingsViewModel(
             }
         }
     }
+
+    fun onSystemNotificationsPreferenceClicked(int: Int) {
+        setEffect { SettingsViewEffect.OpenNotificationsSettings }
+    }
+
+    fun onSystemNotificationsPreferenceChanged(enabled: Boolean) {
+        setState { it.copy(systemNotificationsEnabled = enabled) }
+    }
 }

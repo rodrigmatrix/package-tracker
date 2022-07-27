@@ -11,5 +11,6 @@ data class SettingsViewState(
     val themeDialogVisible: Boolean = false,
     val notificationsEnabled: Boolean = true,
     val notificationsInterval: Int = 0,
-    val notificationIntervalDialogVisible: Boolean = false
+    val notificationIntervalDialogVisible: Boolean = false,
+    val systemNotificationsEnabled: Boolean = true
 ): ViewState
