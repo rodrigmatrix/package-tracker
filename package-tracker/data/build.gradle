@@ -19,10 +19,10 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
 
-        buildConfigField "String", "CORREIOS_URL", "\"https://webservice.correios.com.br/service/rest/rastro/\""
-        buildConfigField "String", "CORREIOS_USER", localProperties['correios.user']
-        buildConfigField "String", "CORREIOS_PASSWORD", localProperties['correios.password']
-        buildConfigField "String", "CORREIOS_TOKEN", localProperties['correios.token']
+        buildConfigField "String", "CORREIOS_URL", localProperties['correios.url']
+        buildConfigField "String", "CORREIOS_PROXY_URL", localProperties['correios.proxyUrl']
+        buildConfigField "String", "CORREIOS_VALIDATE_TOKEN_URL", localProperties['correios.validateTokenUrl']
+        buildConfigField "String", "CORREIOS_REQUEST_TOKEN_URL", localProperties['correios.requestTokenUrl']
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -53,40 +53,40 @@ dependencies {
     implementation project(':core')
     implementation project(':domain')
 
-    implementation(Dependencies.androidxCore)
-    implementation(Dependencies.lifecycle)
-    implementation(Dependencies.androidxWindow)
+    implementation(libs.androidx.ktx)
+    implementation(libs.androidx.lifecycle)
+    implementation(libs.androidx.window)
 
-    implementation(Dependencies.kotlinStdlib)
-    implementation(Dependencies.kotlinCoroutinesCore)
-    implementation(Dependencies.kotlinCoroutinesAndroid)
-    implementation(Dependencies.kotlinSerialization)
+    implementation(libs.kotlin.stdlib)
+    implementation(libs.kotlin.coroutines.android)
+    implementation(libs.kotlin.serialization)
 
-    implementation(Dependencies.composeUi)
+    implementation platform(libs.compose.bom)
+    implementation(libs.compose.ui)
 
-    implementation platform(Dependencies.firebaseBom)
-    implementation(Dependencies.firebaseRemoteConfig)
-    implementation(Dependencies.firebaseAnalytics)
+    implementation platform(libs.firebase.bom)
+    implementation(libs.firebase.remote.config)
+    implementation(libs.firebase.analytics)
 
-    implementation(Dependencies.roomRuntime)
-    kapt(Dependencies.roomCompiler)
-    implementation(Dependencies.roomKtx)
+    implementation(libs.room.runtime)
+    kapt(libs.room.compiler)
+    implementation(libs.room.ktx)
 
-    implementation(Dependencies.retrofit)
-    implementation(Dependencies.okHttp)
-    implementation(Dependencies.retrofitKotlinx)
-    implementation(Dependencies.okHttpLoggingInterceptor)
+    implementation(libs.retrofit)
+    implementation platform(libs.okHttp)
+    implementation(libs.retrofit.kotlinx.converter)
+    implementation(libs.okHttp.interceptor)
 
-    implementation(Dependencies.koinAndroid)
+    implementation(libs.koin.android)
 
-    implementation(Dependencies.jodaTime)
+    implementation(libs.jodaTime)
 
-    implementation(Dependencies.workManager)
+    implementation(libs.workManager)
 
-    implementation(Dependencies.playServicesLocation)
+    implementation(libs.playServices.location)
 
-    testImplementation(Dependencies.junit)
+    testImplementation(libs.junit)
 
-    testImplementation(Dependencies.junit)
-    testImplementation(Dependencies.mockk)
+    testImplementation(libs.junit)
+    testImplementation(libs.mockk)
 }

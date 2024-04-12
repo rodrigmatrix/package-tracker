@@ -37,10 +37,12 @@ abstract class PackagesDAO {
     open fun savePackage(userPackage: UserPackageAndUpdatesEntity) {
         upsertPackage(
             UserPackageEntity(
-                userPackage.id,
-                userPackage.name,
-                userPackage.deliveryType,
-                userPackage.postalDate
+                id = userPackage.id,
+                name = userPackage.name,
+                deliveryType = userPackage.deliveryType,
+                postalDate = userPackage.postalDate,
+                imagePath = userPackage.imagePath,
+                iconType = userPackage.iconType,
             )
         )
         deletePackageUpdates(userPackage.id)

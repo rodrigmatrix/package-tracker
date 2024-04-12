@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "0bc4922f634847c52608b65f58fa2a33",
+    "identityHash": "6bf9cb8c7a525387c0850365abac2d95",
     "entities": [
       {
         "tableName": "packages",
@@ -34,17 +34,17 @@
           }
         ],
         "primaryKey": {
+          "autoGenerate": false,
           "columnNames": [
             "id"
-          ],
-          "autoGenerate": false
+          ]
         },
         "indices": [],
         "foreignKeys": []
       },
       {
         "tableName": "status_update",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`userPackageId` TEXT NOT NULL, `statusUpdateType` TEXT NOT NULL, `description` TEXT NOT NULL, `date` TEXT NOT NULL, `hour` TEXT NOT NULL, `statusId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `fromlocalName` TEXT NOT NULL, `fromcity` TEXT NOT NULL, `fromstate` TEXT NOT NULL, `fromunitType` TEXT, `fromlatitude` INTEGER NOT NULL, `fromlongitude` INTEGER NOT NULL, `tolocalName` TEXT, `tocity` TEXT, `tostate` TEXT, `tounitType` TEXT, `tolatitude` INTEGER, `tolongitude` INTEGER)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`userPackageId` TEXT NOT NULL, `statusUpdateType` TEXT NOT NULL, `description` TEXT NOT NULL, `date` TEXT NOT NULL, `hour` TEXT NOT NULL, `statusId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `fromlocalName` TEXT NOT NULL, `fromcity` TEXT NOT NULL, `fromstate` TEXT NOT NULL, `fromunitType` TEXT, `tolocalName` TEXT, `tocity` TEXT, `tostate` TEXT, `tounitType` TEXT)",
         "fields": [
           {
             "fieldPath": "userPackageId",
@@ -107,18 +107,6 @@
             "notNull": false
           },
           {
-            "fieldPath": "from.latitude",
-            "columnName": "fromlatitude",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "from.longitude",
-            "columnName": "fromlongitude",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
             "fieldPath": "to.localName",
             "columnName": "tolocalName",
             "affinity": "TEXT",
@@ -141,25 +129,13 @@
             "columnName": "tounitType",
             "affinity": "TEXT",
             "notNull": false
-          },
-          {
-            "fieldPath": "to.latitude",
-            "columnName": "tolatitude",
-            "affinity": "INTEGER",
-            "notNull": false
-          },
-          {
-            "fieldPath": "to.longitude",
-            "columnName": "tolongitude",
-            "affinity": "INTEGER",
-            "notNull": false
           }
         ],
         "primaryKey": {
+          "autoGenerate": true,
           "columnNames": [
             "statusId"
-          ],
-          "autoGenerate": true
+          ]
         },
         "indices": [],
         "foreignKeys": []
@@ -168,7 +144,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0bc4922f634847c52608b65f58fa2a33')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '6bf9cb8c7a525387c0850365abac2d95')"
     ]
   }
 }

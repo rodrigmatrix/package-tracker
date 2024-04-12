@@ -2,14 +2,16 @@ package com.rodrigmatrix.packagetracker.presentation.packages.viewmodel
 
 import androidx.lifecycle.viewModelScope
 import com.rodrigmatrix.core.viewmodel.ViewModel
-import com.rodrigmatrix.data.analytics.PackageTrackerAnalytics
 import com.rodrigmatrix.domain.entity.UserPackage
+import com.rodrigmatrix.domain.repository.PackageTrackerAnalytics
 import com.rodrigmatrix.domain.repository.SettingsRepository
 import com.rodrigmatrix.domain.usecase.DeletePackageUseCase
 import com.rodrigmatrix.domain.usecase.FetchAllPackagesUseCase
 import com.rodrigmatrix.domain.usecase.GetAllPackagesUseCase
 import com.rodrigmatrix.domain.usecase.GetPackageProgressStatusUseCase
 import com.rodrigmatrix.packagetracker.analytics.ADD_PACKAGE_FAB_CLICK
+import com.rodrigmatrix.packagetracker.analytics.ADD_PACKAGE_REQUEST_ERROR
+import com.rodrigmatrix.packagetracker.analytics.LOAD_PACKAGES_ERROR
 import com.rodrigmatrix.packagetracker.analytics.PACKAGE_DELETE_CLICK
 import com.rodrigmatrix.packagetracker.analytics.PACKAGE_DETAILS_CLICK
 import com.rodrigmatrix.packagetracker.presentation.packages.model.PackagesFilter
@@ -25,7 +27,6 @@ class PackagesViewModel(
     private val getAllPackagesUseCase: GetAllPackagesUseCase,
     private val fetchAllPackagesUseCase: FetchAllPackagesUseCase,
     private val deletePackageUseCase: DeletePackageUseCase,
-    private val getPackageProgressStatusUseCase: GetPackageProgressStatusUseCase,
     private val settingsRepository: SettingsRepository,
     private val packageTrackerAnalytics: PackageTrackerAnalytics,
     private val coroutineDispatcher: CoroutineDispatcher = Dispatchers.IO
@@ -36,12 +37,18 @@ class PackagesViewModel(
         fetchPackages()
     }
 
-    private fun loadPackages() {
+    private fun loadPackages(setLoadingState: Boolean = true) {
         viewModelScope.launch {
             getAllPackagesUseCase()
                 .flowOn(coroutineDispatcher)
-                .onStart { setState { it.loadingState() } }
+                .onStart { if (setLoadingState) setState { it.loadingState() } }
                 .catch { exception ->
+                    packageTrackerAnalytics.sendEvent(
+                        LOAD_PACKAGES_ERROR,
+                        mapOf(
+                            "error" to exception.message.toString()
+                        )
+                    )
                     setState { it.errorState(exception) }
                 }
                 .collect { packagesList ->
@@ -58,14 +65,8 @@ class PackagesViewModel(
     private fun List<UserPackage>.filterPackages(): List<UserPackage> {
         return when (viewState.value.packagesListFilter) {
             PackagesFilter.ALL -> this
-            PackagesFilter.IN_PROGRESS -> this.filter {
-                val packageStatus = getPackageProgressStatusUseCase(it)
-                packageStatus.delivered.not()
-            }
-            PackagesFilter.DELIVERED -> this.filter {
-                val packageStatus = getPackageProgressStatusUseCase(it)
-                packageStatus.delivered
-            }
+            PackagesFilter.IN_PROGRESS -> this.filter { it.status.delivered.not() }
+            PackagesFilter.DELIVERED -> this.filter { it.status.delivered }
         }
     }
 
@@ -100,7 +101,7 @@ class PackagesViewModel(
 
     fun onFilterChanged(newFilter: PackagesFilter) {
         setState { it.copy(packagesListFilter = newFilter) }
-        loadPackages()
+        loadPackages(setLoadingState = false)
     }
 
     fun trackAddPackageClick() {

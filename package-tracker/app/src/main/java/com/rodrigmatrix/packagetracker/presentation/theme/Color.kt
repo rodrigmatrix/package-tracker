@@ -8,8 +8,8 @@ val theme_light_inRoute = Color(0xFFFFA828)
 val theme_light_inProgress = Color(0xFF006877)
 val theme_light_done_variant = Color(0xFF03A9F4)
 val theme_light_done = Color(0xFF05B648)
+val theme_light_customs = Color(0xFF7afd92)
 val theme_light_disabled = Color(0xFF414940)
-
 
 val md_theme_light_primary = Color(0xFF006e29)
 val md_theme_light_onPrimary = Color(0xFFffffff)

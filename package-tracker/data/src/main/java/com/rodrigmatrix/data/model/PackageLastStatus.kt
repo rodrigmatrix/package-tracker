@@ -5,6 +5,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 
 data class PackageLastStatus(
     val title: String,
+    val description: String,
     val color: Color,
-    val icon: ImageVector
+    val icon: ImageVector,
 )

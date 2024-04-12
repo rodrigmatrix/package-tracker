@@ -12,6 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.*
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.WindowHeightSizeClass
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
@@ -20,16 +21,25 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.window.layout.FoldingFeature
+import com.google.accompanist.adaptive.calculateDisplayFeatures
 import com.google.android.material.color.DynamicColors
 import com.rodrigmatrix.packagetracker.R
-import com.rodrigmatrix.packagetracker.presentation.addpackage.AddNewPackageBottomSheetFragment
 import com.rodrigmatrix.packagetracker.presentation.components.MultiLayoutScaffold
 import com.rodrigmatrix.packagetracker.presentation.theme.PackageTrackerTheme
+import com.rodrigmatrix.packagetracker.presentation.utils.DevicePosture
+import com.rodrigmatrix.packagetracker.presentation.utils.ScreenContentType
+import com.rodrigmatrix.packagetracker.presentation.utils.ScreenNavigationContentPosition
+import com.rodrigmatrix.packagetracker.presentation.utils.ScreenNavigationType
+import com.rodrigmatrix.packagetracker.presentation.utils.isBookPosture
+import com.rodrigmatrix.packagetracker.presentation.utils.isSeparating
 
 class NavigationActivity : AppCompatActivity() {
 
@@ -37,36 +47,98 @@ class NavigationActivity : AppCompatActivity() {
         intent.extras?.getString("link").orEmpty()
     }
 
-    @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3WindowSizeClassApi::class)
+    @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        DynamicColors.applyIfAvailable(this)
         openLink()
         setContent {
             val navController = rememberNavController()
-            val windowSizeClass = calculateWindowSizeClass(this)
+            val windowSize = calculateWindowSizeClass(this)
+            val displayFeatures = calculateDisplayFeatures(this)
             val navBackStackEntry by navController.currentBackStackEntryAsState()
             val currentDestination = navBackStackEntry?.destination
+
+            val navigationType: ScreenNavigationType
+            val contentType: ScreenContentType
+
+            /**
+             * We are using display's folding features to map the device postures a fold is in.
+             * In the state of folding device If it's half fold in BookPosture we want to avoid content
+             * at the crease/hinge
+             */
+            val foldingFeature = displayFeatures.filterIsInstance<FoldingFeature>().firstOrNull()
+
+            val foldingDevicePosture = when {
+                isBookPosture(foldingFeature) ->
+                    DevicePosture.BookPosture(foldingFeature.bounds)
+
+                isSeparating(foldingFeature) ->
+                    DevicePosture.Separating(foldingFeature.bounds, foldingFeature.orientation)
+
+                else -> DevicePosture.NormalPosture
+            }
+
+            when (windowSize.widthSizeClass) {
+                WindowWidthSizeClass.Compact -> {
+                    navigationType = ScreenNavigationType.BOTTOM_NAVIGATION
+                    contentType = ScreenContentType.SINGLE_PANE
+                }
+                WindowWidthSizeClass.Medium -> {
+                    navigationType = ScreenNavigationType.NAVIGATION_RAIL
+                    contentType = if (foldingDevicePosture != DevicePosture.NormalPosture) {
+                        ScreenContentType.DUAL_PANE
+                    } else {
+                        ScreenContentType.SINGLE_PANE
+                    }
+                }
+                WindowWidthSizeClass.Expanded -> {
+                    navigationType = if (foldingDevicePosture is DevicePosture.BookPosture) {
+                        ScreenNavigationType.NAVIGATION_RAIL
+                    } else {
+                        ScreenNavigationType.NAVIGATION_RAIL
+                    }
+                    contentType = ScreenContentType.DUAL_PANE
+                }
+                else -> {
+                    navigationType = ScreenNavigationType.BOTTOM_NAVIGATION
+                    contentType = ScreenContentType.SINGLE_PANE
+                }
+            }
+
+            /**
+             * Content inside Navigation Rail/Drawer can also be positioned at top, bottom or center for
+             * ergonomics and reachability depending upon the height of the device.
+             */
+            val navigationContentPosition = when (windowSize.heightSizeClass) {
+                WindowHeightSizeClass.Compact -> {
+                    ScreenNavigationContentPosition.TOP
+                }
+                WindowHeightSizeClass.Medium,
+                WindowHeightSizeClass.Expanded -> {
+                    ScreenNavigationContentPosition.CENTER
+                }
+                else -> {
+                    ScreenNavigationContentPosition.TOP
+                }
+            }
             PackageTrackerTheme {
                 MultiLayoutScaffold(
-                    windowSizeClass = windowSizeClass,
+                    windowSizeClass = windowSize,
                     bottomBar = {
                         HomeBottomBar(navController)
                     },
                     floatingActionButton = {
-                        if (currentDestination?.route == HomeRoutes.Packages.route) {
-                            AddPackageFab(windowSizeClass = windowSizeClass)
-                        }
+
                     },
                     floatingActionButtonPosition = FabPosition.Center,
                     navigationRail = {
                         NavigationRail(
                             header = {
-                                AddPackageFab(windowSizeClass = windowSizeClass)
+
                             },
                             modifier = Modifier.safeDrawingPadding()
                         ) {
-                            HomeRoutes.values().forEach { destination ->
+                            HomeRoutes.entries.forEach { destination ->
                                 val selected = currentDestination?.hierarchy?.any { it.route == destination.route } == true
                                 NavigationRailItem(
                                     selected = selected,
@@ -96,12 +168,10 @@ class NavigationActivity : AppCompatActivity() {
                     },
                     navigationDrawer = {
                         NavigationRail(
-                            header = {
-                                AddPackageFab(windowSizeClass = windowSizeClass)
-                            },
+                            header = { },
                             modifier = Modifier.width(230.dp)
                         ) {
-                            HomeRoutes.values().forEach { destination ->
+                            HomeRoutes.entries.forEach { destination ->
                                 val selected = currentDestination?.hierarchy?.any { it.route == destination.route } == true
                                 NavigationDrawerItem(
                                     selected = selected,
@@ -132,68 +202,11 @@ class NavigationActivity : AppCompatActivity() {
                     }
                 ) {
                     HomeNavHost(
-                        windowSizeClass,
+                        navigationType,
+                        contentType,
                         navController,
                         supportFragmentManager
                     )
-                }
-            }
-        }
-    }
-
-    @Composable
-    private fun AddPackageFab(windowSizeClass: WindowSizeClass) {
-        when (windowSizeClass.widthSizeClass) {
-            WindowWidthSizeClass.Compact -> {
-                LargeFloatingActionButton(
-                    onClick = {
-                        AddNewPackageBottomSheetFragment()
-                            .show(supportFragmentManager, "")
-                    },
-                    shape = RoundedCornerShape(100)
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.Add,
-                        modifier = Modifier.size(24.dp),
-                        contentDescription = getString(R.string.add_package)
-                    )
-                }
-            }
-            WindowWidthSizeClass.Medium -> {
-                FloatingActionButton(
-                    onClick = {
-                        AddNewPackageBottomSheetFragment()
-                            .show(supportFragmentManager, "")
-                    },
-                    shape = RoundedCornerShape(100)
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.Add,
-                        modifier = Modifier.size(24.dp),
-                        contentDescription = getString(R.string.add_package)
-                    )
-                }
-            }
-            WindowWidthSizeClass.Expanded -> {
-                FloatingActionButton(
-                    onClick = {
-                        AddNewPackageBottomSheetFragment()
-                            .show(supportFragmentManager, "")
-                    },
-                    shape = CircleShape
-                ) {
-                    Row(
-                        modifier = Modifier.padding(horizontal = 16.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.Add,
-                            modifier = Modifier.size(24.dp),
-                            contentDescription = getString(R.string.add_package)
-                        )
-                        Spacer(Modifier.width(8.dp))
-                        Text(text = stringResource(R.string.add_package))
-                    }
                 }
             }
         }

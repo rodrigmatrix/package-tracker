@@ -5,5 +5,8 @@ data class UserPackage(
     val name: String,
     val deliveryType: String,
     val postalDate: String,
-    val statusUpdateList: List<StatusUpdate>
+    val statusUpdateList: List<StatusUpdate>,
+    val imagePath: String?,
+    val iconType: String?,
+    val status: PackageProgressStatus,
 )

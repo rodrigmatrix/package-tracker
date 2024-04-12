@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.rodrigmatrix.packagetracker.presentation.components
 
 import androidx.compose.foundation.background
@@ -17,21 +19,16 @@ import com.rodrigmatrix.packagetracker.presentation.theme.PackageTrackerTheme
 @Composable
 fun PackageTrackerTopAppBar(
     modifier: Modifier = Modifier,
-    scrollBehavior: TopAppBarScrollBehavior? = null,
     title: @Composable () -> Unit,
     navigationIcon: @Composable () -> Unit,
     actions: @Composable RowScope.() -> Unit = {}
 ) {
-    val backgroundColors = TopAppBarDefaults.centerAlignedTopAppBarColors()
-    val backgroundColor = backgroundColors.containerColor(
-        scrollFraction = scrollBehavior?.scrollFraction ?: 0f
-    ).value
-    Box(modifier = Modifier.background(backgroundColor)) {
-        SmallTopAppBar(
+    Box(modifier = Modifier) {
+        TopAppBar(
             modifier = modifier,
             actions = actions,
             title = title,
-            navigationIcon = navigationIcon
+            navigationIcon = navigationIcon,
         )
     }
 }

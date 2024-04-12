@@ -13,7 +13,6 @@ import kotlinx.coroutines.launch
 
 class PackagesDetailsViewModel(
     private val getPackageStatusUseCase: GetPackageStatusUseCase,
-    private val getPackageProgressStatusUseCase: GetPackageProgressStatusUseCase,
     private val deletePackageUseCase: DeletePackageUseCase,
     private val coroutineDispatcher: CoroutineDispatcher = Dispatchers.IO
 ): ViewModel<PackageStatusViewState, PackageStatusViewEffect>(PackageStatusViewState()) {
@@ -36,7 +35,6 @@ class PackagesDetailsViewModel(
                         it.copy(
                             isLoading = false,
                             userPackage = userPackage,
-                            packageProgressStatus = getPackageProgressStatusUseCase(userPackage)
                         )
                     }
                 }

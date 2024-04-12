@@ -2,13 +2,14 @@ package com.rodrigmatrix.domain.usecase
 
 import com.rodrigmatrix.domain.entity.StatusUpdate
 import com.rodrigmatrix.domain.entity.UserPackage
+import com.rodrigmatrix.domain.repository.PackageTrackerAnalytics
 import kotlinx.coroutines.flow.first
 
 class SendPackageUpdatesNotificationsUseCase(
     private val getAllPackagesUseCase: GetAllPackagesUseCase,
     private val fetchAllPackagesUseCase: FetchAllPackagesUseCase,
-    private val getPackageProgressStatusUseCase: GetPackageProgressStatusUseCase,
-    private val sendNotificationUseCase: SendPackageUpdateNotificationUseCase
+    private val sendNotificationUseCase: SendPackageUpdateNotificationUseCase,
+    private val packageTrackerAnalytics: PackageTrackerAnalytics,
 ) {
 
     suspend operator fun invoke() {
@@ -16,7 +17,7 @@ class SendPackageUpdatesNotificationsUseCase(
         val updatedPackages = fetchAllPackagesUseCase().first()
 
         cachedPackages
-            .filterNot { getPackageProgressStatusUseCase(it).delivered }
+            .filterNot { it.status.delivered }
             .map { userPackage ->
                 updatedPackages.find {
                     it.packageId == userPackage.packageId
@@ -25,7 +26,7 @@ class SendPackageUpdatesNotificationsUseCase(
                         userPackage,
                         updatedPackage
                     ).firstOrNull()?.run {
-                        sendNotification(userPackage, statusUpdate = this)
+                        sendNotification(updatedPackage, statusUpdate = this)
                     }
                 }
             }
@@ -39,14 +40,23 @@ class SendPackageUpdatesNotificationsUseCase(
             return emptyList()
         }
 
-        return cachedPackage.statusUpdateList.plus(updatedPackage.statusUpdateList)
-            .groupBy { it.description + it.date }
+        return updatedPackage.statusUpdateList.plus(cachedPackage.statusUpdateList)
+            .groupBy { it.title + it.date }
             .filter { it.value.size == 1 }
             .flatMap { it.value }
     }
 
     private fun sendNotification(userPackage: UserPackage, statusUpdate: StatusUpdate) {
-        val description = statusUpdate.description + " - " + statusUpdate.getDateWithHour()
-        sendNotificationUseCase(userPackage.name, description)
+        sendNotificationUseCase(
+            title = userPackage.name,
+            description = statusUpdate.title
+        )
+        packageTrackerAnalytics.sendEvent(
+            "NOTIFICATION_SENT",
+            mapOf(
+                "title" to userPackage.name,
+                "description" to statusUpdate.title
+            ),
+        )
     }
 }

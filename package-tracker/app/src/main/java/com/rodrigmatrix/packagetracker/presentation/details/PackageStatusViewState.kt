@@ -7,6 +7,5 @@ import com.rodrigmatrix.domain.entity.UserPackage
 data class PackageStatusViewState(
     val isLoading: Boolean = true,
     val userPackage: UserPackage? = null,
-    val packageProgressStatus: PackageProgressStatus? = null,
     val deletePackageDialogVisible: Boolean = false
 ): ViewState

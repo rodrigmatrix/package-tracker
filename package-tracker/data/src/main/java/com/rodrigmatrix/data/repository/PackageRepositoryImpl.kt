@@ -3,8 +3,11 @@ package com.rodrigmatrix.data.repository
 import com.rodrigmatrix.data.local.PackageLocalDataSource
 import com.rodrigmatrix.data.mapper.PackageEntityMapper
 import com.rodrigmatrix.data.mapper.PackageMapper
+import com.rodrigmatrix.data.mapper.mapToUserPackage
 import com.rodrigmatrix.data.model.UserPackageAndUpdatesEntity
+import com.rodrigmatrix.data.model.UserPackageEntity
 import com.rodrigmatrix.data.remote.PackageRemoteDataSource
+import com.rodrigmatrix.domain.entity.AddPackage
 import com.rodrigmatrix.domain.entity.UserPackage
 import com.rodrigmatrix.domain.repository.PackageRepository
 import kotlinx.coroutines.flow.*
@@ -12,21 +15,28 @@ import kotlinx.coroutines.flow.*
 class PackageRepositoryImpl(
     private val packagesLocalDataSource: PackageLocalDataSource,
     private val packagesRemoteDataSource: PackageRemoteDataSource,
-    private val packageMapper: PackageMapper = PackageMapper(),
-    private val packageEntityMapper: PackageEntityMapper = PackageEntityMapper()
+    private val packageMapper: PackageMapper,
+    private val packageEntityMapper: PackageEntityMapper = PackageEntityMapper(),
 ) : PackageRepository {
 
-    private fun fetchPackage(packageId: String): Flow<UserPackageAndUpdatesEntity> {
+    private fun fetchPackage(
+        packageId: String,
+        userPackage: UserPackageEntity?,
+    ): Flow<UserPackageAndUpdatesEntity> {
         return packagesRemoteDataSource.getPackage(packageId)
-            .map { packageEntityMapper.map(it) }
+            .map { packageEntityMapper.map(source = it, userPackage = userPackage) }
     }
 
-    override fun addPackage(name: String, packageId: String): Flow<UserPackage> {
-        return fetchPackage(packageId)
+    override fun addPackage(addPackage: AddPackage): Flow<UserPackage> {
+        return fetchPackage(packageId = addPackage.packageId, userPackage = null)
             .map { userPackageEntity ->
-                userPackageEntity.name = name
-                packagesLocalDataSource.savePackage(userPackageEntity)
-                packageMapper.map(userPackageEntity)
+                val updatedUserPackageEntity = userPackageEntity.copy(
+                    name = addPackage.name,
+                    imagePath = addPackage.imagePath,
+                    iconType = addPackage.iconType,
+                )
+                packagesLocalDataSource.savePackage(updatedUserPackageEntity)
+                packageMapper.map(updatedUserPackageEntity)
             }
     }
 
@@ -38,8 +48,8 @@ class PackageRepositoryImpl(
     override fun getPackages(): Flow<List<UserPackage>> {
         return packagesLocalDataSource.getAllPackages()
             .map { packagesList ->
-                packagesList.map { userPackage ->
-                    packageMapper.map(userPackage)
+                packagesList.map { userPackageEntity ->
+                    packageMapper.map(userPackageEntity)
                 }
             }
     }
@@ -48,13 +58,10 @@ class PackageRepositoryImpl(
         return flow {
             packagesLocalDataSource.getAllPackages()
                 .first()
-                .map { userPackage ->
-                    fetchPackage(userPackage.id)
-                        .catch {
-                            emit(userPackage)
-                        }.first().apply {
-                            name = userPackage.name
-                        }
+                .map { userPackageAndUpdates ->
+                    fetchPackage(userPackageAndUpdates.id, userPackageAndUpdates.mapToUserPackage())
+                        .catch { emit(userPackageAndUpdates) }
+                        .first()
                 }.also { packagesList ->
                     packagesLocalDataSource.savePackages(packagesList)
                     emit(packagesList.map { packageMapper.map(it) })
@@ -66,13 +73,20 @@ class PackageRepositoryImpl(
         return packagesLocalDataSource.deletePackage(packageId)
     }
 
-    override fun editPackage(name: String, packageId: String): Flow<Unit> {
+    override fun editPackage(
+        addPackage: AddPackage,
+        packageId: String
+    ): Flow<Unit> {
         return flow {
             packagesLocalDataSource.getPackage(packageId)
                 .first()
                 .also {
-                    it.name = name
-                    packagesLocalDataSource.savePackage(it)
+                    val editedPackaged = it.copy(
+                        name = addPackage.name,
+                        imagePath = addPackage.imagePath,
+                        iconType = addPackage.iconType,
+                    )
+                    packagesLocalDataSource.savePackage(editedPackaged)
                     emit(Unit)
                 }
         }

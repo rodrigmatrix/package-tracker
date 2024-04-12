@@ -8,10 +8,11 @@ import androidx.room.PrimaryKey
 data class StatusUpdateEntity(
     val userPackageId: String = "",
     val statusUpdateType: String = "",
+    val title: String = "",
     val description: String = "",
     val date: String = "",
     val hour: String = "",
-    @Embedded(prefix = "from") val from: StatusAddressEntity,
+    @Embedded(prefix = "from") val from: StatusAddressEntity? = null,
     @Embedded(prefix = "to") val to: StatusAddressEntity? = null
 ) {
     @PrimaryKey(autoGenerate = true)

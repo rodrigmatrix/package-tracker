@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import com.rodrigmatrix.data.model.StatusUpdateEntity
 import com.rodrigmatrix.data.model.UserPackageEntity
 
-@Database(entities = [UserPackageEntity::class, StatusUpdateEntity::class], version = 1)
+@Database(entities = [UserPackageEntity::class, StatusUpdateEntity::class], version = 2)
 abstract class PackagesDatabase : RoomDatabase() {
 
     abstract fun packagesDAO(): PackagesDAO
@@ -25,7 +25,7 @@ abstract class PackagesDatabase : RoomDatabase() {
             context.applicationContext,
             PackagesDatabase::class.java,
             "packages.db"
-        ).build()
+        ).fallbackToDestructiveMigration().build()
     }
 
 }

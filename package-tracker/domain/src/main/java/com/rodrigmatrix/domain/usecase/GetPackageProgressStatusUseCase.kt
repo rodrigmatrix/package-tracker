@@ -9,9 +9,10 @@ class GetPackageProgressStatusUseCase {
 
     operator fun invoke(userPackage: UserPackage): PackageProgressStatus {
         return PackageProgressStatus(
-            hasPackageMailed(userPackage),
-            isPackageInProgress(userPackage),
-            hasPackageBeenDelivered(userPackage)
+            mailed = hasPackageMailed(userPackage),
+            inProgress = isPackageInProgress(userPackage),
+            delivered = hasPackageBeenDelivered(userPackage),
+            outForDelivery = isPackageOutForDelivery(userPackage),
         )
     }
 
@@ -20,7 +21,15 @@ class GetPackageProgressStatusUseCase {
     }
 
     private fun isPackageInProgress(userPackage: UserPackage): Boolean {
-        return userPackage.statusUpdateList.size > 1
+        return userPackage.statusUpdateList.any {
+            it.title.contains("Objeto em tran")
+        } || hasPackageBeenDelivered(userPackage)
+    }
+
+    private fun isPackageOutForDelivery(userPackage: UserPackage): Boolean {
+        return userPackage.statusUpdateList.any {
+            it.title.contains("saiu para entrega")
+        } || hasPackageBeenDelivered(userPackage)
     }
 
     private fun hasPackageBeenDelivered(userPackage: UserPackage): Boolean {
@@ -29,7 +38,7 @@ class GetPackageProgressStatusUseCase {
         }
 
         return userPackage.statusUpdateList.any {
-            it.description.lowercase().contains(DELIVERED_MATCHER)
+            it.title.lowercase().contains(DELIVERED_MATCHER)
         }
     }
 }

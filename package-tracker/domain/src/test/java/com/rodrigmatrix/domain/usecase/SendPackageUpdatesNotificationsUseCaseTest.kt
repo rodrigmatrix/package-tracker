@@ -1,15 +1,17 @@
 package com.rodrigmatrix.domain.usecase
 
+import com.rodrigmatrix.domain.repository.PackageTrackerAnalytics
 import com.rodrigmatrix.stubs.deliveredPackage
 import com.rodrigmatrix.stubs.emptyPackage
 import com.rodrigmatrix.stubs.inProgressPackage
+import com.rodrigmatrix.stubs.mailedPackage
 import com.rodrigmatrix.stubs.outForDeliveryPackage
 import io.mockk.coEvery
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 @ExperimentalCoroutinesApi
@@ -17,16 +19,17 @@ internal class SendPackageUpdatesNotificationsUseCaseTest {
 
     private val getAllPackagesUseCase = mockk<GetAllPackagesUseCase>()
     private val fetchAllPackagesUseCase = mockk<FetchAllPackagesUseCase>()
-    private val getPackageProgressStatus = GetPackageProgressStatusUseCase()
-    private val sendNotificationUseCase = mockk<SendPackageUpdateNotificationUseCase>(
-        relaxed = true
-    )
+    private val sendNotificationUseCase = mockk<SendPackageUpdateNotificationUseCase>(relaxed = true)
+    private val analytics = mockk<PackageTrackerAnalytics>(relaxed = true)
+
     private val useCase = SendPackageUpdatesNotificationsUseCase(
         getAllPackagesUseCase,
         fetchAllPackagesUseCase,
-        getPackageProgressStatus,
-        sendNotificationUseCase
+        sendNotificationUseCase,
+        analytics
     )
+
+    // DELETE FROM status_update WHERE statusId = 0
 
     @Test
     fun `given package with update Then notify about it`() {
@@ -37,15 +40,15 @@ internal class SendPackageUpdatesNotificationsUseCaseTest {
         coEvery { getAllPackagesUseCase() } returns flow { emit(cachedPackages) }
         coEvery { fetchAllPackagesUseCase() } returns flow { emit(remotePackages) }
 
-        runBlockingTest {
+        runTest {
             // When
             useCase()
 
             // Then
-            verify {
+            verify(exactly = 1) {
                 sendNotificationUseCase(
                     title = "Google Pixel 4",
-                    description = "Objeto entregue ao destinatario - 22/07/2022 - 12:00"
+                    description = "Objeto entregue ao destinatario"
                 )
             }
         }
@@ -60,21 +63,15 @@ internal class SendPackageUpdatesNotificationsUseCaseTest {
         coEvery { getAllPackagesUseCase() } returns flow { emit(cachedPackages) }
         coEvery { fetchAllPackagesUseCase() } returns flow { emit(remotePackages) }
 
-        runBlockingTest {
+        runTest {
             // When
             useCase()
 
             // Then
-            verify {
-                sendNotificationUseCase(
-                    title = "Google Pixel 4",
-                    description = "Objeto entregue ao destinatario - 22/07/2022 - 12:00"
-                )
-            }
             verify(exactly = 1) {
                 sendNotificationUseCase(
-                    title = any(),
-                    description = any()
+                    title = "Google Pixel 4",
+                    description = "Objeto entregue ao destinatario"
                 )
             }
         }
@@ -83,13 +80,13 @@ internal class SendPackageUpdatesNotificationsUseCaseTest {
     @Test
     fun `given empty remote package Then do not send any notification`() {
         // Given
-        val cachedPackages = listOf(inProgressPackage)
+        val cachedPackages = listOf(emptyPackage)
         val remotePackages = listOf(emptyPackage)
 
         coEvery { getAllPackagesUseCase() } returns flow { emit(cachedPackages) }
         coEvery { fetchAllPackagesUseCase() } returns flow { emit(remotePackages) }
 
-        runBlockingTest {
+        runTest {
             // When
             useCase()
 
@@ -104,23 +101,23 @@ internal class SendPackageUpdatesNotificationsUseCaseTest {
     }
 
     @Test
-    fun `given empty local package Then do not send any notification`() {
+    fun `given empty local package and mailed remote package Then send notification`() {
         // Given
         val cachedPackages = listOf(emptyPackage)
-        val remotePackages = listOf(inProgressPackage)
+        val remotePackages = listOf(mailedPackage)
 
         coEvery { getAllPackagesUseCase() } returns flow { emit(cachedPackages) }
         coEvery { fetchAllPackagesUseCase() } returns flow { emit(remotePackages) }
 
-        runBlockingTest {
+        runTest {
             // When
             useCase()
 
             // Then
-            verify(exactly = 0) {
+            verify(exactly = 1) {
                 sendNotificationUseCase(
-                    title = any(),
-                    description = any()
+                    title = "Google Pixel 4",
+                    description = "Postado",
                 )
             }
         }
@@ -135,7 +132,7 @@ internal class SendPackageUpdatesNotificationsUseCaseTest {
         coEvery { getAllPackagesUseCase() } returns flow { emit(cachedPackages) }
         coEvery { fetchAllPackagesUseCase() } returns flow { emit(remotePackages) }
 
-        runBlockingTest {
+        runTest {
             // When
             useCase()
 

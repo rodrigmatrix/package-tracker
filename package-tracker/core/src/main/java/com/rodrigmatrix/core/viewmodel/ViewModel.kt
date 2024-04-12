@@ -12,7 +12,7 @@ abstract class ViewModel<S: ViewState, E: ViewEffect>(initialState: S): Androidx
     private val _viewState = MutableStateFlow(initialState)
     val viewState: StateFlow<S> = _viewState
 
-    private val _viewEffect = Channel<E>()
+    private val _viewEffect = Channel<E>(Channel.BUFFERED)
     val viewEffect: Flow<E> = _viewEffect.receiveAsFlow()
 
     protected fun setState(newState: (S) -> S) {

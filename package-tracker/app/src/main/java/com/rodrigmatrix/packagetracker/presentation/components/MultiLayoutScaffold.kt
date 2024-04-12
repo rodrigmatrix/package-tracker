@@ -49,7 +49,7 @@ fun MultiLayoutScaffold(
                 Row(
                     modifier = Modifier
                         .padding(innerPadding)
-                        .consumedWindowInsets(innerPadding)
+                        .consumeWindowInsets(innerPadding)
                         .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal))
                 ) {
                     navigationRail()
@@ -60,7 +60,7 @@ fun MultiLayoutScaffold(
                 Row(
                     modifier = Modifier
                         .padding(innerPadding)
-                        .consumedWindowInsets(innerPadding)
+                        .consumeWindowInsets(innerPadding)
                         .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal))
                 ) {
                     navigationDrawer()

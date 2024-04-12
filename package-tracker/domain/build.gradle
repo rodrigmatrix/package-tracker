@@ -34,10 +34,11 @@ android {
 dependencies {
     implementation project(':core')
 
-    implementation(Dependencies.kotlinStdlib)
-    implementation(Dependencies.kotlinCoroutinesCore)
-    implementation(Dependencies.kotlinCoroutinesAndroid)
+    implementation(libs.kotlin.stdlib)
+    implementation(libs.kotlin.coroutines.android)
 
-    testImplementation(Dependencies.junit)
-    testImplementation(Dependencies.mockk)
+    testImplementation(libs.junit)
+    testImplementation(libs.mockk)
+    testImplementation(libs.coroutines.test)
+    testImplementation(libs.turbine)
 }

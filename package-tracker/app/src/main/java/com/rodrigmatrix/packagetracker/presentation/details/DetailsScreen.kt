@@ -1,46 +1,42 @@
 package com.rodrigmatrix.packagetracker.presentation.details
 
-import android.content.res.Configuration
 import androidx.compose.animation.*
+import androidx.compose.animation.core.animate
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.outlined.Delete
-import androidx.compose.material.icons.outlined.Edit
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.*
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavController
-import com.rodrigmatrix.domain.entity.PackageProgressStatus
-import com.rodrigmatrix.domain.entity.UserPackage
 import com.rodrigmatrix.packagetracker.R
-import com.rodrigmatrix.packagetracker.presentation.addpackage.AddNewPackageBottomSheetFragment
 import com.rodrigmatrix.packagetracker.presentation.components.PackageTrackerTopAppBar
-import com.rodrigmatrix.packagetracker.presentation.history.PackageStatus
 import com.rodrigmatrix.packagetracker.presentation.history.PackageUpdatesList
 import com.rodrigmatrix.packagetracker.presentation.theme.PackageTrackerTheme
 import com.rodrigmatrix.packagetracker.presentation.utils.PreviewPackageItem
-import com.rodrigmatrix.packagetracker.presentation.utils.PreviewPackageProgressStatus
-import kotlinx.coroutines.flow.onEach
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import com.rodrigmatrix.core.extensions.toast
+import com.rodrigmatrix.domain.entity.UserPackage
+import com.rodrigmatrix.packagetracker.extensions.getCurrentStatusString
+import com.rodrigmatrix.packagetracker.extensions.getDaysString
+import com.rodrigmatrix.packagetracker.presentation.addpackage.getIconOptions
 import com.rodrigmatrix.packagetracker.presentation.components.DeletePackageDialog
-import com.rodrigmatrix.packagetracker.presentation.components.Toast
+import com.rodrigmatrix.packagetracker.presentation.components.PackageImage
 import com.rodrigmatrix.packagetracker.presentation.utils.LaunchViewEffect
+import com.rodrigmatrix.packagetracker.presentation.utils.PreviewAllTypes
 import org.koin.androidx.compose.getViewModel
 
 @Composable
@@ -70,9 +66,7 @@ fun DetailsScreen(
             viewState = viewState,
             onBackButtonClick = navController::navigateUp,
             onEditButtonClick = {
-                AddNewPackageBottomSheetFragment
-                    .newInstance(packageId)
-                    .show(fragmentManager, null)
+                navController.navigate("add_package?packageId=${viewState.userPackage?.packageId}")
             },
             onDeleteButtonClick = viewModel::showDeleteDialog,
             onConfirmDeletePackage = {
@@ -83,7 +77,6 @@ fun DetailsScreen(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 private fun DetailsScreen(
     viewState: PackageStatusViewState,
@@ -99,30 +92,26 @@ private fun DetailsScreen(
     Scaffold(
         topBar = {
             PackageTrackerTopAppBar(
-                title = {
-                    Text(
-                        text = viewState.userPackage?.name ?: stringResource(R.string.details),
-                        style = MaterialTheme.typography.bodyLarge
-                    )
-                },
+                title = { },
                 navigationIcon = {
                     IconButton(onClick = onBackButtonClick) {
                         Icon(
-                            imageVector = Icons.Filled.ArrowBack,
-                            contentDescription = stringResource(R.string.back)
+                            imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
+                            contentDescription = stringResource(R.string.back),
+                            modifier = Modifier.size(36.dp)
                         )
                     }
                 },
                 actions = {
                     IconButton(onClick = onEditButtonClick) {
                         Icon(
-                            imageVector = Icons.Outlined.Edit,
+                            imageVector = Icons.Filled.Edit,
                             contentDescription = stringResource(R.string.edit_package)
                         )
                     }
                     IconButton(onClick = onDeleteButtonClick) {
                         Icon(
-                            imageVector = Icons.Outlined.Delete,
+                            imageVector = Icons.Filled.Delete,
                             tint = MaterialTheme.colorScheme.onSurfaceVariant,
                             contentDescription = stringResource(R.string.delete_package)
                         )
@@ -133,12 +122,11 @@ private fun DetailsScreen(
     ) { innerPadding ->
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .padding(innerPadding)
-                .consumedWindowInsets(innerPadding)
+            modifier = Modifier.padding(innerPadding)
         ) {
-            viewState.packageProgressStatus?.let {
-                PackageStatus(it)
+            if (viewState.userPackage != null) {
+                DetailsHeader(userPackage = viewState.userPackage)
+                Spacer(modifier = Modifier.height(8.dp))
             }
             PackageUpdatesList(
                 statusUpdateList = viewState.userPackage?.statusUpdateList.orEmpty()
@@ -147,17 +135,84 @@ private fun DetailsScreen(
     }
 }
 
-@Preview(name = "Light Theme")
-@Preview(name = "Dark Theme", uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Preview(name = "Large Font", fontScale = 2f)
+@Composable
+private fun DetailsHeader(
+    userPackage: UserPackage,
+    modifier: Modifier = Modifier,
+) {
+    var progress by remember {
+        mutableFloatStateOf(-20f)
+    }
+
+    LaunchedEffect(Unit) {
+        animate(
+            initialValue = 0f,
+            targetValue = when {
+                userPackage.status.delivered -> 1f
+                userPackage.status.outForDelivery -> 0.9f
+                userPackage.status.inProgress -> 0.5f
+                userPackage.status.mailed -> 0.3f
+                else -> 0.1f
+            },
+            animationSpec = tween(1000),
+        ) { value, _ ->
+            progress = value
+        }
+    }
+    Column(modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
+        Text(
+            text = userPackage.getCurrentStatusString(),
+            style = MaterialTheme.typography.titleLarge,
+            fontWeight = FontWeight.Bold,
+        )
+        Text(
+            text = userPackage.deliveryType,
+            style = MaterialTheme.typography.labelSmall,
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        LinearProgressIndicator(
+            progress = { progress },
+            color = MaterialTheme.colorScheme.tertiary,
+            strokeCap = StrokeCap.Round,
+            modifier = Modifier.fillMaxWidth(),
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+
+        ) {
+            PackageImage(
+                imagePath = userPackage.imagePath,
+                icon = getIconOptions().find { it.type == userPackage.iconType },
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Column {
+                Text(
+                    text = userPackage.name,
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold,
+                )
+                Text(
+                    text = userPackage.packageId,
+                    style = MaterialTheme.typography.labelSmall
+                )
+                userPackage.getDaysString()?.let { daysText ->
+                    Text(
+                        text = daysText,
+                        style = MaterialTheme.typography.labelMedium,
+                    )
+                }
+            }
+        }
+    }
+}
+
+@PreviewAllTypes
 @Composable
 fun DetailsScreenPreview() {
     PackageTrackerTheme {
         DetailsScreen(
-            viewState = PackageStatusViewState(
-                userPackage = PreviewPackageItem,
-                packageProgressStatus = PreviewPackageProgressStatus
-            ),
+            viewState = PackageStatusViewState(userPackage = PreviewPackageItem),
             onBackButtonClick = { },
             onEditButtonClick = { },
             onDeleteButtonClick = { },

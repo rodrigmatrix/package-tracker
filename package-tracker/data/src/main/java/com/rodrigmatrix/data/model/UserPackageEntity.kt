@@ -8,7 +8,9 @@ data class UserPackageEntity(
     val id: String,
     val name: String,
     val deliveryType: String,
-    val postalDate: String
+    val postalDate: String,
+    val iconType: String?,
+    val imagePath: String?,
 )
 
 data class UserPackageAndUpdatesEntity(
@@ -21,5 +23,7 @@ data class UserPackageAndUpdatesEntity(
         parentColumn = "id",
         entityColumn = "userPackageId"
     )
-    val statusUpdate: List<StatusUpdateEntity>? = null
+    val statusUpdate: List<StatusUpdateEntity>? = null,
+    val iconType: String?,
+    val imagePath: String?,
 )

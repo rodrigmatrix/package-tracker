@@ -18,7 +18,7 @@
     <string name="developed_by">Desenvolvido por Rodrigo Gomes</string>
     <string name="about_description">Esse é um projeto open source e seu código pode ser encontrado no meu github</string>
     <string name="app_theme">Tema do aplicativo</string>
-    <string name="package_id_copied">Id do pacote copiado</string>
+    <string name="package_id_copied">Código da encomenda copiado</string>
     <string name="enable_notifications">Receber notificações de atualizações de encomendas</string>
     <string name="enable_system_notifications">Notificações do app estão desativadas. Toque para ativar.</string>
     <string name="update_interval">Intervalo de atualização</string>
@@ -36,4 +36,6 @@
     <string name="want_to_enable_notifications">Quer receber notificações?</string>
     <string name="we_need_notification_permission">Precisamos da sua permissão para te enviar notificações relacionadas a atualizacões de suas encomendas.</string>
     <string name="not_now">Agora Não</string>
+    <string name="package_id_regex_error">Código inválido</string>
+    <string name="package_name_empty_error">Digite o nome</string>
 </resources>

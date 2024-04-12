@@ -5,6 +5,4 @@ class StatusAddress(
     val city: String = "",
     val state: String = "",
     val unitType: String? = null,
-    val latitude: Long = 0L,
-    val longitude: Long = 0L
 )

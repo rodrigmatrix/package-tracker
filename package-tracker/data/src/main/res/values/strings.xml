@@ -6,7 +6,6 @@
     <string name="general_channel_name">Geral</string>
     <string name="general_channel_description">Notificações gerais do app</string>
     <string name="package_updates_channel_description">Atualizações de suas encomendas em progresso</string>
-    <string name="correios_request_body" translatable="false"><![CDATA[<rastroObjeto><usuario>%s</usuario><senha>%s</senha><tipo>L</tipo><resultado>L</resultado><objetos>%s</objetos><lingua>101</lingua><token>%s</token></rastroObjeto>]]></string>
     <string name="system_default">Padrão do sistema</string>
     <string name="light_theme">Light</string>
     <string name="dark_theme">Dark</string>

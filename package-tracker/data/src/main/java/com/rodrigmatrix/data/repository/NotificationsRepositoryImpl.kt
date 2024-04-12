@@ -2,10 +2,10 @@ package com.rodrigmatrix.data.repository
 
 import com.rodrigmatrix.data.R
 import com.rodrigmatrix.data.analytics.PACKAGE_NOTIFICATION_SENT
-import com.rodrigmatrix.data.analytics.PackageTrackerAnalytics
 import com.rodrigmatrix.data.model.notification.PackageTrackerNotificationChannel
 import com.rodrigmatrix.data.util.NotificationService
 import com.rodrigmatrix.domain.repository.NotificationsRepository
+import com.rodrigmatrix.domain.repository.PackageTrackerAnalytics
 
 class NotificationsRepositoryImpl(
     private val notificationService: NotificationService,

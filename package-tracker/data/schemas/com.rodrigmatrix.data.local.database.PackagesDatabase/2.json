@@ -1,0 +1,168 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 2,
+    "identityHash": "1fb432aba7209ee0ebc2a4b9cd0669fe",
+    "entities": [
+      {
+        "tableName": "packages",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `deliveryType` TEXT NOT NULL, `postalDate` TEXT NOT NULL, `iconType` TEXT, `imagePath` TEXT, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "deliveryType",
+            "columnName": "deliveryType",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "postalDate",
+            "columnName": "postalDate",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "iconType",
+            "columnName": "iconType",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "imagePath",
+            "columnName": "imagePath",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "status_update",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`userPackageId` TEXT NOT NULL, `statusUpdateType` TEXT NOT NULL, `title` TEXT NOT NULL, `description` TEXT NOT NULL, `date` TEXT NOT NULL, `hour` TEXT NOT NULL, `statusId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `fromlocalName` TEXT, `fromcity` TEXT, `fromstate` TEXT, `fromunitType` TEXT, `tolocalName` TEXT, `tocity` TEXT, `tostate` TEXT, `tounitType` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "userPackageId",
+            "columnName": "userPackageId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "statusUpdateType",
+            "columnName": "statusUpdateType",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "date",
+            "columnName": "date",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hour",
+            "columnName": "hour",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "statusId",
+            "columnName": "statusId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "from.localName",
+            "columnName": "fromlocalName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "from.city",
+            "columnName": "fromcity",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "from.state",
+            "columnName": "fromstate",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "from.unitType",
+            "columnName": "fromunitType",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "to.localName",
+            "columnName": "tolocalName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "to.city",
+            "columnName": "tocity",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "to.state",
+            "columnName": "tostate",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "to.unitType",
+            "columnName": "tounitType",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "statusId"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '1fb432aba7209ee0ebc2a4b9cd0669fe')"
+    ]
+  }
+}

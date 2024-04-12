@@ -32,22 +32,22 @@ android {
         compose true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion Versions.composeVersion
+        kotlinCompilerExtensionVersion libs.versions.composeCompilerVersion.get()
     }
     namespace 'com.rodrigmatrix.core'
 }
 
 dependencies {
-    implementation(Dependencies.androidxCore)
-    implementation(Dependencies.lifecycleViewModel)
+    implementation(libs.androidx.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel)
 
-    implementation(Dependencies.jodaTime)
+    implementation(libs.jodaTime)
 
-    implementation(Dependencies.kotlinStdlib)
-    implementation(Dependencies.kotlinCoroutinesCore)
-    implementation(Dependencies.kotlinCoroutinesAndroid)
+    implementation(libs.kotlin.stdlib)
+    implementation(libs.kotlin.coroutines.android)
 
-    implementation(Dependencies.koinAndroid)
+    implementation(libs.koin.android)
 
-    implementation(Dependencies.composeUi)
+    implementation platform(libs.compose.bom)
+    implementation(libs.compose.ui)
 }

@@ -16,29 +16,32 @@ internal val deliveredPackage = UserPackage(
     listOf(
         StatusUpdate(
             date = "22/07/2022",
-            description = "Objeto entregue ao destinatario",
+            title = "Objeto entregue ao destinatario",
             from = StatusAddress(),
             hour = "12:00"
         ),
         StatusUpdate(
             date = "22/07/2022",
-            description = "Saiu para entrega",
+            title = "Saiu para entrega",
             from = StatusAddress(),
             hour = "12:00"
         ),
         StatusUpdate(
             date = "21/07/2022",
-            description = "Em progresso",
+            title = "Em progresso",
             from = StatusAddress(),
             hour = "12:00"
         ),
         StatusUpdate(
             date = "21/07/2022",
-            description = "Enviado",
+            title = "Enviado",
             from = StatusAddress(),
             hour = "12:00"
         )
-    )
+    ),
+    iconType = "",
+    imagePath = "",
+    status = PackageProgressStatus(delivered = true),
 )
 
 internal val outForDeliveryPackage = UserPackage(
@@ -49,23 +52,26 @@ internal val outForDeliveryPackage = UserPackage(
     listOf(
         StatusUpdate(
             date = "22/07/2022",
-            description = "Saiu para entrega",
+            title = "Saiu para entrega",
             from = StatusAddress(),
             hour = "12:00"
         ),
         StatusUpdate(
             date = "21/07/2022",
-            description = "Em progresso",
+            title = "Em progresso",
             from = StatusAddress(),
             hour = "12:00"
         ),
         StatusUpdate(
             date = "21/07/2022",
-            description = "Enviado",
+            title = "Enviado",
             from = StatusAddress(),
             hour = "12:00"
         )
-    )
+    ),
+    iconType = "",
+    imagePath = "",
+    status = PackageProgressStatus(outForDelivery = true),
 )
 
 internal val inProgressPackage = UserPackage(
@@ -76,40 +82,55 @@ internal val inProgressPackage = UserPackage(
     listOf(
         StatusUpdate(
             date = "21/07/2022",
-            description = "Em progresso",
+            title = "Em progresso",
             from = StatusAddress(),
             hour = "12:00"
         ),
         StatusUpdate(
             date = "21/07/2022",
-            description = "Enviado",
+            title = "Enviado",
             from = StatusAddress(),
             hour = "12:00"
         )
-    )
+    ),
+    iconType = "",
+    imagePath = "",
+    status = PackageProgressStatus(inProgress = true),
 )
 
 internal val mailedPackage = UserPackage(
     "H6XAJ123BN12",
     "Google Pixel 4",
-    "",
+    "SEDEX",
     "20/07/2022",
     listOf(
         StatusUpdate(
             date = "21/07/2022",
-            description = "Enviado",
+            title = "Postado",
             from = StatusAddress(),
             hour = "12:00"
         )
-    )
+    ),
+    iconType = "",
+    imagePath = "",
+    status = PackageProgressStatus(mailed = true),
 )
 
 internal val emptyPackage = UserPackage(
     "H6XAJ123BN12",
     "Google Pixel 4",
-    "",
+    "CORREIOS",
     "20/07/2022",
-    listOf()
+    listOf(
+        StatusUpdate(
+            title = "Encomenda cadastrada",
+            description = "Essa encomenda ainda não possui dados na base dos correios. Aguarde " +
+                "por novas atualizações. Se essa for uma encomenda antiga, ela não será atualizada.",
+        )
+    ),
+    iconType = "",
+    imagePath = "",
+    status = PackageProgressStatus(),
 )
 
 internal val mailedProgressStatus = PackageProgressStatus(

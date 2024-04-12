@@ -40,10 +40,8 @@ class PackageTrackerApp: Application() {
             .build()
         val periodicWorkRequest = PeriodicWorkRequest.Builder(
             UpdatePackagesAndSendNotificationsWorker::class.java,
-            1,
+            repeatInterval = 1,
             TimeUnit.HOURS,
-            30,
-            TimeUnit.MINUTES
         ).setConstraints(workerConstraints).build()
 
         WorkManager

@@ -42,7 +42,10 @@ val PreviewPackageItemsList = listOf(
                 from = StatusAddress(),
                 hour = "12:00"
             )
-        )
+        ),
+        imagePath = null,
+        iconType = "smartphone",
+        status = PackageProgressStatus(),
     ),
     UserPackage(
         "H6XAJ123BN12",
@@ -56,51 +59,61 @@ val PreviewPackageItemsList = listOf(
                 from = StatusAddress(),
                 hour = "12:00"
             )
-        )
+        ),
+        imagePath = null,
+        iconType = "smartphone",
+        status = PackageProgressStatus(),
     )
 )
 
 val PreviewPackageItem = UserPackage(
     "H6XAJ123BN12",
     "Google Pixel 4",
-    "",
+    "Prime Express",
     "20/07/2022",
     listOf(
         StatusUpdate(
             date = "22/07/2022",
-            description = "Objeto entregue ao destinatario",
-            from = StatusAddress(),
-            hour = "12:00"
-        ),
-        StatusUpdate(
-            date = "22/07/2022",
-            description = "Saiu para entrega",
+            title = "Saiu para entrega",
             from = StatusAddress(),
             hour = "12:00"
         ),
         StatusUpdate(
             date = "21/07/2022",
-            description = "Objeto em trânsito",
-            from = StatusAddress(),
+            title = "Objeto em transferência",
+            from = StatusAddress(
+                city = "CURITIBA",
+                state = "PR",
+                unitType = "Unidade Operacional",
+            ),
             hour = "12:00"
         ),
         StatusUpdate(
             date = "21/07/2022",
-            description = "Objeto em trânsito",
-            from = StatusAddress(),
+            title = "Objeto em transferência",
+            from = StatusAddress(
+                localName = "Alemanha",
+                city = "",
+                state = "",
+                unitType = "Pais",
+            ),
             hour = "12:00"
         ),
         StatusUpdate(
             date = "21/07/2022",
-            description = "Postado",
+            title = "Postado",
             from = StatusAddress(),
             hour = "12:00"
         )
-    )
+    ),
+    imagePath = null,
+    iconType = "smartphone",
+    status = PackageProgressStatus(),
 )
 
 val PreviewPackageProgressStatus = PackageProgressStatus(
     mailed = true,
     inProgress = true,
-    delivered = false
+    delivered = false,
+    outForDelivery = false,
 )

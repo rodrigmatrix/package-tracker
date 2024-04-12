@@ -2,31 +2,40 @@ package com.rodrigmatrix.packagetracker.presentation.packages
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.content.res.Configuration
 import android.os.Build
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
+import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Devices
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
@@ -34,8 +43,6 @@ import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec.RawRes
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
-import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.rodrigmatrix.domain.entity.UserPackage
 import com.rodrigmatrix.packagetracker.R
 import com.rodrigmatrix.packagetracker.presentation.components.DeletePackageDialog
@@ -47,38 +54,40 @@ import com.rodrigmatrix.packagetracker.presentation.packages.viewmodel.PackagesV
 import com.rodrigmatrix.packagetracker.presentation.packages.viewmodel.PackagesViewState
 import com.rodrigmatrix.packagetracker.presentation.theme.PackageTrackerTheme
 import com.rodrigmatrix.packagetracker.presentation.utils.LaunchViewEffect
+import com.rodrigmatrix.packagetracker.presentation.utils.PreviewAllTypes
 import com.rodrigmatrix.packagetracker.presentation.utils.PreviewPackageItemsList
+import com.rodrigmatrix.packagetracker.presentation.utils.ScreenContentType
+import com.rodrigmatrix.packagetracker.presentation.utils.ScreenNavigationType
 import org.koin.androidx.compose.getViewModel
 
 const val PACKAGES_LIST_TAG = "packages_list_tag"
 
 @Composable
 fun PackagesScreen(
-    windowSizeClass: WindowSizeClass,
+    navigationType: ScreenNavigationType,
+    contentType: ScreenContentType,
     navController: NavController,
     viewModel: PackagesViewModel = getViewModel()
 ) {
     val viewState by viewModel.viewState.collectAsState()
     val context = LocalContext.current
-
     PackagesScreen(
         viewState = viewState,
-        windowSizeClass = windowSizeClass,
+        navigationType = navigationType,
         onSwipeRefresh = viewModel::fetchPackages,
         onPackageClick = { id ->
             viewModel.trackPackageDetailsClick()
             navController.navigate("package/$id")
         },
-        onLongClick = { id ->
-            viewModel.showDeletePackageDialog(id)
-        },
+        onLongClick = viewModel::showDeletePackageDialog,
         onConfirmDeletePackage = {
             viewModel.deletePackage(viewState.selectedPackageId)
         },
         onDismissDeletePackageDialog = viewModel::hideDeleteDialog,
-        onFilterChanged = { newFilter ->
-            viewModel.onFilterChanged(newFilter)
-        }
+        onFilterChanged = viewModel::onFilterChanged,
+        onAddPackageButtonClicked = {
+            navController.navigate(NavigationRoutes.ADD_PACKAGE)
+        },
     )
 
     LaunchViewEffect(viewModel) { effect ->
@@ -100,25 +109,27 @@ fun PackagesScreen(
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun PackagesScreen(
     viewState: PackagesViewState,
-    windowSizeClass: WindowSizeClass,
+    navigationType: ScreenNavigationType,
     onSwipeRefresh: () -> Unit,
     onPackageClick: (id: String) -> Unit,
     onLongClick: (id: String) -> Unit,
     onConfirmDeletePackage: () -> Unit,
     onDismissDeletePackageDialog: () -> Unit,
-    onFilterChanged: (PackagesFilter) -> Unit
+    onFilterChanged: (PackagesFilter) -> Unit,
+    onAddPackageButtonClicked: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
+    val pullRefreshState = rememberPullRefreshState(viewState.isRefreshing, onSwipeRefresh)
     if (viewState.deletePackageDialogVisible) {
         DeletePackageDialog(onConfirmDeletePackage, onDismissDeletePackageDialog)
     }
-    SwipeRefresh(
-        state = rememberSwipeRefreshState(viewState.isRefreshing),
-        onRefresh = onSwipeRefresh,
-        swipeEnabled = viewState.packagesList.isNotEmpty()
-    ) {
+    val lazyListState = rememberLazyListState()
+    val expandedFab by remember { derivedStateOf { lazyListState.firstVisibleItemIndex == 0 } }
+    Box(modifier.pullRefresh(pullRefreshState)) {
         Column(modifier = Modifier.fillMaxSize()) {
             when {
                 viewState.packagesList.isEmpty() && !viewState.isRefreshing && viewState.hasPackages.not() -> {
@@ -134,11 +145,34 @@ fun PackagesScreen(
                         onLongClick = {
                             onLongClick(it)
                         },
-                        onFilterChanged = onFilterChanged
+                        onFilterChanged = onFilterChanged,
+                        state = lazyListState,
+                        navigationType = navigationType,
                     )
                 }
             }
         }
+        if (viewState.hasPackages) {
+            PullRefreshIndicator(
+                refreshing = viewState.isRefreshing,
+                state = pullRefreshState,
+                modifier = Modifier.align(Alignment.TopCenter),
+            )
+        }
+        AddPackageFab(
+            onAddPackageButtonClicked = onAddPackageButtonClicked,
+            expanded = expandedFab,
+            modifier = when (navigationType) {
+                ScreenNavigationType.BOTTOM_NAVIGATION ->
+                    Modifier
+                        .align(Alignment.BottomEnd)
+                        .padding(bottom = 96.dp, end = 16.dp)
+                ScreenNavigationType.NAVIGATION_RAIL ->
+                    Modifier
+                        .align(Alignment.BottomEnd)
+                        .padding(16.dp)
+            },
+        )
     }
 }
 
@@ -146,13 +180,19 @@ fun PackagesScreen(
 @Composable
 private fun PackagesList(
     packagesList: List<UserPackage>,
+    navigationType: ScreenNavigationType,
     selectedFilter: PackagesFilter,
     onItemClick: (id: String) -> Unit,
     onLongClick: (id: String) -> Unit,
-    onFilterChanged: (PackagesFilter) -> Unit
+    onFilterChanged: (PackagesFilter) -> Unit,
+    state: LazyListState,
 ) {
     LazyColumn(
-        contentPadding = PaddingValues(bottom = 200.dp),
+        state = state,
+        contentPadding = PaddingValues(bottom = when (navigationType) {
+            ScreenNavigationType.BOTTOM_NAVIGATION -> 160.dp
+            ScreenNavigationType.NAVIGATION_RAIL -> 16.dp
+        }),
         modifier = Modifier
             .fillMaxSize()
             .testTag(PACKAGES_LIST_TAG)
@@ -191,8 +231,8 @@ fun NoPackagesForFilter() {
         val composition by rememberLottieComposition(RawRes(R.raw.empty_box))
         val progress by animateLottieCompositionAsState(composition)
         LottieAnimation(
-            composition,
-            progress,
+            composition = composition,
+            progress = { progress },
             modifier = Modifier
                 .size(width = 200.dp, height = 200.dp)
         )
@@ -255,7 +295,7 @@ private fun PackagesListEmptyState() {
         val progress by animateLottieCompositionAsState(composition)
         LottieAnimation(
             composition,
-            progress,
+            { progress },
             modifier = Modifier
                 .size(width = 200.dp, height = 200.dp)
         )
@@ -273,49 +313,69 @@ private fun PackagesListEmptyState() {
     }
 }
 
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
-@Preview(name = "Light Theme")
-@Preview("Tablet View", device = Devices.PIXEL_C)
-@Preview(name = "Dark Theme", uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Preview(name = "Large Font", fontScale = 2f)
+@Composable
+private fun AddPackageFab(
+    onAddPackageButtonClicked: () -> Unit,
+    expanded: Boolean,
+    modifier: Modifier = Modifier,
+) {
+    ExtendedFloatingActionButton(
+        onClick = onAddPackageButtonClicked,
+        expanded = expanded,
+        icon = {
+            Icon(
+                imageVector = Icons.Filled.Add,
+                tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                contentDescription = null,
+            )
+        },
+        text = {
+            Text(
+                text = stringResource(id = R.string.add),
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                fontWeight = FontWeight.Bold,
+            )
+        },
+        modifier = modifier,
+    )
+}
+
+@PreviewAllTypes
 @Composable
 fun PackagesPreview() {
-    BoxWithConstraints {
-        PackageTrackerTheme {
-            PackagesScreen(
-                viewState = PackagesViewState(
-                    isRefreshing = false,
-                    packagesList = PreviewPackageItemsList
-                ),
-                windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(maxWidth, maxHeight)),
-                onSwipeRefresh = { },
-                onPackageClick = { },
-                onLongClick = { },
-                onConfirmDeletePackage = { },
-                onDismissDeletePackageDialog = { },
-                onFilterChanged = { }
-            )
-        }
+    PackageTrackerTheme {
+        PackagesScreen(
+            viewState = PackagesViewState(
+                isRefreshing = false,
+                packagesList = PreviewPackageItemsList
+            ),
+            navigationType = ScreenNavigationType.BOTTOM_NAVIGATION,
+            onSwipeRefresh = { },
+            onPackageClick = { },
+            onLongClick = { },
+            onConfirmDeletePackage = { },
+            onDismissDeletePackageDialog = { },
+            onFilterChanged = { },
+            onAddPackageButtonClicked = { },
+        )
     }
 }
 
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
-@Preview(name = "Empty Light Theme")
-@Preview(name = "Empty Dark Theme", uiMode = Configuration.UI_MODE_NIGHT_YES)
+@PreviewAllTypes
 @Composable
 fun PackagesEmptyStatePreview() {
-    BoxWithConstraints {
-        PackageTrackerTheme {
-            PackagesScreen(
-                viewState = PackagesViewState(isRefreshing = false),
-                windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(maxWidth, maxHeight)),
-                onSwipeRefresh = { },
-                onPackageClick = { },
-                onLongClick = { },
-                onConfirmDeletePackage = { },
-                onDismissDeletePackageDialog = { },
-                onFilterChanged = { }
-            )
-        }
+    PackageTrackerTheme {
+        PackagesScreen(
+            viewState = PackagesViewState(isRefreshing = false),
+            navigationType = ScreenNavigationType.BOTTOM_NAVIGATION,
+            onSwipeRefresh = { },
+            onPackageClick = { },
+            onLongClick = { },
+            onConfirmDeletePackage = { },
+            onDismissDeletePackageDialog = { },
+            onFilterChanged = { },
+            onAddPackageButtonClicked = { },
+        )
     }
 }
