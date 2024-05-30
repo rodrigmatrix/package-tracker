@@ -131,15 +131,17 @@ fun UserPackage.getCurrentStatusString(): String {
 }
 
 fun UserPackage.getDaysString(): String? {
-    val firstStatus = statusUpdateList.firstOrNull()
-    val lastStatus = statusUpdateList.lastOrNull()
-
+    val firstStatus = statusUpdateList.minByOrNull { it.date }
     return try {
         val formatter = DateTimeFormat.forPattern("dd/MM/yyyy")
         val firstDate = formatter.parseDateTime(firstStatus?.date)
-        val lastDate = formatter.parseDateTime(lastStatus?.date)
+        val lastDate = if (status.delivered) {
+            formatter.parseDateTime(statusUpdateList.lastOrNull()?.date)
+        } else {
+            DateTime.now()
+        }
         val days = Days.daysBetween(firstDate, lastDate).days.absoluteValue
-        if (firstStatus?.title?.contains("entregue") == true) {
+        if (status.delivered) {
             "Entregue em $days dias"
         } else {
             "$days dias"

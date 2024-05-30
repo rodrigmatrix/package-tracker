@@ -1,4 +1,5 @@
-<resources>
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
     <color name="md_theme_light_primary">#006D32</color>
     <color name="md_theme_light_onPrimary">#FFFFFF</color>
     <color name="md_theme_light_primaryContainer">#8EF9A8</color>
@@ -53,4 +54,6 @@
     <color name="md_theme_dark_primaryInverse">#006D32</color>
     <color name="seed">#3DA961</color>
     <color name="error">#BA1B1B</color>
+    <color name="widget_background_outside_color">#c9fde3</color>
+    <color name="widget_background_inside_color">#b6f0d5</color>
 </resources>

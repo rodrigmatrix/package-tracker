@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:minWidth="120dp"
+    android:minHeight="80dp"
+    android:maxResizeHeight="280dp"
+    android:updatePeriodMillis="10000"
+    android:resizeMode="horizontal|vertical"
+    android:widgetCategory="home_screen"
+    android:initialLayout="@layout/glance_default_loading_layout"
+    android:widgetFeatures="reconfigurable|configuration_optional"
+    tools:targetApi="s">
+
+</appwidget-provider>

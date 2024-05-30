@@ -13,8 +13,8 @@ android {
         applicationId "com.rodrigmatrix.packagetracker"
         minSdk Versions.minSdkVersion
         targetSdk Versions.targetSdkVersion
-        versionCode 16
-        versionName "2.0"
+        versionCode 17
+        versionName "2.0.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -92,6 +92,8 @@ dependencies {
     implementation(libs.android.material)
 
     implementation(libs.glanceAppWidget)
+    implementation(libs.glance.preview)
+    implementation(libs.glanceAppWidget.preview)
     implementation(libs.glanceAppWidget.material3)
 
     implementation(libs.koin.android)

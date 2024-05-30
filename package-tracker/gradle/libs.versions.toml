@@ -1,24 +1,24 @@
 [versions]
 firebaseCrashlyticsGradle = "2.9.9"
 googleServices = "4.4.1"
-gradle = "8.3.1"
-ktx = "1.12.0"
-composeCompilerVersion = "1.5.10"
-kotlinVersion = "1.9.22"
+gradle = "8.3.2"
+ktx = "1.13.1"
+composeCompilerVersion = "1.5.14"
+kotlinVersion = "1.9.24"
 coroutinesVersion = "1.8.0"
-composeBomVersion = "2024.02.02"
+composeBomVersion = "2024.05.00"
 accompanistNavigation = "0.16.1"
 accompanistPermissions = "0.24.0-alpha"
 accompanistAdaptive = "0.31.1-alpha"
 appCompat = "1.6.1"
-lifecycle = "2.7.0"
+lifecycle = "2.8.0"
 androidxWindow = "1.2.0"
 splashScreen = "1.0.1"
 multidex = "2.0.1"
 kotlinSerialization = "1.5.1"
 koinAndroid = "3.4.2"
 koinCompose = "3.4.5"
-glanceAppWidget = "1.0.0"
+glanceAppWidget = "1.1.0-rc01"
 firebaseBom = "32.7.4"
 retrofit = "2.9.0"
 okHttp = "4.11.0"
@@ -31,10 +31,10 @@ coil = "2.3.0"
 playServicesLocation = "21.2.0"
 lottieCompose = "6.2.0"
 composeConstraintLayout = "1.0.1"
-material = "1.11.0"
+material = "1.12.0"
 junit = "4.13.2"
 testExtJunit = "1.1.5"
-composeJunit4 = "1.6.3"
+composeJunit4 = "1.6.7"
 espressoCore = "3.5.1"
 mockk = "1.13.10"
 turbine = "1.1.0"
@@ -70,6 +70,8 @@ compose-iconExtended = { group = "androidx.compose.material", name = "material-i
 
 # Glance App Widget
 glanceAppWidget = { group = "androidx.glance", name = "glance-appwidget", version.ref = "glanceAppWidget" }
+glance-preview = { group = "androidx.glance", name = "glance-preview", version.ref = "glanceAppWidget" }
+glanceAppWidget-preview = { group = "androidx.glance", name = "glance-appwidget-preview", version.ref = "glanceAppWidget" }
 glanceAppWidget-material3 = { group = "androidx.glance", name = "glance-material3", version.ref = "glanceAppWidget" }
 
 # Accompanist
