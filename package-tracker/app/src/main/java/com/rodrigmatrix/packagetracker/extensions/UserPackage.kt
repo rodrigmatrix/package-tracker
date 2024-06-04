@@ -125,18 +125,26 @@ fun UserPackage.getCurrentStatusString(): String {
         title.contains("Revisão de tributos solicitada") -> "Em revisão de tributos"
         title.contains("Informações eletrônicas enviadas para análise da autoridade") -> "Em análise tributária"
         title.contains("recebido pelos Correios do Brasil") -> "Chegou ao Brasil"
+        title.contains("objeto selecionado para conferência pela au") -> "Em fiscalização"
+        title.contains("de apresentar documentação ou complementar") -> "Aguardando envio de documentação"
         title.contains("postado") -> "Postado"
         else -> title
     }
 }
 
 fun UserPackage.getDaysString(): String? {
-    val firstStatus = statusUpdateList.minByOrNull { it.date }
     return try {
         val formatter = DateTimeFormat.forPattern("dd/MM/yyyy")
+        val firstStatus = statusUpdateList.sortedBy {
+            LocalDate.parse(it.date, formatter)
+        }.firstOrNull()
         val firstDate = formatter.parseDateTime(firstStatus?.date)
         val lastDate = if (status.delivered) {
-            formatter.parseDateTime(statusUpdateList.lastOrNull()?.date)
+            formatter.parseDateTime(
+                statusUpdateList.sortedByDescending {
+                    LocalDate.parse(it.date, formatter)
+                }.firstOrNull()?.date
+            )
         } else {
             DateTime.now()
         }

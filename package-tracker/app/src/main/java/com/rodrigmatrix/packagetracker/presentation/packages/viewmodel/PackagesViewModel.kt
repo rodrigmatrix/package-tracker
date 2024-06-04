@@ -22,6 +22,8 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
+import org.joda.time.LocalDate
+import org.joda.time.format.DateTimeFormat
 
 class PackagesViewModel(
     private val getAllPackagesUseCase: GetAllPackagesUseCase,
@@ -52,10 +54,11 @@ class PackagesViewModel(
                     setState { it.errorState(exception) }
                 }
                 .collect { packagesList ->
+                    val filteredList = packagesList.filterPackages()
                     setState {
                         it.successState(
                             hasPackages = packagesList.isNotEmpty(),
-                            packagesList.filterPackages(),
+                            packagesList = filteredList,
                         )
                     }
                 }
@@ -64,7 +67,7 @@ class PackagesViewModel(
 
     private fun List<UserPackage>.filterPackages(): List<UserPackage> {
         return when (viewState.value.packagesListFilter) {
-            PackagesFilter.ALL -> this
+            PackagesFilter.ALL -> this.sortedBy { it.status.delivered }
             PackagesFilter.IN_PROGRESS -> this.filter { it.status.delivered.not() }
             PackagesFilter.DELIVERED -> this.filter { it.status.delivered }
         }
